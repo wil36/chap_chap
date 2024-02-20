@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "803577577513",
+    "project_id": "chapchap0",
+    "storage_bucket": "chapchap0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:803577577513:android:a9d69212bed4628b0a5c38",
+        "android_client_info": {
+          "package_name": "fr.mizzup.chapchap"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "803577577513-2vb7trm0gp7tskohsk6d4i42g7qg8ldn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCw1M4D6y9gYCAdwbucDTOYtOYPCGtt1lA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "803577577513-2vb7trm0gp7tskohsk6d4i42g7qg8ldn.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "803577577513-tfua1bg4ictn47kkqpeohjkkcjfii1ev.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "fr.mizzup.chapchap"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
