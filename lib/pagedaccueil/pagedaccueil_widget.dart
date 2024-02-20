@@ -3,6 +3,8 @@ import 'package:chap_chap/components/pas_de_prog_en_cours_widget.dart';
 import 'package:chap_chap/MizzUp_Code/MizzUp_Calendar.dart';
 import 'package:chap_chap/notification/notification_widget.dart';
 import 'package:chap_chap/decouvrir_programme/programme_suite_widget.dart';
+import 'package:chap_chap/profil/profil_preview.dart';
+import 'package:chap_chap/profil/profil_widget.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../auth/auth_util.dart';
 import '../backend/backend.dart';
@@ -31,8 +33,13 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
   List<dynamic> dateRoutine = [DateTime.now()];
   List<DateTime> dateRoutineOther = [DateTime.now()];
   DateTime recurrencePoint = DateTime.now();
-  final Query<Map<String, dynamic>> collectionProg = FirebaseFirestore.instance.collection('progUser').where('userRef', isEqualTo: currentUserReference);
-  final Query<Map<String, dynamic>> collectionRoutines = FirebaseFirestore.instance.collection('routines').where('userRef', isEqualTo: currentUserReference);
+  final Query<Map<String, dynamic>> collectionProg = FirebaseFirestore.instance
+      .collection('progUser')
+      .where('userRef', isEqualTo: currentUserReference);
+  final Query<Map<String, dynamic>> collectionRoutines = FirebaseFirestore
+      .instance
+      .collection('routines')
+      .where('userRef', isEqualTo: currentUserReference);
 
   @override
   void initState() {
@@ -68,7 +75,7 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
                     buttonSize: 40,
                     fillColor: MizzUpTheme.secondaryColor,
                     icon: const FaIcon(
-                      FontAwesomeIcons.bell,
+                      FontAwesomeIcons.user,
                       color: MizzUpTheme.primaryColor,
                       size: 20,
                     ),
@@ -76,7 +83,7 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
                       await Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const NotificationWidget(),
+                          builder: (context) => const ProfilWidget(),
                         ),
                       );
                     },
@@ -96,14 +103,17 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
                     child: GestureDetector(
                       onTap: () async {
                         // Récupère la référence de la collection "users"
-                        final usersCollection = FirebaseFirestore.instance.collection('users');
+                        final usersCollection =
+                            FirebaseFirestore.instance.collection('users');
                         print(usersCollection);
 
 // Récupère la référence de la collection "likes"
-                        final likesCollection = FirebaseFirestore.instance.collection('likes');
+                        final likesCollection =
+                            FirebaseFirestore.instance.collection('likes');
                         print(likesCollection);
 
-                        await addLikesFromUsers(usersCollection, likesCollection);
+                        await addLikesFromUsers(
+                            usersCollection, likesCollection);
                       },
                       child: Text(
                         'Bonjour $currentUserDisplayName',
@@ -167,9 +177,12 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
     );
   }
 
-  Future<List<DateTime>?> getProgPoint(Query<Map<String, dynamic>> collection) async {
+  Future<List<DateTime>?> getProgPoint(
+      Query<Map<String, dynamic>> collection) async {
     var querySnapshot = await collection.where('create_time').get();
-    var tut = querySnapshot.docs.map((doc) => doc.get('create_time').toDate()).toList();
+    var tut = querySnapshot.docs
+        .map((doc) => doc.get('create_time').toDate())
+        .toList();
     if (mounted) {
       setState(() {
         dateProg = tut.cast<DateTime>();
@@ -178,12 +191,15 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
     return dateProg;
   }
 
-  Future<List<DateTime>?> getRoutinePoint(Query<Map<String, dynamic>> collection) async {
+  Future<List<DateTime>?> getRoutinePoint(
+      Query<Map<String, dynamic>> collection) async {
     var querySnapshot = await collection.get();
-    var tut = querySnapshot.docs.map((doc) => doc.get('reccurenceTime')).toList();
+    var tut =
+        querySnapshot.docs.map((doc) => doc.get('reccurenceTime')).toList();
     for (var doc in tut) {
       final allDataFirst = doc;
-      final listPointFirst = allDataFirst.map((allData1) => allData1.toDate()).toList();
+      final listPointFirst =
+          allDataFirst.map((allData1) => allData1.toDate()).toList();
       for (var doc2 in listPointFirst) {
         if (mounted) {
           setState(() {
@@ -194,7 +210,8 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
     }
     for (var doc in querySnapshot.docs) {
       final allData = doc["reccurenceTime"];
-      final listPointSecond = allData.map((allData) => allData.toDate()).toList();
+      final listPointSecond =
+          allData.map((allData) => allData.toDate()).toList();
       if (mounted) {
         setState(() {
           dateRoutine = listPointSecond;
@@ -242,13 +259,16 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
         if (dateRoutine.contains(dayTolocal.add(const Duration(hours: 1)))) {
           return [const Event('Cyclic event')];
         }
-        if (dateRoutine.contains(dayTolocal.subtract(const Duration(hours: 1)))) {
+        if (dateRoutine
+            .contains(dayTolocal.subtract(const Duration(hours: 1)))) {
           return [const Event('Cyclic event')];
         }
-        if (dateRoutineOther.contains(dayTolocal.add(const Duration(hours: 1)))) {
+        if (dateRoutineOther
+            .contains(dayTolocal.add(const Duration(hours: 1)))) {
           return [const Event('Cyclic event')];
         }
-        if (dateRoutineOther.contains(dayTolocal.subtract(const Duration(hours: 1)))) {
+        if (dateRoutineOther
+            .contains(dayTolocal.subtract(const Duration(hours: 1)))) {
           return [const Event('Cyclic event')];
         }
         if (dateRoutineOther.contains(dayTolocal)) {
@@ -257,7 +277,8 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
 
         return [];
       },
-      focusedDay: DateTime(_focusedDay.year, _focusedDay.month, _focusedDay.day),
+      focusedDay:
+          DateTime(_focusedDay.year, _focusedDay.month, _focusedDay.day),
       weekendDays: const [DateTime.saturday, DateTime.sunday],
       calendarFormat: CalendarFormat.month,
       startingDayOfWeek: StartingDayOfWeek.monday,
@@ -270,7 +291,8 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
           color: MizzUpTheme.primaryColor,
           fontWeight: FontWeight.w700,
         ),
-        formatButtonTextStyle: const TextStyle(fontSize: 17.0, fontFamily: 'IBM'),
+        formatButtonTextStyle:
+            const TextStyle(fontSize: 17.0, fontFamily: 'IBM'),
         formatButtonDecoration: const BoxDecoration(
           border: Border.fromBorderSide(BorderSide()),
           borderRadius: BorderRadius.all(Radius.circular(12.0)),
@@ -287,10 +309,12 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
         leftChevronVisible: true,
         rightChevronVisible: true,
         decoration: const BoxDecoration(),
-        titleTextFormatter: (date, locale) => DateFormat.yMMMM(locale).format(date).toCapitalized(),
+        titleTextFormatter: (date, locale) =>
+            DateFormat.yMMMM(locale).format(date).toCapitalized(),
       ),
       daysOfWeekStyle: DaysOfWeekStyle(
-        dowTextFormatter: (date, locale) => DateFormat.E(locale).format(date).toCapitalized(),
+        dowTextFormatter: (date, locale) =>
+            DateFormat.E(locale).format(date).toCapitalized(),
       ),
       calendarStyle: const CalendarStyle(
         markerSize: 4,
@@ -388,10 +412,16 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
   Widget progUser() {
     return FutureBuilder<List<ProgUserRecord?>>(
       future: queryProgUserRecordOnce(
-        queryBuilder: (progUserRecord) => progUserRecord.where('dateAffichage1', arrayContainsAny: [
-          DateTime(_selectedDay.year, _selectedDay.month, _selectedDay.day).toLocal(),
-          DateTime(_selectedDay.year, _selectedDay.month, _selectedDay.day).toLocal().add(const Duration(hours: 1)),
-          DateTime(_selectedDay.year, _selectedDay.month, _selectedDay.day).toLocal().subtract(const Duration(hours: 1))
+        queryBuilder: (progUserRecord) =>
+            progUserRecord.where('dateAffichage1', arrayContainsAny: [
+          DateTime(_selectedDay.year, _selectedDay.month, _selectedDay.day)
+              .toLocal(),
+          DateTime(_selectedDay.year, _selectedDay.month, _selectedDay.day)
+              .toLocal()
+              .add(const Duration(hours: 1)),
+          DateTime(_selectedDay.year, _selectedDay.month, _selectedDay.day)
+              .toLocal()
+              .subtract(const Duration(hours: 1))
         ]).where('userRef', isEqualTo: currentUserReference),
         singleRecord: true,
       ),
@@ -419,7 +449,9 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
             child: const PasDeProgEnCoursWidget(),
           );
         }
-        final columnProgUserRecord = columnProgUserRecordList.isNotEmpty ? columnProgUserRecordList.first : null;
+        final columnProgUserRecord = columnProgUserRecordList.isNotEmpty
+            ? columnProgUserRecordList.first
+            : null;
 
         return Column(
           mainAxisSize: MainAxisSize.max,
@@ -427,7 +459,8 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
             Padding(
               padding: const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
               child: FutureBuilder<DetailsWeekProgRecord?>(
-                future: DetailsWeekProgRecord.getDocumentOnce(columnProgUserRecord!.semaineShow!),
+                future: DetailsWeekProgRecord.getDocumentOnce(
+                    columnProgUserRecord!.semaineShow!),
                 builder: (context, snapshot) {
                   // Customize what your widget looks like when it's loading.
                   if (!snapshot.hasData) {
@@ -457,7 +490,8 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: FutureBuilder<ProgrammesRecord?>(
-                        future: ProgrammesRecord.getDocumentOnce(columnProgUserRecord.progRef!),
+                        future: ProgrammesRecord.getDocumentOnce(
+                            columnProgUserRecord.progRef!),
                         builder: (context, snapshot) {
                           // Customize what your widget looks like when it's loading.
                           if (!snapshot.hasData) {
@@ -481,9 +515,11 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
                                   await Navigator.pushAndRemoveUntil(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => ProgrammeSuiteWidget(
+                                      builder: (context) =>
+                                          ProgrammeSuiteWidget(
                                         detailsProg: columnProgrammesRecord,
-                                        detailsWeek: containerDetailsWeekProgRecord!,
+                                        detailsWeek:
+                                            containerDetailsWeekProgRecord!,
                                         detailsProgUser: columnProgUserRecord,
                                         date: _selectedDay,
                                       ),
@@ -493,40 +529,52 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
                                 },
                                 child: Row(
                                   mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Row(
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Padding(
-                                          padding: const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 20),
+                                          padding: const EdgeInsetsDirectional
+                                              .fromSTEB(0, 20, 0, 20),
                                           child: Container(
                                             width: 100,
                                             decoration: const BoxDecoration(),
                                             child: Column(
                                               mainAxisSize: MainAxisSize.max,
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              crossAxisAlignment: CrossAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
                                               children: [
                                                 Material(
                                                   color: Colors.transparent,
                                                   elevation: 5,
                                                   shape: RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius.circular(10),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
                                                   ),
                                                   child: Container(
                                                     width: 60,
                                                     height: 60,
                                                     decoration: BoxDecoration(
-                                                      color: const Color(0xFFEEEEEE),
-                                                      borderRadius: BorderRadius.circular(10),
+                                                      color: const Color(
+                                                          0xFFEEEEEE),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
                                                     ),
                                                     child: ClipRRect(
-                                                      borderRadius: BorderRadius.circular(10),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
                                                       child: Image.network(
                                                         valueOrDefault<String>(
-                                                          columnProgrammesRecord!.imagePrincipale!,
+                                                          columnProgrammesRecord!
+                                                              .imagePrincipale!,
                                                           'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/chap-chap-1137ns/assets/z0582h302sn8/Rectangle_29_(1).png',
                                                         ),
                                                         width: double.infinity,
@@ -545,12 +593,15 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
                                           decoration: const BoxDecoration(),
                                           child: Column(
                                             mainAxisSize: MainAxisSize.max,
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
                                             children: [
                                               Text(
                                                 columnProgrammesRecord.titre!,
-                                                style: MizzUpTheme.title1.override(
+                                                style:
+                                                    MizzUpTheme.title1.override(
                                                   fontFamily: 'IBM',
                                                   color: Colors.black,
                                                   fontSize: 14,
@@ -569,7 +620,8 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
                                         shape: BoxShape.circle,
                                       ),
                                       child: Padding(
-                                        padding: const EdgeInsetsDirectional.fromSTEB(10, 10, 0, 0),
+                                        padding: const EdgeInsetsDirectional
+                                            .fromSTEB(10, 10, 0, 0),
                                         child: InkWell(
                                           onTap: () async {
                                             await showModalBottomSheet(
@@ -577,10 +629,17 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
                                               context: context,
                                               builder: (context) {
                                                 return Padding(
-                                                  padding: MediaQuery.of(context).viewInsets,
+                                                  padding:
+                                                      MediaQuery.of(context)
+                                                          .viewInsets,
                                                   child: SizedBox(
-                                                    height: MediaQuery.of(context).size.height * 0.5,
-                                                    child: const SupprimerProgrammeWidget(),
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height *
+                                                            0.5,
+                                                    child:
+                                                        const SupprimerProgrammeWidget(),
                                                   ),
                                                 );
                                               },
@@ -617,9 +676,14 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
       padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 200),
       child: FutureBuilder<List<RoutinesRecord?>>(
         future: queryRoutinesRecordOnce(
-          queryBuilder: (routinesRecord) => routinesRecord.where('userRef', isEqualTo: currentUserReference).where('reccurenceTime', arrayContainsAny: [
-            DateTime(_selectedDay.year, _selectedDay.month, _selectedDay.day).toLocal(),
-            DateTime(_selectedDay.year, _selectedDay.month, _selectedDay.day).toLocal().add(
+          queryBuilder: (routinesRecord) => routinesRecord
+              .where('userRef', isEqualTo: currentUserReference)
+              .where('reccurenceTime', arrayContainsAny: [
+            DateTime(_selectedDay.year, _selectedDay.month, _selectedDay.day)
+                .toLocal(),
+            DateTime(_selectedDay.year, _selectedDay.month, _selectedDay.day)
+                .toLocal()
+                .add(
                   const Duration(hours: 1),
                 ),
           ]),
@@ -642,7 +706,9 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
           if (snapshot.data!.isEmpty) {
             return Container();
           }
-          final columnRoutinesRecord = columnRoutinesRecordList.isNotEmpty ? columnRoutinesRecordList.first! : null;
+          final columnRoutinesRecord = columnRoutinesRecordList.isNotEmpty
+              ? columnRoutinesRecordList.first!
+              : null;
           return Column(
             mainAxisSize: MainAxisSize.max,
             children: [
@@ -675,7 +741,8 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Padding(
-                                  padding: const EdgeInsetsDirectional.fromSTEB(30, 20, 0, 20),
+                                  padding: const EdgeInsetsDirectional.fromSTEB(
+                                      30, 20, 0, 20),
                                   child: Material(
                                     color: Colors.transparent,
                                     elevation: 5,
@@ -709,7 +776,8 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
                           ],
                         ),
                         Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(10, 20, 20, 20),
+                          padding: const EdgeInsetsDirectional.fromSTEB(
+                              10, 20, 20, 20),
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -721,12 +789,17 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
+                                    padding:
+                                        const EdgeInsetsDirectional.fromSTEB(
+                                            0, 0, 0, 10),
                                     child: Column(
                                       mainAxisSize: MainAxisSize.max,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        if ((columnRoutinesRecord.soinNourissant) == true)
+                                        if ((columnRoutinesRecord
+                                                .soinNourissant) ==
+                                            true)
                                           Text(
                                             'Soin Nourissant',
                                             style: MizzUpTheme.title1.override(
@@ -736,7 +809,9 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
                                               useGoogleFonts: false,
                                             ),
                                           ),
-                                        if ((columnRoutinesRecord.shampoingClarifiant) == true)
+                                        if ((columnRoutinesRecord
+                                                .shampoingClarifiant) ==
+                                            true)
                                           Text(
                                             'Shampoing clarifiant',
                                             style: MizzUpTheme.title1.override(
@@ -746,7 +821,9 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
                                               useGoogleFonts: false,
                                             ),
                                           ),
-                                        if ((columnRoutinesRecord.shampoingDoux) == true)
+                                        if ((columnRoutinesRecord
+                                                .shampoingDoux) ==
+                                            true)
                                           Text(
                                             'Shampoing doux',
                                             style: MizzUpTheme.title1.override(
@@ -756,7 +833,8 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
                                               useGoogleFonts: false,
                                             ),
                                           ),
-                                        if ((columnRoutinesRecord.coWash) == true)
+                                        if ((columnRoutinesRecord.coWash) ==
+                                            true)
                                           Text(
                                             'Co wash',
                                             style: MizzUpTheme.title1.override(
@@ -766,7 +844,8 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
                                               useGoogleFonts: false,
                                             ),
                                           ),
-                                        if ((columnRoutinesRecord.noPoo) == true)
+                                        if ((columnRoutinesRecord.noPoo) ==
+                                            true)
                                           Text(
                                             'No poo',
                                             style: MizzUpTheme.title1.override(
@@ -776,7 +855,9 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
                                               useGoogleFonts: false,
                                             ),
                                           ),
-                                        if ((columnRoutinesRecord.apresShampoing) == true)
+                                        if ((columnRoutinesRecord
+                                                .apresShampoing) ==
+                                            true)
                                           Text(
                                             'Après shampoing',
                                             style: MizzUpTheme.title1.override(
@@ -786,7 +867,9 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
                                               useGoogleFonts: false,
                                             ),
                                           ),
-                                        if ((columnRoutinesRecord.soinHydratant) == true)
+                                        if ((columnRoutinesRecord
+                                                .soinHydratant) ==
+                                            true)
                                           Text(
                                             'Soin Hydratant',
                                             style: MizzUpTheme.title1.override(
@@ -796,7 +879,9 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
                                               useGoogleFonts: false,
                                             ),
                                           ),
-                                        if ((columnRoutinesRecord.soinNourissant) == true)
+                                        if ((columnRoutinesRecord
+                                                .soinNourissant) ==
+                                            true)
                                           Text(
                                             'Soin protéiné',
                                             style: MizzUpTheme.title1.override(
@@ -831,7 +916,8 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
                                 return Padding(
                                   padding: MediaQuery.of(context).viewInsets,
                                   child: SizedBox(
-                                    height: MediaQuery.of(context).size.height * 0.4,
+                                    height: MediaQuery.of(context).size.height *
+                                        0.4,
                                     child: SupprimerRoutinesWidget(
                                       detailRoutine: columnRoutinesRecord,
                                     ),
@@ -845,7 +931,8 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: const [
                               Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(10, 10, 0, 0),
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    10, 10, 0, 0),
                                 child: Icon(
                                   Icons.more_vert,
                                   color: Colors.black,
@@ -878,7 +965,8 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
       if (userSnapshot.data()['favorisRecettes'] == null) {
         continue;
       }
-      final favorisRecettes = List<DocumentReference>.from(userSnapshot.data()['favorisRecettes']);
+      final favorisRecettes =
+          List<DocumentReference>.from(userSnapshot.data()['favorisRecettes']);
 
       // Divise la liste de favoris en lots de moins de 500 éléments
       final recetteBatches = <List<DocumentReference>>[];

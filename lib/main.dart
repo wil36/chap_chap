@@ -68,7 +68,8 @@ class MyApp extends StatefulWidget {
   @override
   _MyAppState createState() => _MyAppState();
 
-  static _MyAppState? of(BuildContext context) => context.findAncestorStateOfType<_MyAppState>();
+  static _MyAppState? of(BuildContext context) =>
+      context.findAncestorStateOfType<_MyAppState>();
 }
 
 class _MyAppState extends State<MyApp> {
@@ -81,8 +82,10 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    userStream = chapChapFirebaseUserStream()..listen((user) => initialUser ?? setState(() => initialUser = user));
-    Future.delayed(const Duration(seconds: 1), () => setState(() => displaySplashImage = false));
+    userStream = chapChapFirebaseUserStream()
+      ..listen((user) => initialUser ?? setState(() => initialUser = user));
+    Future.delayed(const Duration(seconds: 1),
+        () => setState(() => displaySplashImage = false));
   }
 
   @override
@@ -101,7 +104,10 @@ class _MyAppState extends State<MyApp> {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      theme: ThemeData(colorScheme: ColorScheme.fromSwatch(primarySwatch: customColor).copyWith(background: customColor)),
+      theme: ThemeData(
+          useMaterial3: false,
+          colorScheme: ColorScheme.fromSwatch(primarySwatch: customColor)
+              .copyWith(background: customColor)),
       home: initialUser == null || displaySplashImage
           ? Container(
               color: Colors.transparent,
@@ -129,7 +135,14 @@ class _NavBarPageState extends State<NavBarPage> {
   PageController? _pageController;
   int _index = 0;
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  final screen = [const DecouvrirProgrammeWidget(), const RecettesWidget(), const PagedaccueilWidget(), const ArticlesWidget(), const ProfilWidget(), const PagedaccueilWidget()];
+  final screen = [
+    const DecouvrirProgrammeWidget(),
+    const RecettesWidget(),
+    const PagedaccueilWidget(),
+    const ArticlesWidget(),
+    const ProfilWidget(),
+    const PagedaccueilWidget()
+  ];
 
   @override
   void initState() {
@@ -148,32 +161,32 @@ class _NavBarPageState extends State<NavBarPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: MizzUpTheme.tertiaryColor,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          await Navigator.push(
-            context,
-            PageTransition(
-              type: PageTransitionType.fade,
-              duration: Duration(milliseconds: 500),
-              reverseDuration: Duration(milliseconds: 500),
-              child: NavBarPage(index: 5),
-            ),
-          );
-        },
-        backgroundColor: MizzUpTheme.secondaryColor,
-        elevation: 8,
-        child: const MizzUpIconButton(
-          borderColor: Colors.transparent,
-          borderRadius: 30,
-          borderWidth: 1,
-          buttonSize: 60,
-          icon: Icon(
-            Icons.calendar_today_sharp,
-            color: MizzUpTheme.primaryColor,
-            size: 30,
-          ),
-        ),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () async {
+      //     await Navigator.push(
+      //       context,
+      //       PageTransition(
+      //         type: PageTransitionType.fade,
+      //         duration: Duration(milliseconds: 500),
+      //         reverseDuration: Duration(milliseconds: 500),
+      //         child: NavBarPage(index: 5),
+      //       ),
+      //     );
+      //   },
+      //   backgroundColor: MizzUpTheme.secondaryColor,
+      //   elevation: 8,
+      //   child: const MizzUpIconButton(
+      //     borderColor: Colors.transparent,
+      //     borderRadius: 30,
+      //     borderWidth: 1,
+      //     buttonSize: 60,
+      //     icon: Icon(
+      //       Icons.calendar_today_sharp,
+      //       color: MizzUpTheme.primaryColor,
+      //       size: 30,
+      //     ),
+      //   ),
+      // ),
       body: PageView(
         controller: _pageController,
         children: screen,
@@ -188,126 +201,155 @@ class _NavBarPageState extends State<NavBarPage> {
         notchMargin: 4.0,
         elevation: 10,
         color: MizzUpTheme.secondaryColor,
-        child: SizedBox(
-          height: 80,
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  IconButton(
-                    icon: const Icon(Icons.pending_actions),
-                    color: MizzUpTheme.primaryColor,
-                    onPressed: () async {
-                      await Navigator.push(
-                        context,
-                        PageTransition(
-                          type: PageTransitionType.fade,
-                          duration: Duration(milliseconds: 500),
-                          reverseDuration: Duration(milliseconds: 500),
-                          child: NavBarPage(index: 0),
-                        ),
-                      );
-                    },
-                  ),
-                  Text(
-                    'Programmes',
-                    style: MizzUpTheme.bodyText1.override(
-                      fontFamily: 'Poppins',
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: SizedBox(
+            height: 80,
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    IconButton(
+                      icon: const Icon(Icons.home_filled),
                       color: MizzUpTheme.primaryColor,
-                      fontSize: 11,
+                      onPressed: () async {
+                        await Navigator.push(
+                          context,
+                          PageTransition(
+                            type: PageTransitionType.fade,
+                            duration: Duration(milliseconds: 500),
+                            reverseDuration: Duration(milliseconds: 500),
+                            child: NavBarPage(index: 5),
+                          ),
+                        );
+                      },
                     ),
-                  ),
-                ],
-              ),
-              Column(
-                children: <Widget>[
-                  IconButton(
-                    icon: const Icon(Icons.menu_book_outlined),
-                    color: MizzUpTheme.primaryColor,
-                    onPressed: () async {
-                      await Navigator.push(
-                        context,
-                        PageTransition(
-                          type: PageTransitionType.fade,
-                          duration: Duration(milliseconds: 500),
-                          reverseDuration: Duration(milliseconds: 500),
-                          child: NavBarPage(index: 1),
-                        ),
-                      );
-                    },
-                  ),
-                  Text(
-                    'Recettes',
-                    style: MizzUpTheme.bodyText1.override(
-                      fontFamily: 'Poppins',
+                    Text(
+                      'Accueil',
+                      style: MizzUpTheme.bodyText1.override(
+                        fontFamily: 'Poppins',
+                        color: MizzUpTheme.primaryColor,
+                        fontSize: 11,
+                      ),
+                    ),
+                  ],
+                ),
+                Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    IconButton(
+                      icon: const Icon(Icons.pending_actions),
                       color: MizzUpTheme.primaryColor,
-                      fontSize: 11,
+                      onPressed: () async {
+                        await Navigator.push(
+                          context,
+                          PageTransition(
+                            type: PageTransitionType.fade,
+                            duration: Duration(milliseconds: 500),
+                            reverseDuration: Duration(milliseconds: 500),
+                            child: NavBarPage(index: 0),
+                          ),
+                        );
+                      },
                     ),
-                  ),
-                ],
-              ),
-              Container(
-                width: 20,
-              ),
-              Column(
-                children: <Widget>[
-                  IconButton(
-                    icon: const Icon(Icons.bookmark_border),
-                    color: MizzUpTheme.primaryColor,
-                    onPressed: () async {
-                      await Navigator.push(
-                        context,
-                        PageTransition(
-                          type: PageTransitionType.fade,
-                          duration: Duration(milliseconds: 500),
-                          reverseDuration: Duration(milliseconds: 500),
-                          child: NavBarPage(index: 3),
-                        ),
-                      );
-                    },
-                  ),
-                  Text(
-                    'Articles',
-                    style: MizzUpTheme.bodyText1.override(
-                      fontFamily: 'Poppins',
+                    Text(
+                      'Programmes',
+                      style: MizzUpTheme.bodyText1.override(
+                        fontFamily: 'Poppins',
+                        color: MizzUpTheme.primaryColor,
+                        fontSize: 11,
+                      ),
+                    ),
+                  ],
+                ),
+                Column(
+                  children: <Widget>[
+                    IconButton(
+                      icon: const Icon(Icons.bookmark_border),
                       color: MizzUpTheme.primaryColor,
-                      fontSize: 11,
+                      onPressed: () async {
+                        await Navigator.push(
+                          context,
+                          PageTransition(
+                            type: PageTransitionType.fade,
+                            duration: Duration(milliseconds: 500),
+                            reverseDuration: Duration(milliseconds: 500),
+                            child: NavBarPage(index: 3),
+                          ),
+                        );
+                      },
                     ),
-                  ),
-                ],
-              ),
-              Column(
-                children: <Widget>[
-                  IconButton(
-                    icon: const Icon(Icons.person_outline),
-                    color: MizzUpTheme.primaryColor,
-                    onPressed: () async {
-                      await Navigator.push(
-                        context,
-                        PageTransition(
-                          type: PageTransitionType.fade,
-                          duration: Duration(milliseconds: 500),
-                          reverseDuration: Duration(milliseconds: 500),
-                          child: NavBarPage(index: 4),
-                        ),
-                      );
-                    },
-                  ),
-                  Text(
-                    'Profil',
-                    style: MizzUpTheme.bodyText1.override(
-                      fontFamily: 'Poppins',
+                    Text(
+                      'Articles',
+                      style: MizzUpTheme.bodyText1.override(
+                        fontFamily: 'Poppins',
+                        color: MizzUpTheme.primaryColor,
+                        fontSize: 11,
+                      ),
+                    ),
+                  ],
+                ),
+                Column(
+                  children: <Widget>[
+                    IconButton(
+                      icon: const Icon(Icons.menu_book_outlined),
                       color: MizzUpTheme.primaryColor,
-                      fontSize: 11,
+                      onPressed: () async {
+                        await Navigator.push(
+                          context,
+                          PageTransition(
+                            type: PageTransitionType.fade,
+                            duration: Duration(milliseconds: 500),
+                            reverseDuration: Duration(milliseconds: 500),
+                            child: NavBarPage(index: 1),
+                          ),
+                        );
+                      },
                     ),
-                  ),
-                ],
-              ),
-            ],
+                    Text(
+                      'Recettes',
+                      style: MizzUpTheme.bodyText1.override(
+                        fontFamily: 'Poppins',
+                        color: MizzUpTheme.primaryColor,
+                        fontSize: 11,
+                      ),
+                    ),
+                  ],
+                ),
+                Column(
+                  children: <Widget>[
+                    IconButton(
+                      icon: const Icon(Icons.chat_bubble_outline_rounded),
+                      color: MizzUpTheme.primaryColor,
+                      onPressed: () async {
+                        await Navigator.push(
+                          context,
+                          PageTransition(
+                            type: PageTransitionType.fade,
+                            duration: Duration(milliseconds: 500),
+                            reverseDuration: Duration(milliseconds: 500),
+                            child: NavBarPage(index: 4),
+                          ),
+                        );
+                      },
+                    ),
+                    Text(
+                      'Forum',
+                      style: MizzUpTheme.bodyText1.override(
+                        fontFamily: 'Poppins',
+                        color: MizzUpTheme.primaryColor,
+                        fontSize: 11,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
