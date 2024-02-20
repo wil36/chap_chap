@@ -665,10 +665,10 @@ packages:
     dependency: transitive
     description:
       name: fwfh_text_style
-      sha256: "37806ee0222f79b6e8d4c698c322c897eae6a817258156f40aeece4e588fac60"
+      sha256: "5f8b587fd223a6bf14aad3d3da5e7ced0628becbd0768f8e7ae25ff6b9f3d2ec"
       url: "https://pub.dev"
     source: hosted
-    version: "2.22.08+1"
+    version: "2.23.8"
   glob:
     dependency: transitive
     description:
@@ -1620,4 +1620,4 @@ packages:
     version: "3.1.1"
 sdks:
   dart: ">=3.2.0-194.0.dev <4.0.0"
-  flutter: ">=3.10.0"
+  flutter: ">=3.14.0-0"
