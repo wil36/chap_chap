@@ -53,7 +53,8 @@ class _RecetteSuite2WidgetState extends State<RecetteSuite2Widget> {
   String message = '';
 
   int index = 0;
-  Future<QuerySnapshot<Map<String, dynamic>>> getUsersWithFavRecipe = getUsersWithFavorisRecipe();
+  Future<QuerySnapshot<Map<String, dynamic>>> getUsersWithFavRecipe =
+      getUsersWithFavorisRecipe();
 
   void _openLink(BuildContext context, Map<String?, String?> attrs) async {
     final String? link = attrs['href'];
@@ -81,7 +82,8 @@ class _RecetteSuite2WidgetState extends State<RecetteSuite2Widget> {
           headerRecette(),
           Expanded(
             child: Container(
-              child: Padding(padding: EdgeInsets.only(right: 0), child: bodyRecette()),
+              child: Padding(
+                  padding: EdgeInsets.only(right: 0), child: bodyRecette()),
             ),
           ),
         ],
@@ -108,7 +110,8 @@ class _RecetteSuite2WidgetState extends State<RecetteSuite2Widget> {
         ),
         Padding(
           padding: EdgeInsets.only(top: 20),
-          child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          child:
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             Padding(
               padding: EdgeInsets.only(left: 20),
               child: MizzUpIconButton(
@@ -139,16 +142,22 @@ class _RecetteSuite2WidgetState extends State<RecetteSuite2Widget> {
                 child: ToggleIcon(
                   onPressed: () async {
                     final favorisRecettesElement = widget.recetteRef;
-                    final favorisRecettesUpdate = currentUserDocument!.favorisRecettes!.toList().contains(favorisRecettesElement)
+                    final favorisRecettesUpdate = currentUserDocument!
+                            .favorisRecettes!
+                            .toList()
+                            .contains(favorisRecettesElement)
                         ? FieldValue.arrayRemove([favorisRecettesElement])
                         : FieldValue.arrayUnion([favorisRecettesElement]);
                     final usersUpdateData = {
                       'favorisRecettes': favorisRecettesUpdate,
                     };
-                    await currentUserDocument!.reference!.update(usersUpdateData);
+                    await currentUserDocument!.reference!
+                        .update(usersUpdateData);
                     setState(() {});
                   },
-                  value: currentUserDocument!.favorisRecettes!.toList().contains(widget.recetteRef),
+                  value: currentUserDocument!.favorisRecettes!
+                      .toList()
+                      .contains(widget.recetteRef),
                   onIcon: SvgPicture.asset(
                     'assets/profil/saved_recipe_full_icon.svg',
                     width: 20,
@@ -340,19 +349,29 @@ class _RecetteSuite2WidgetState extends State<RecetteSuite2Widget> {
                 int likesCounter = 0;
                 List<String> usersInitials = [];
                 QuerySnapshot<Map<String, dynamic>> docs = snapshot.data!;
-                List<DocumentSnapshot<Map<String, dynamic>>> documents = docs.docs;
-                for (DocumentSnapshot<Map<String, dynamic>> document in documents) {
-                  if (document.data()!['favorisRecettes'].contains(widget.recetteRef)) {
+                List<DocumentSnapshot<Map<String, dynamic>>> documents =
+                    docs.docs;
+                for (DocumentSnapshot<Map<String, dynamic>> document
+                    in documents) {
+                  if (document
+                      .data()!['favorisRecettes']
+                      .contains(widget.recetteRef)) {
                     likesCounter++;
                     var firstInitial;
                     var secondInitial;
-                    if (document.data()!.containsKey('Prenom') && document.data()!['Prenom'] != '') {
-                      firstInitial = document.data()!['Prenom'][0].toString().toUpperCase();
+                    if (document.data()!.containsKey('Prenom') &&
+                        document.data()!['Prenom'] != '') {
+                      firstInitial = document
+                          .data()!['Prenom'][0]
+                          .toString()
+                          .toUpperCase();
                     } else {
                       firstInitial = 'L';
                     }
-                    if (document.data()!.containsKey('Nom') && document.data()!['Nom'] != '') {
-                      secondInitial = document.data()!['Nom'][0].toString().toUpperCase();
+                    if (document.data()!.containsKey('Nom') &&
+                        document.data()!['Nom'] != '') {
+                      secondInitial =
+                          document.data()!['Nom'][0].toString().toUpperCase();
                     } else {
                       secondInitial = 'L';
                     }
@@ -372,7 +391,8 @@ class _RecetteSuite2WidgetState extends State<RecetteSuite2Widget> {
                               children: [
                                 for (String userInitial in usersInitials)
                                   Positioned(
-                                    left: (usersInitials.indexOf(userInitial) * 15),
+                                    left: (usersInitials.indexOf(userInitial) *
+                                        15),
                                     child: Container(
                                       width: 20,
                                       height: 20,
@@ -416,7 +436,10 @@ class _RecetteSuite2WidgetState extends State<RecetteSuite2Widget> {
                 return Text('Erreur: ${snapshot.error}');
               }
               // Chargement des données
-              return Container(width: 50, height: 50, child: Center(child: CircularProgressIndicator()));
+              return Container(
+                  width: 50,
+                  height: 50,
+                  child: Center(child: CircularProgressIndicator()));
             },
           ),
         ),
@@ -431,7 +454,10 @@ class _RecetteSuite2WidgetState extends State<RecetteSuite2Widget> {
                 Expanded(
                   child: ChoiceChipMizzup(
                     initialOption: choiceChipsValue ??= 'Ingrédients',
-                    options: const [ChipData('Ingrédients'), ChipData('Recette')],
+                    options: const [
+                      ChipData('Ingrédients'),
+                      ChipData('Recette')
+                    ],
                     onChanged: (val) => setState(() => choiceChipsValue = val),
                     selectedChipStyle: ChipStyle(
                       backgroundColor: MizzUpTheme.primaryColor,
@@ -470,13 +496,29 @@ class _RecetteSuite2WidgetState extends State<RecetteSuite2Widget> {
             padding: const EdgeInsetsDirectional.fromSTEB(40, 20, 20, 50),
             child: StyledText(
               newLineAsBreaks: true,
-              text: (choiceChipsValue) == 'Ingrédients' ? widget.listeIngredients : widget.etapes,
-              style: MizzUpTheme.bodyText1.override(fontFamily: 'IBM', color: Colors.black, useGoogleFonts: false, fontWeight: FontWeight.w400, fontSize: 13),
+              text: (choiceChipsValue) == 'Ingrédients'
+                  ? widget.listeIngredients
+                  : widget.etapes,
+              style: MizzUpTheme.bodyText1.override(
+                  fontFamily: 'IBM',
+                  color: Colors.black,
+                  useGoogleFonts: false,
+                  fontWeight: FontWeight.w400,
+                  fontSize: 13),
               tags: {
-                'bold': StyledTextTag(style: MizzUpTheme.bodyText1.override(fontFamily: 'IBM', color: MizzUpTheme.primaryColor, useGoogleFonts: false, fontWeight: FontWeight.bold, fontSize: 15)),
+                'bold': StyledTextTag(
+                    style: MizzUpTheme.bodyText1.override(
+                        fontFamily: 'IBM',
+                        color: MizzUpTheme.primaryColor,
+                        useGoogleFonts: false,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15)),
                 'link': StyledTextActionTag(
                   (_, attrs) => _openLink(context, attrs),
-                  style: const TextStyle(decoration: TextDecoration.underline, color: MizzUpTheme.primaryColor, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      decoration: TextDecoration.underline,
+                      color: MizzUpTheme.primaryColor,
+                      fontWeight: FontWeight.bold),
                 ),
               },
             ),
@@ -501,8 +543,14 @@ class _RecetteSuite2WidgetState extends State<RecetteSuite2Widget> {
                           children: [
                             Container(
                                 margin: const EdgeInsets.only(left: 40),
-                                child: Text('Commentaires (${recipeComments.length})',
-                                    style: MizzUpTheme.bodyText1.override(fontFamily: 'IBM', color: Colors.black, useGoogleFonts: false, fontWeight: FontWeight.w800, fontSize: 15))),
+                                child: Text(
+                                    'Commentaires (${recipeComments.length})',
+                                    style: MizzUpTheme.bodyText1.override(
+                                        fontFamily: 'IBM',
+                                        color: Colors.black,
+                                        useGoogleFonts: false,
+                                        fontWeight: FontWeight.w800,
+                                        fontSize: 15))),
                             GestureDetector(
                               onTap: () async {
                                 await showModalBottomSheet(
@@ -511,10 +559,14 @@ class _RecetteSuite2WidgetState extends State<RecetteSuite2Widget> {
                                   context: context,
                                   builder: (context) {
                                     return Padding(
-                                      padding: MediaQuery.of(context).viewInsets,
+                                      padding:
+                                          MediaQuery.of(context).viewInsets,
                                       child: Container(
-                                        height: MediaQuery.of(context).size.height * 0.9,
-                                        child: DisplayAllComments(recetteRef: widget.recetteRef),
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.9,
+                                        child: DisplayAllComments(
+                                            recetteRef: widget.recetteRef),
                                       ),
                                     );
                                   },
@@ -524,7 +576,12 @@ class _RecetteSuite2WidgetState extends State<RecetteSuite2Widget> {
                                   margin: const EdgeInsets.only(right: 40),
                                   child: Text(
                                     'Voir tout',
-                                    style: TextStyle(color: Colors.black, fontFamily: 'IBM', fontSize: 12, fontWeight: FontWeight.w400, decoration: TextDecoration.underline),
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontFamily: 'IBM',
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w400,
+                                        decoration: TextDecoration.underline),
                                   )),
                             ),
                           ],
@@ -536,10 +593,12 @@ class _RecetteSuite2WidgetState extends State<RecetteSuite2Widget> {
                             builder: (context, snapshot) {
                               var comment = recipeComments[i];
                               return Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 40),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 40),
                                 child: Container(
                                   padding: const EdgeInsets.all(10),
-                                  margin: const EdgeInsets.only(top: 10, bottom: 10),
+                                  margin: const EdgeInsets.only(
+                                      top: 10, bottom: 10),
                                   decoration: BoxDecoration(
                                     color: Colors.white,
                                     borderRadius: BorderRadius.circular(10),
@@ -548,24 +607,29 @@ class _RecetteSuite2WidgetState extends State<RecetteSuite2Widget> {
                                         color: Colors.grey.withOpacity(0.5),
                                         spreadRadius: 1,
                                         blurRadius: 7,
-                                        offset: const Offset(0, 3), // changes position of shadow
+                                        offset: const Offset(
+                                            0, 3), // changes position of shadow
                                       ),
                                     ],
                                   ),
                                   child: LayoutBuilder(
-                                    builder: (BuildContext context, BoxConstraints constraints) {
+                                    builder: (BuildContext context,
+                                        BoxConstraints constraints) {
                                       return Column(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
                                           Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
                                             children: [
                                               GestureDetector(
                                                 onTap: () {
                                                   Navigator.push(
                                                     context,
                                                     MaterialPageRoute(
-                                                      builder: (context) => OtherProfilePage(
+                                                      builder: (context) =>
+                                                          OtherProfilePage(
                                                         userId: user.id,
                                                       ),
                                                     ),
@@ -574,7 +638,9 @@ class _RecetteSuite2WidgetState extends State<RecetteSuite2Widget> {
                                                 child: Row(
                                                   children: [
                                                     ClipRRect(
-                                                      borderRadius: BorderRadius.circular(50), // Adjust the radius to your liking
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              50), // Adjust the radius to your liking
                                                       child: Image.network(
                                                         user!['photo_url'],
                                                         width: 30,
@@ -584,16 +650,22 @@ class _RecetteSuite2WidgetState extends State<RecetteSuite2Widget> {
                                                     ),
                                                     SizedBox(width: 10),
                                                     Column(
-                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
                                                       children: [
                                                         Text(
                                                           user['display_name'],
-                                                          style: MizzUpTheme.bodyText1.override(
+                                                          style: MizzUpTheme
+                                                              .bodyText1
+                                                              .override(
                                                             color: Colors.black,
                                                             fontFamily: 'IBM',
                                                             fontSize: 14,
-                                                            fontWeight: FontWeight.w600,
-                                                            useGoogleFonts: false,
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            useGoogleFonts:
+                                                                false,
                                                           ),
                                                         ),
                                                       ],
@@ -604,8 +676,13 @@ class _RecetteSuite2WidgetState extends State<RecetteSuite2Widget> {
                                               Row(
                                                 children: [
                                                   Text(
-                                                    DateFormat.yMd('fr_FR').format(recipeComments[i]['date'].toDate()),
-                                                    style: MizzUpTheme.bodyText1.override(
+                                                    DateFormat.yMd('fr_FR')
+                                                        .format(
+                                                            recipeComments[i]
+                                                                    ['date']
+                                                                .toDate()),
+                                                    style: MizzUpTheme.bodyText1
+                                                        .override(
                                                       color: Colors.black,
                                                       fontFamily: 'IBM',
                                                       fontSize: 10,
@@ -613,10 +690,14 @@ class _RecetteSuite2WidgetState extends State<RecetteSuite2Widget> {
                                                     ),
                                                   ),
                                                   SizedBox(width: 5),
-                                                  recipeComments[i]["user_id"] == currentUserUid
+                                                  recipeComments[i]
+                                                              ["user_id"] ==
+                                                          currentUserUid
                                                       ? GestureDetector(
                                                           onTap: () {
-                                                            showCommentOptions(context, comment);
+                                                            showCommentOptions(
+                                                                context,
+                                                                comment);
                                                           },
                                                           child: Icon(
                                                             Icons.more_vert,
@@ -631,12 +712,16 @@ class _RecetteSuite2WidgetState extends State<RecetteSuite2Widget> {
                                           ),
                                           SizedBox(height: 15),
                                           Container(
-                                            width: MediaQuery.of(context).size.width * 0.6,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.6,
                                             child: Center(
                                               child: Text(
                                                 textAlign: TextAlign.center,
                                                 comment['comment'].toString(),
-                                                style: MizzUpTheme.bodyText1.override(
+                                                style: MizzUpTheme.bodyText1
+                                                    .override(
                                                   color: Colors.black,
                                                   fontFamily: 'IBM',
                                                   fontSize: 12,
@@ -647,48 +732,78 @@ class _RecetteSuite2WidgetState extends State<RecetteSuite2Widget> {
                                           ),
                                           SizedBox(height: 5),
                                           Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
                                             children: [
                                               //repondre button
                                               TextButton(
                                                 onPressed: () async {
                                                   await showModalBottomSheet(
                                                     isScrollControlled: true,
-                                                    backgroundColor: Colors.transparent,
+                                                    backgroundColor:
+                                                        Colors.transparent,
                                                     context: context,
                                                     builder: (context) {
                                                       return Padding(
-                                                        padding: MediaQuery.of(context).viewInsets,
+                                                        padding: MediaQuery.of(
+                                                                context)
+                                                            .viewInsets,
                                                         child: Container(
-                                                          height: MediaQuery.of(context).size.height * 0.9,
-                                                          child: ReplyComment(comment: comment, user: user),
+                                                          height: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .height *
+                                                              0.9,
+                                                          child: ReplyComment(
+                                                              comment: comment,
+                                                              user: user),
                                                         ),
                                                       );
                                                     },
-                                                  ).then((value) => setState(() {}));
+                                                  ).then((value) =>
+                                                      setState(() {}));
                                                 },
                                                 child: Container(
-                                                    padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        vertical: 5,
+                                                        horizontal: 15),
                                                     decoration: BoxDecoration(
-                                                      borderRadius: BorderRadius.circular(5),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5),
                                                       color: Colors.white,
                                                       boxShadow: [
                                                         BoxShadow(
-                                                          color: Colors.grey.withOpacity(0.3),
+                                                          color: Colors.grey
+                                                              .withOpacity(0.3),
                                                           spreadRadius: 0,
                                                           blurRadius: 5,
-                                                          offset: const Offset(0, 4), // changes position of shadow
+                                                          offset: const Offset(
+                                                              0,
+                                                              4), // changes position of shadow
                                                         ),
                                                       ],
                                                     ),
-                                                    child: const Text('Répondre', style: TextStyle(color: MizzUpTheme.primaryColor, fontSize: 12, fontWeight: FontWeight.w300))),
+                                                    child: const Text(
+                                                        'Répondre',
+                                                        style: TextStyle(
+                                                            color: MizzUpTheme
+                                                                .primaryColor,
+                                                            fontSize: 12,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w300))),
                                               ),
                                               //like button
                                               Row(
                                                 children: [
                                                   Text(
-                                                    comment['likes'].length.toString(),
-                                                    style: MizzUpTheme.bodyText1.override(
+                                                    comment['likes']
+                                                        .length
+                                                        .toString(),
+                                                    style: MizzUpTheme.bodyText1
+                                                        .override(
                                                       color: Colors.black,
                                                       fontFamily: 'IBM',
                                                       fontSize: 14,
@@ -698,12 +813,24 @@ class _RecetteSuite2WidgetState extends State<RecetteSuite2Widget> {
                                                   ToggleIcon(
                                                     onPressed: () async {
                                                       print(comment.id);
-                                                      comment['likes'].contains(currentUserUid) ? await unlikeComment(comment.id) : await likeComment(comment.id);
+                                                      comment['likes'].contains(
+                                                              currentUserUid)
+                                                          ? await unlikeComment(
+                                                              comment.id)
+                                                          : await likeComment(
+                                                              comment.id);
                                                       setState(() {});
                                                     },
-                                                    value: comment['likes'].contains(currentUserUid),
-                                                    onIcon: Icon(Icons.favorite, color: MizzUpTheme.primaryColor),
-                                                    offIcon: Icon(Icons.favorite_border, color: MizzUpTheme.primaryColor),
+                                                    value: comment['likes']
+                                                        .contains(
+                                                            currentUserUid),
+                                                    onIcon: Icon(Icons.favorite,
+                                                        color: MizzUpTheme
+                                                            .primaryColor),
+                                                    offIcon: Icon(
+                                                        Icons.favorite_border,
+                                                        color: MizzUpTheme
+                                                            .primaryColor),
                                                   ),
                                                 ],
                                               ),
@@ -750,7 +877,8 @@ class _RecetteSuite2WidgetState extends State<RecetteSuite2Widget> {
                 borderRadius: BorderRadius.circular(10),
                 color: MizzUpTheme.secondaryColor,
               ),
-              child: const Text('Laisser un commentaire', style: TextStyle(color: Colors.black, fontSize: 16))),
+              child: const Text('Laisser un commentaire',
+                  style: TextStyle(color: Colors.black, fontSize: 16))),
         ),
       ],
     );
@@ -772,9 +900,11 @@ class _RecetteSuite2WidgetState extends State<RecetteSuite2Widget> {
     }
   }
 
-  void showCommentOptions(BuildContext context, QueryDocumentSnapshot<Map<String, dynamic>> comment) {
+  void showCommentOptions(BuildContext context,
+      QueryDocumentSnapshot<Map<String, dynamic>> comment) {
     final RenderBox button = context.findRenderObject() as RenderBox;
-    final RenderBox overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
+    final RenderBox overlay =
+        Overlay.of(context).context.findRenderObject() as RenderBox;
     final Offset offset = button.localToGlobal(Offset.zero, ancestor: overlay);
 
     showMenu<String>(
@@ -783,11 +913,13 @@ class _RecetteSuite2WidgetState extends State<RecetteSuite2Widget> {
       items: [
         PopupMenuItem<String>(
           value: 'edit',
-          child: Text('Modifier', style: TextStyle(color: Colors.black, fontSize: 12)),
+          child: Text('Modifier',
+              style: TextStyle(color: Colors.black, fontSize: 12)),
         ),
         PopupMenuItem<String>(
           value: 'delete',
-          child: Text('Supprimer', style: TextStyle(color: Colors.black, fontSize: 12)),
+          child: Text('Supprimer',
+              style: TextStyle(color: Colors.black, fontSize: 12)),
         ),
       ],
       elevation: 8.0,
@@ -803,7 +935,10 @@ class _RecetteSuite2WidgetState extends State<RecetteSuite2Widget> {
               padding: MediaQuery.of(context).viewInsets,
               child: Container(
                 height: MediaQuery.of(context).size.height * 0.9,
-                child: EditReply(comment: comment, isAnAnswer: false,),
+                child: EditReply(
+                  comment: comment,
+                  isAnAnswer: false,
+                ),
               ),
             );
           },
@@ -815,8 +950,12 @@ class _RecetteSuite2WidgetState extends State<RecetteSuite2Widget> {
   }
 }
 
-Stream<QuerySnapshot<Map<String, dynamic>>> getAllRecipeComments(DocumentReference recipeId) {
-  return FirebaseFirestore.instance.collection('comments').where('recipe_id', isEqualTo: recipeId).snapshots();
+Stream<QuerySnapshot<Map<String, dynamic>>> getAllRecipeComments(
+    DocumentReference recipeId) {
+  return FirebaseFirestore.instance
+      .collection('comments')
+      .where('recipe_id', isEqualTo: recipeId)
+      .snapshots();
 }
 
 Future<DocumentSnapshot<Map<String, dynamic>>> getUserById(String userId) {
@@ -824,17 +963,26 @@ Future<DocumentSnapshot<Map<String, dynamic>>> getUserById(String userId) {
 }
 
 Future<void> likeComment(String commentId) async {
-  await FirebaseFirestore.instance.collection('comments').doc(commentId).update({
+  await FirebaseFirestore.instance
+      .collection('comments')
+      .doc(commentId)
+      .update({
     'likes': FieldValue.arrayUnion([currentUserUid])
   });
 }
 
 Future<void> unlikeComment(String commentId) async {
-  await FirebaseFirestore.instance.collection('comments').doc(commentId).update({
+  await FirebaseFirestore.instance
+      .collection('comments')
+      .doc(commentId)
+      .update({
     'likes': FieldValue.arrayRemove([currentUserUid])
   });
 }
 
 Future<void> deleteComment(String commentId) async {
-  await FirebaseFirestore.instance.collection('comments').doc(commentId).delete();
+  await FirebaseFirestore.instance
+      .collection('comments')
+      .doc(commentId)
+      .delete();
 }

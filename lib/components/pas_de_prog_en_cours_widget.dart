@@ -17,7 +17,7 @@ class _PasDeProgEnCoursWidgetState extends State<PasDeProgEnCoursWidget> {
       width: double.infinity,
       height: double.infinity,
       decoration: const BoxDecoration(
-        color: Colors.white,
+        color: Colors.transparent,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.max,
@@ -30,41 +30,50 @@ class _PasDeProgEnCoursWidgetState extends State<PasDeProgEnCoursWidget> {
               children: [
                 Text(
                   'Tu n\'as pas de programmes aujourd\'hui',
+                  // 'Rien de prévu aujourd\'hui !',
                   style: MizzUpTheme.bodyText1,
                 ),
               ],
             ),
           ),
           Padding(
-            padding: const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
-            child: FFButtonWidget(
-              onPressed: () async {
-                await Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const NavBarPage(index: 0)),
-                  (r) => false,
-                );
-              },
-              text: 'Découvrir les programmes',
-              options: MizzUpOptionButton(
-                width: 290,
-                height: 40,
-                color: MizzUpTheme.secondaryColor,
-                textStyle: MizzUpTheme.subtitle2.override(
-                  fontFamily: 'IBM',
-                  color: Colors.black,
-                  useGoogleFonts: false,
-                ),
-                elevation: 5,
-                borderSide: const BorderSide(
-                  color: Colors.transparent,
-                  width: 1,
-                ),
-                borderRadius: 12,
+              padding: const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+              child: Center(
+                child: Container(
+                    width: MediaQuery.of(context).size.width / 2.5,
+                    child: Divider(
+                      height: 2,
+                      color: MizzUpTheme.primaryColor,
+                    )),
+              )
+              // FFButtonWidget(
+              //   onPressed: () async {
+              //     await Navigator.pushAndRemoveUntil(
+              //       context,
+              //       MaterialPageRoute(
+              //           builder: (context) => const NavBarPage(index: 0)),
+              //       (r) => false,
+              //     );
+              //   },
+              //   text: 'Découvrir les programmes',
+              //   options: MizzUpOptionButton(
+              //     width: 290,
+              //     height: 40,
+              //     color: MizzUpTheme.secondaryColor,
+              //     textStyle: MizzUpTheme.subtitle2.override(
+              //       fontFamily: 'IBM',
+              //       color: Colors.black,
+              //       useGoogleFonts: false,
+              //     ),
+              //     elevation: 5,
+              //     borderSide: const BorderSide(
+              //       color: Colors.transparent,
+              //       width: 1,
+              //     ),
+              //     borderRadius: 12,
+              //   ),
+              // ),
               ),
-            ),
-          ),
         ],
       ),
     );

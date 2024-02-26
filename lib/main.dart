@@ -16,7 +16,6 @@ import 'auth/firebase_user_provider.dart';
 import 'auth/auth_util.dart';
 import 'package:chap_chap/start/start_widget.dart';
 import 'package:chap_chap/pagedaccueil/pagedaccueil_widget.dart';
-import 'MizzUp_Code/MizzUp_icon_button.dart';
 import 'MizzUp_Code/MizzUp_theme.dart';
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'notification/messaging_service.dart';

@@ -1,9 +1,8 @@
 // ignore_for_file: avoid_print, unnecessary_statements
 import 'package:chap_chap/components/pas_de_prog_en_cours_widget.dart';
 import 'package:chap_chap/MizzUp_Code/MizzUp_Calendar.dart';
-import 'package:chap_chap/notification/notification_widget.dart';
 import 'package:chap_chap/decouvrir_programme/programme_suite_widget.dart';
-import 'package:chap_chap/profil/profil_preview.dart';
+import 'package:chap_chap/main.dart';
 import 'package:chap_chap/profil/profil_widget.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../auth/auth_util.dart';
@@ -28,11 +27,13 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
   DateTime _selectedDay = DateTime.now();
+  CalendarFormat calendarFormat = CalendarFormat.week;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   List<DateTime> dateProg = [DateTime.now()];
   List<dynamic> dateRoutine = [DateTime.now()];
   List<DateTime> dateRoutineOther = [DateTime.now()];
   DateTime recurrencePoint = DateTime.now();
+  ScrollController scrollController = new ScrollController();
   final Query<Map<String, dynamic>> collectionProg = FirebaseFirestore.instance
       .collection('progUser')
       .where('userRef', isEqualTo: currentUserReference);
@@ -58,6 +59,7 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
         color: MizzUpTheme.tertiaryColor,
       ),
       child: SingleChildScrollView(
+        controller: scrollController,
         child: Column(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -91,6 +93,9 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
                 ],
               ),
             ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.02,
+            ),
             Column(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.start,
@@ -116,7 +121,7 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
                             usersCollection, likesCollection);
                       },
                       child: Text(
-                        'Bonjour $currentUserDisplayName',
+                        'Bonjour $currentUserDisplayName!',
                         textAlign: TextAlign.start,
                         style: MizzUpTheme.title1.override(
                           fontFamily: 'IBM',
@@ -132,7 +137,7 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
                   child: Padding(
                     padding: const EdgeInsetsDirectional.fromSTEB(40, 0, 0, 10),
                     child: Text(
-                      'Prêt(e) pour prendre soin de tes cheveux ?',
+                      'Bienvenue dans ton appli Chap Chap',
                       style: MizzUpTheme.bodyText1.override(
                         fontFamily: 'IBM',
                         color: Colors.white,
@@ -140,6 +145,9 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
                       ),
                     ),
                   ),
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.05,
                 ),
                 Align(
                   alignment: const AlignmentDirectional(-0.8, 0),
@@ -156,13 +164,191 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
                       ),
                     ),
                     child: SingleChildScrollView(
+                      controller: scrollController,
                       child: Column(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          calendar(),
-                          addRoutine(),
-                          progUser(),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.01,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "Mon calendrier",
+                                  style: TextStyle(
+                                    fontSize: 25.0,
+                                    fontFamily: 'IBM',
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      calendarFormat =
+                                          calendarFormat == CalendarFormat.month
+                                              ? CalendarFormat.week
+                                              : CalendarFormat.month;
+                                    });
+                                  },
+                                  child: Text(
+                                    calendarFormat == CalendarFormat.month
+                                        ? "Voir moins"
+                                        : "Voir plus",
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 12.0),
+                            child: Material(
+                              borderRadius: BorderRadius.circular(18.0),
+                              elevation: 2,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  children: [
+                                    calendarMini(),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    progUser(),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.01,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "Recettes",
+                                  style: TextStyle(
+                                    fontSize: 25.0,
+                                    fontFamily: 'IBM',
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed: () async {
+                                    await Navigator.push(
+                                      context,
+                                      PageTransition(
+                                        type: PageTransitionType.fade,
+                                        duration: Duration(milliseconds: 500),
+                                        reverseDuration:
+                                            Duration(milliseconds: 500),
+                                        child: NavBarPage(index: 1),
+                                      ),
+                                    );
+                                  },
+                                  child: Text(
+                                    calendarFormat == CalendarFormat.month
+                                        ? "Voir moins"
+                                        : "Voir plus",
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.01,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "Programmes",
+                                  style: TextStyle(
+                                    fontSize: 25.0,
+                                    fontFamily: 'IBM',
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed: () async {
+                                    await Navigator.push(
+                                      context,
+                                      PageTransition(
+                                        type: PageTransitionType.fade,
+                                        duration: Duration(milliseconds: 500),
+                                        reverseDuration:
+                                            Duration(milliseconds: 500),
+                                        child: NavBarPage(index: 0),
+                                      ),
+                                    );
+                                  },
+                                  child: Text(
+                                    calendarFormat == CalendarFormat.month
+                                        ? "Voir moins"
+                                        : "Voir plus",
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.01,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "Articles",
+                                  style: TextStyle(
+                                    fontSize: 25.0,
+                                    fontFamily: 'IBM',
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed: () async {
+                                    await Navigator.push(
+                                      context,
+                                      PageTransition(
+                                        type: PageTransitionType.fade,
+                                        duration: Duration(milliseconds: 500),
+                                        reverseDuration:
+                                            Duration(milliseconds: 500),
+                                        child: NavBarPage(index: 3),
+                                      ),
+                                    );
+                                  },
+                                  child: Text(
+                                    calendarFormat == CalendarFormat.month
+                                        ? "Voir moins"
+                                        : "Voir plus",
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          // addRoutine(),
+
                           routineUser(),
                         ],
                       ),
@@ -360,6 +546,133 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
     );
   }
 
+  Widget calendarMini() {
+    return TableCalendar(
+      locale: "fr",
+      firstDay: kFirstDay,
+      lastDay: kLastDay,
+      eventLoader: (day) {
+        DateTime dayTolocal = DateTime(day.year, day.month, day.day);
+        if (dateProg.contains(dayTolocal)) {
+          (date, locale) => DateFormat.E(locale).format(date).toCapitalized();
+
+          return [const Event('Cyclic event')];
+        }
+        if (dateProg.contains(dayTolocal.add(const Duration(hours: 1)))) {
+          return [const Event('Cyclic event')];
+        }
+        if (dateProg.contains(dayTolocal.subtract(const Duration(hours: 1)))) {
+          return [const Event('Cyclic event')];
+        }
+        if (dateRoutine.contains(dayTolocal)) {
+          return [const Event('Cyclic event')];
+        }
+        if (dateRoutine.contains(dayTolocal.add(const Duration(hours: 1)))) {
+          return [const Event('Cyclic event')];
+        }
+        if (dateRoutine
+            .contains(dayTolocal.subtract(const Duration(hours: 1)))) {
+          return [const Event('Cyclic event')];
+        }
+        if (dateRoutineOther
+            .contains(dayTolocal.add(const Duration(hours: 1)))) {
+          return [const Event('Cyclic event')];
+        }
+        if (dateRoutineOther
+            .contains(dayTolocal.subtract(const Duration(hours: 1)))) {
+          return [const Event('Cyclic event')];
+        }
+        if (dateRoutineOther.contains(dayTolocal)) {
+          return [const Event('Cyclic event')];
+        }
+
+        return [];
+      },
+      focusedDay:
+          DateTime(_focusedDay.year, _focusedDay.month, _focusedDay.day),
+      weekendDays: const [DateTime.saturday, DateTime.sunday],
+      calendarFormat: calendarFormat,
+      startingDayOfWeek: StartingDayOfWeek.monday,
+      headerStyle: HeaderStyle(
+        titleCentered: false,
+        formatButtonVisible: false,
+        formatButtonShowsNext: false,
+        titleTextStyle: const TextStyle(
+          fontSize: 17.0,
+          fontFamily: 'IBM',
+          color: MizzUpTheme.primaryColor,
+          fontWeight: FontWeight.w700,
+        ),
+        formatButtonTextStyle:
+            const TextStyle(fontSize: 17.0, fontFamily: 'IBM'),
+        formatButtonDecoration: const BoxDecoration(
+          border: Border.fromBorderSide(BorderSide()),
+          borderRadius: BorderRadius.all(Radius.circular(12.0)),
+        ),
+        headerMargin: const EdgeInsets.only(left: 10, bottom: 12),
+        headerPadding: const EdgeInsets.symmetric(vertical: 8.0),
+        formatButtonPadding: const EdgeInsets.all(10.0),
+        leftChevronPadding: const EdgeInsets.all(12.0),
+        rightChevronPadding: const EdgeInsets.all(12.0),
+        leftChevronMargin: const EdgeInsets.symmetric(horizontal: 8.0),
+        rightChevronMargin: const EdgeInsets.symmetric(horizontal: 8.0),
+        leftChevronIcon: const Icon(Icons.chevron_left),
+        rightChevronIcon: const Icon(Icons.chevron_right),
+        leftChevronVisible: false,
+        rightChevronVisible: false,
+        decoration: const BoxDecoration(),
+        titleTextFormatter: (date, locale) =>
+            DateFormat.yMMMM(locale).format(date).toCapitalized(),
+      ),
+      availableGestures: AvailableGestures.all,
+      daysOfWeekStyle: DaysOfWeekStyle(
+        dowTextFormatter: (date, locale) =>
+            DateFormat.E(locale).format(date).toCapitalized(),
+      ),
+      calendarStyle: const CalendarStyle(
+        markerSize: 5,
+        markerMargin: EdgeInsets.symmetric(vertical: 5),
+        todayTextStyle: TextStyle(
+          color: Colors.white,
+          fontSize: 16.0,
+        ),
+        todayDecoration: BoxDecoration(
+          color: MizzUpTheme.secondaryColor,
+          shape: BoxShape.circle,
+        ),
+        selectedTextStyle: TextStyle(
+          color: Colors.white,
+          fontSize: 16.0,
+        ),
+        selectedDecoration: BoxDecoration(
+          color: MizzUpTheme.primaryColor,
+          shape: BoxShape.circle,
+        ),
+      ),
+      selectedDayPredicate: (day) {
+        return isSameDay(_selectedDay, day);
+      },
+      onDaySelected: (selectedDay, focusedDay) {
+        if (!isSameDay(_selectedDay, selectedDay)) {
+          setState(() {
+            _selectedDay = selectedDay;
+            _focusedDay = selectedDay;
+          });
+        }
+      },
+      onFormatChanged: (format) {
+        if (_calendarFormat != format) {
+          setState(() {
+            _calendarFormat = format;
+          });
+        }
+      },
+      onPageChanged: (focusedDay) {
+        _focusedDay = focusedDay;
+      },
+    );
+  }
+
   Widget addRoutine() {
     return Row(
       mainAxisSize: MainAxisSize.max,
@@ -512,7 +825,7 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
                             children: [
                               InkWell(
                                 onTap: () async {
-                                  await Navigator.pushAndRemoveUntil(
+                                  await Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) =>
@@ -524,7 +837,6 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
                                         date: _selectedDay,
                                       ),
                                     ),
-                                    (r) => false,
                                   );
                                 },
                                 child: Row(
