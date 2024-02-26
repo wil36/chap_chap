@@ -78,6 +78,9 @@ class _ArticlesWidgetState extends State<ArticlesWidget> {
                 ],
               ),
             ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.02,
+            ),
             Column(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.start,
@@ -97,6 +100,9 @@ class _ArticlesWidgetState extends State<ArticlesWidget> {
                   ),
                 ),
               ],
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.05,
             ),
             Container(
               width: double.infinity,
@@ -159,7 +165,8 @@ class _ArticlesWidgetState extends State<ArticlesWidget> {
               ),
               child: StreamBuilder<List<ArticlesRecord?>>(
                 stream: queryArticlesRecord(
-                  queryBuilder: (articlesRecord) => articlesRecord.orderBy('create_time', descending: true)
+                  queryBuilder: (articlesRecord) => articlesRecord
+                      .orderBy('create_time', descending: true)
                       .where('categorie',
                           isEqualTo: defaultChoiceIndex != 0
                               ? categoryIds[_choicesList[defaultChoiceIndex]]

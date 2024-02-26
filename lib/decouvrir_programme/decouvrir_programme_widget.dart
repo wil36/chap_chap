@@ -84,12 +84,12 @@ class _DecouvrirProgrammeWidgetState extends State<DecouvrirProgrammeWidget> {
                         size: 20,
                       ),
                       onPressed: () async {
-                         await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const NotificationWidget(),
-                        ),
-                      );
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const NotificationWidget(),
+                          ),
+                        );
                       },
                     ),
                   ],
@@ -242,7 +242,7 @@ class _DecouvrirProgrammeWidgetState extends State<DecouvrirProgrammeWidget> {
                                                       Padding(
                                                         padding:
                                                             const EdgeInsetsDirectional
-                                                                    .fromSTEB(
+                                                                .fromSTEB(
                                                                 0, 20, 0, 0),
                                                         child: Container(
                                                             height: MediaQuery.of(
@@ -293,7 +293,7 @@ class _DecouvrirProgrammeWidgetState extends State<DecouvrirProgrammeWidget> {
                                                       Padding(
                                                         padding:
                                                             const EdgeInsetsDirectional
-                                                                    .fromSTEB(
+                                                                .fromSTEB(
                                                                 5, 10, 0, 0),
                                                         child: Text(
                                                           containerProgrammesRecord
@@ -315,7 +315,7 @@ class _DecouvrirProgrammeWidgetState extends State<DecouvrirProgrammeWidget> {
                                                       Padding(
                                                         padding:
                                                             const EdgeInsetsDirectional
-                                                                    .fromSTEB(
+                                                                .fromSTEB(
                                                                 5, 5, 35, 0),
                                                         child: Text(
                                                           containerProgrammesRecord
@@ -515,7 +515,7 @@ class _DecouvrirProgrammeWidgetState extends State<DecouvrirProgrammeWidget> {
                                                             Padding(
                                                               padding:
                                                                   const EdgeInsetsDirectional
-                                                                          .fromSTEB(
+                                                                      .fromSTEB(
                                                                       0,
                                                                       0,
                                                                       0,
@@ -629,7 +629,7 @@ class _DecouvrirProgrammeWidgetState extends State<DecouvrirProgrammeWidget> {
                                                       Padding(
                                                         padding:
                                                             const EdgeInsetsDirectional
-                                                                    .fromSTEB(
+                                                                .fromSTEB(
                                                                 5, 10, 0, 0),
                                                         child: Text(
                                                           containerProgrammesRecord
@@ -651,7 +651,7 @@ class _DecouvrirProgrammeWidgetState extends State<DecouvrirProgrammeWidget> {
                                                       Padding(
                                                         padding:
                                                             const EdgeInsetsDirectional
-                                                                    .fromSTEB(
+                                                                .fromSTEB(
                                                                 5, 5, 35, 0),
                                                         child: Text(
                                                           containerProgrammesRecord

@@ -2,7 +2,6 @@
 import 'package:chap_chap/components/pas_de_prog_en_cours_widget.dart';
 import 'package:chap_chap/MizzUp_Code/MizzUp_Calendar.dart';
 import 'package:chap_chap/decouvrir_programme/programme_suite_widget.dart';
-import 'package:chap_chap/main.dart';
 import 'package:chap_chap/profil/profil_widget.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../auth/auth_util.dart';
@@ -16,14 +15,14 @@ import '../MizzUp_Code/MizzUp_util.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class PagedaccueilWidget extends StatefulWidget {
-  const PagedaccueilWidget({Key? key}) : super(key: key);
+class ForumWidget extends StatefulWidget {
+  const ForumWidget({Key? key}) : super(key: key);
 
   @override
-  _PagedaccueilWidgetState createState() => _PagedaccueilWidgetState();
+  _ForumWidgetState createState() => _ForumWidgetState();
 }
 
-class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
+class _ForumWidgetState extends State<ForumWidget> {
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
   DateTime _selectedDay = DateTime.now();
@@ -154,6 +153,7 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
                   child: Container(
                     width: double.infinity,
                     height: MediaQuery.of(context).size.height * 1,
+                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
                     decoration: const BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.only(
@@ -163,195 +163,69 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
                         topRight: Radius.circular(20),
                       ),
                     ),
-                    child: SingleChildScrollView(
-                      controller: scrollController,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.01,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "Mon calendrier",
-                                  style: TextStyle(
-                                    fontSize: 25.0,
-                                    fontFamily: 'IBM',
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w700,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          height: 15,
+                        ),
+                        Text(
+                          "Forum",
+                          style: MizzUpTheme.subtitle1,
+                        ),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        SizedBox(
+                          width: double.infinity,
+                          child: Material(
+                            borderRadius: BorderRadius.circular(18.0),
+                            elevation: 2,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    height: 15,
                                   ),
-                                ),
-                                TextButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      calendarFormat =
-                                          calendarFormat == CalendarFormat.month
-                                              ? CalendarFormat.week
-                                              : CalendarFormat.month;
-                                    });
-                                  },
-                                  child: Text(
-                                    calendarFormat == CalendarFormat.month
-                                        ? "Voir moins"
-                                        : "Voir plus",
+                                  Text(
+                                    "<< Seul on va plus-vite, ensemble, on va plus loin. >>",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontFamily: 'IBM',
+                                      color: MizzUpTheme.primaryColor,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 18,
+                                    ),
                                   ),
-                                )
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 12.0),
-                            child: Material(
-                              borderRadius: BorderRadius.circular(18.0),
-                              elevation: 2,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  children: [
-                                    calendarMini(),
-                                    SizedBox(
-                                      height: 10,
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Text(
+                                    "Quoi de mieux qu’un forum pour s’entraider tous ensemble ? Ici, on échange dans la bienveillance, le respect et toujours dans la bonne humeur 🤎",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontFamily: 'IBM',
+                                      color: MizzUpTheme.primaryColor,
+                                      fontWeight: FontWeight.normal,
+                                      fontSize: 14,
                                     ),
-                                    progUser(),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                  ],
-                                ),
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                ],
                               ),
                             ),
                           ),
-
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.01,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "Recettes",
-                                  style: TextStyle(
-                                    fontSize: 25.0,
-                                    fontFamily: 'IBM',
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                                TextButton(
-                                  onPressed: () async {
-                                    await Navigator.push(
-                                      context,
-                                      PageTransition(
-                                        type: PageTransitionType.fade,
-                                        duration: Duration(milliseconds: 500),
-                                        reverseDuration:
-                                            Duration(milliseconds: 500),
-                                        child: NavBarPage(index: 1),
-                                      ),
-                                    );
-                                  },
-                                  child: Text(
-                                    calendarFormat == CalendarFormat.month
-                                        ? "Voir moins"
-                                        : "Voir plus",
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.01,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "Programmes",
-                                  style: TextStyle(
-                                    fontSize: 25.0,
-                                    fontFamily: 'IBM',
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                                TextButton(
-                                  onPressed: () async {
-                                    await Navigator.push(
-                                      context,
-                                      PageTransition(
-                                        type: PageTransitionType.fade,
-                                        duration: Duration(milliseconds: 500),
-                                        reverseDuration:
-                                            Duration(milliseconds: 500),
-                                        child: NavBarPage(index: 0),
-                                      ),
-                                    );
-                                  },
-                                  child: Text(
-                                    calendarFormat == CalendarFormat.month
-                                        ? "Voir moins"
-                                        : "Voir plus",
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.01,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "Articles",
-                                  style: TextStyle(
-                                    fontSize: 25.0,
-                                    fontFamily: 'IBM',
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                                TextButton(
-                                  onPressed: () async {
-                                    await Navigator.push(
-                                      context,
-                                      PageTransition(
-                                        type: PageTransitionType.fade,
-                                        duration: Duration(milliseconds: 500),
-                                        reverseDuration:
-                                            Duration(milliseconds: 500),
-                                        child: NavBarPage(index: 3),
-                                      ),
-                                    );
-                                  },
-                                  child: Text(
-                                    calendarFormat == CalendarFormat.month
-                                        ? "Voir moins"
-                                        : "Voir plus",
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                          // addRoutine(),
-
-                          // routineUser(),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
