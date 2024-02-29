@@ -4,7 +4,6 @@ import 'package:chap_chap/forum/detail_forum_widget.dart';
 import 'package:chap_chap/profil/profil_widget.dart';
 import '../auth/auth_util.dart';
 import '../backend/backend.dart';
-import '../components/nouvelle_routine_widget.dart';
 import '../MizzUp_Code/MizzUp_icon_button.dart';
 import '../MizzUp_Code/MizzUp_theme.dart';
 import '../MizzUp_Code/MizzUp_util.dart';
@@ -22,6 +21,7 @@ class _ForumWidgetState extends State<ForumWidget> {
   ScrollController scrollController = new ScrollController();
 
   List<ForumModel> items = [];
+  bool isLoading = true;
 
   Future<List<ForumModel>> getForumData() async {
     QuerySnapshot querySnapshot =
@@ -43,6 +43,7 @@ class _ForumWidgetState extends State<ForumWidget> {
     getForumData().then((value) {
       setState(() {
         items = value;
+        isLoading = false;
       });
     });
   }
@@ -220,27 +221,38 @@ class _ForumWidgetState extends State<ForumWidget> {
                               ),
                             ),
                           ),
-                          Container(
-                            margin: EdgeInsets.symmetric(vertical: 20),
-                            width: double.infinity,
-                            height: MediaQuery.of(context).size.height,
-                            child: GridView(
-                              physics: NeverScrollableScrollPhysics(),
-                              controller: scrollController,
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2, // Nombre de colonnes
-                                      crossAxisSpacing:
-                                          10, // Espacement horizontal
-                                      mainAxisSpacing: 10
-                                      // childAspectRatio:
-                                      //     1.5, // Ratio de l'aspect des cellules
-                                      ),
-                              children: items
-                                  .map((item) => _buildItem(item))
-                                  .toList(),
-                            ),
-                          ),
+                          isLoading
+                              ? Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 20),
+                                  child: Center(
+                                    child: CircularProgressIndicator(
+                                      color: MizzUpTheme.primaryColor,
+                                    ),
+                                  ),
+                                )
+                              : Container(
+                                  margin: EdgeInsets.symmetric(vertical: 20),
+                                  width: double.infinity,
+                                  height: MediaQuery.of(context).size.height,
+                                  child: GridView(
+                                    physics: NeverScrollableScrollPhysics(),
+                                    controller: scrollController,
+                                    gridDelegate:
+                                        SliverGridDelegateWithFixedCrossAxisCount(
+                                            crossAxisCount:
+                                                2, // Nombre de colonnes
+                                            crossAxisSpacing:
+                                                10, // Espacement horizontal
+                                            mainAxisSpacing: 10
+                                            // childAspectRatio:
+                                            //     1.5, // Ratio de l'aspect des cellules
+                                            ),
+                                    children: items
+                                        .map((item) => _buildItem(item))
+                                        .toList(),
+                                  ),
+                                ),
                         ],
                       ),
                     ),
@@ -257,55 +269,6 @@ class _ForumWidgetState extends State<ForumWidget> {
           ],
         ),
       ),
-    );
-  }
-
-  Widget addRoutine() {
-    return Row(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        Padding(
-          padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 25, 10),
-          child: Material(
-            color: Colors.transparent,
-            elevation: 5,
-            shape: const CircleBorder(),
-            child: Container(
-              width: 40,
-              height: 40,
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-              ),
-              child: MizzUpIconButton(
-                borderColor: Colors.transparent,
-                borderRadius: 30,
-                fillColor: MizzUpTheme.secondaryColor,
-                icon: const Icon(
-                  Icons.add,
-                  color: MizzUpTheme.primaryColor,
-                  size: 20,
-                ),
-                onPressed: () async {
-                  await showModalBottomSheet(
-                    isScrollControlled: true,
-                    context: context,
-                    builder: (context) {
-                      return Padding(
-                        padding: MediaQuery.of(context).viewInsets,
-                        child: SizedBox(
-                          height: MediaQuery.of(context).size.height * 1,
-                          child: const NouvelleRoutineWidget(),
-                        ),
-                      );
-                    },
-                  );
-                },
-              ),
-            ),
-          ),
-        ),
-      ],
     );
   }
 

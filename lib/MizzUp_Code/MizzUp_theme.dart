@@ -47,6 +47,13 @@ class MizzUpTheme {
         fontWeight: FontWeight.normal,
         fontSize: 14,
       );
+
+  static TextStyle get bodyText3 => const TextStyle(
+        fontFamily: 'IBM',
+        color: Colors.white,
+        fontWeight: FontWeight.normal,
+        fontSize: 14,
+      );
   static TextStyle get bodyText2 => const TextStyle(
         fontFamily: 'IBM',
         color: Colors.black,
