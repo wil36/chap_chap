@@ -36,16 +36,24 @@ class _ForumWidgetState extends State<ForumWidget> {
   final Query<Map<String, dynamic>> collectionProg = FirebaseFirestore.instance
       .collection('progUser')
       .where('userRef', isEqualTo: currentUserReference);
-  final Query<Map<String, dynamic>> collectionRoutines = FirebaseFirestore
-      .instance
+  final Query<Map<String, dynamic>> collectionForum = FirebaseFirestore.instance
       .collection('routines')
       .where('userRef', isEqualTo: currentUserReference);
+
+  List<Item> items = [
+    Item(id: 1, image: 'assets/images/Rectangle_34.png', title: 'Titre 1'),
+    Item(id: 2, image: 'assets/images/Rectangle_34.png', title: 'Titre 2'),
+    Item(id: 2, image: 'assets/images/Rectangle_34.png', title: 'Titre 2'),
+    Item(id: 2, image: 'assets/images/Rectangle_34.png', title: 'Titre 2'),
+    Item(id: 2, image: 'assets/images/Rectangle_34.png', title: 'Titre 2'),
+    // ...
+  ];
 
   @override
   void initState() {
     super.initState();
     getProgPoint(collectionProg);
-    getRoutinePoint(collectionRoutines);
+    // getRoutinePoint(collectionRoutines);
     //  endSubscription();
   }
 
@@ -163,73 +171,95 @@ class _ForumWidgetState extends State<ForumWidget> {
                         topRight: Radius.circular(20),
                       ),
                     ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Text(
-                          "Forum",
-                          style: MizzUpTheme.subtitle1,
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        SizedBox(
-                          width: double.infinity,
-                          child: Material(
-                            borderRadius: BorderRadius.circular(18.0),
-                            elevation: 2,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  SizedBox(
-                                    height: 15,
-                                  ),
-                                  Text(
-                                    "<< Seul on va plus-vite, ensemble, on va plus loin. >>",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontFamily: 'IBM',
-                                      color: MizzUpTheme.primaryColor,
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 18,
+                    child: SingleChildScrollView(
+                      physics: NeverScrollableScrollPhysics(),
+                      controller: scrollController,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            height: 15,
+                          ),
+                          Text(
+                            "Forum",
+                            style: MizzUpTheme.subtitle1,
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          SizedBox(
+                            width: double.infinity,
+                            child: Material(
+                              borderRadius: BorderRadius.circular(18.0),
+                              elevation: 2,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    SizedBox(
+                                      height: 15,
                                     ),
-                                  ),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                  Text(
-                                    "Quoi de mieux qu’un forum pour s’entraider tous ensemble ? Ici, on échange dans la bienveillance, le respect et toujours dans la bonne humeur 🤎",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontFamily: 'IBM',
-                                      color: MizzUpTheme.primaryColor,
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 14,
+                                    Text(
+                                      "<< Seul on va plus-vite, ensemble, on va plus loin. >>",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontFamily: 'IBM',
+                                        color: MizzUpTheme.primaryColor,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 18,
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                  SizedBox(
-                                    height: 15,
-                                  ),
-                                ],
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    Text(
+                                      "Quoi de mieux qu’un forum pour s’entraider tous ensemble ? Ici, on échange dans la bienveillance, le respect et toujours dans la bonne humeur 🤎",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontFamily: 'IBM',
+                                        color: MizzUpTheme.primaryColor,
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                          Container(
+                            margin: EdgeInsets.symmetric(vertical: 20),
+                            width: double.infinity,
+                            height: MediaQuery.of(context).size.height,
+                            child: GridView(
+                              physics: NeverScrollableScrollPhysics(),
+                              controller: scrollController,
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2, // Nombre de colonnes
+                                // childAspectRatio:
+                                //     1.5, // Ratio de l'aspect des cellules
+                              ),
+                              children: items
+                                  .map((item) => _buildItem(item))
+                                  .toList(),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
               ],
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            SizedBox(
+              height: 15,
             ),
           ],
         ),
@@ -1186,4 +1216,53 @@ class _ForumWidgetState extends State<ForumWidget> {
       await batch.commit();
     }
   }
+
+  Widget _buildItem(Item item) {
+    return GestureDetector(
+      onTap: () {
+        // Redirection vers une page de contenu
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(builder: (context) => DetailPage(item)),
+        // );
+      },
+      child: SizedBox(
+        // height: 100,
+        // width: 100,
+        child: Card(
+          elevation: 2,
+          child: SingleChildScrollView(
+            physics: NeverScrollableScrollPhysics(),
+            child: Column(
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.all(10),
+                  child: Image.asset(
+                    item.image!,
+                  ),
+                ),
+                Text(
+                  item.title!,
+                  style: TextStyle(
+                    fontFamily: 'IBM',
+                    color: MizzUpTheme.primaryColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class Item {
+  int? id;
+  String? image;
+  String? title;
+
+  Item({this.id, this.image, this.title});
 }
