@@ -1,14 +1,10 @@
 // ignore_for_file: avoid_print, unnecessary_statements
-import 'package:chap_chap/components/pas_de_prog_en_cours_widget.dart';
-import 'package:chap_chap/MizzUp_Code/MizzUp_Calendar.dart';
-import 'package:chap_chap/decouvrir_programme/programme_suite_widget.dart';
+import 'package:chap_chap/forum/Models/forum_model.dart';
+import 'package:chap_chap/forum/detail_forum_widget.dart';
 import 'package:chap_chap/profil/profil_widget.dart';
-import 'package:table_calendar/table_calendar.dart';
 import '../auth/auth_util.dart';
 import '../backend/backend.dart';
 import '../components/nouvelle_routine_widget.dart';
-import '../components/supprimer_programme_widget.dart';
-import '../components/supprimer_routines_widget.dart';
 import '../MizzUp_Code/MizzUp_icon_button.dart';
 import '../MizzUp_Code/MizzUp_theme.dart';
 import '../MizzUp_Code/MizzUp_util.dart';
@@ -23,38 +19,32 @@ class ForumWidget extends StatefulWidget {
 }
 
 class _ForumWidgetState extends State<ForumWidget> {
-  CalendarFormat _calendarFormat = CalendarFormat.month;
-  DateTime _focusedDay = DateTime.now();
-  DateTime _selectedDay = DateTime.now();
-  CalendarFormat calendarFormat = CalendarFormat.week;
-  final scaffoldKey = GlobalKey<ScaffoldState>();
-  List<DateTime> dateProg = [DateTime.now()];
-  List<dynamic> dateRoutine = [DateTime.now()];
-  List<DateTime> dateRoutineOther = [DateTime.now()];
-  DateTime recurrencePoint = DateTime.now();
   ScrollController scrollController = new ScrollController();
-  final Query<Map<String, dynamic>> collectionProg = FirebaseFirestore.instance
-      .collection('progUser')
-      .where('userRef', isEqualTo: currentUserReference);
-  final Query<Map<String, dynamic>> collectionForum = FirebaseFirestore.instance
-      .collection('routines')
-      .where('userRef', isEqualTo: currentUserReference);
 
-  List<Item> items = [
-    Item(id: 1, image: 'assets/images/Rectangle_34.png', title: 'Titre 1'),
-    Item(id: 2, image: 'assets/images/Rectangle_34.png', title: 'Titre 2'),
-    Item(id: 2, image: 'assets/images/Rectangle_34.png', title: 'Titre 2'),
-    Item(id: 2, image: 'assets/images/Rectangle_34.png', title: 'Titre 2'),
-    Item(id: 2, image: 'assets/images/Rectangle_34.png', title: 'Titre 2'),
-    // ...
-  ];
+  List<ForumModel> items = [];
+
+  Future<List<ForumModel>> getForumData() async {
+    QuerySnapshot querySnapshot =
+        await FirebaseFirestore.instance.collection('forum').get();
+    List<ForumModel> forumList = querySnapshot.docs.map((doc) {
+      Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+      ForumModel forum = ForumModel.fromJson(data);
+      forum.id = doc.id;
+      return forum;
+    }).toList();
+    print('hello');
+    print(forumList);
+    return forumList;
+  }
 
   @override
   void initState() {
     super.initState();
-    getProgPoint(collectionProg);
-    // getRoutinePoint(collectionRoutines);
-    //  endSubscription();
+    getForumData().then((value) {
+      setState(() {
+        items = value;
+      });
+    });
   }
 
   @override
@@ -239,10 +229,13 @@ class _ForumWidgetState extends State<ForumWidget> {
                               controller: scrollController,
                               gridDelegate:
                                   SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2, // Nombre de colonnes
-                                // childAspectRatio:
-                                //     1.5, // Ratio de l'aspect des cellules
-                              ),
+                                      crossAxisCount: 2, // Nombre de colonnes
+                                      crossAxisSpacing:
+                                          10, // Espacement horizontal
+                                      mainAxisSpacing: 10
+                                      // childAspectRatio:
+                                      //     1.5, // Ratio de l'aspect des cellules
+                                      ),
                               children: items
                                   .map((item) => _buildItem(item))
                                   .toList(),
@@ -264,316 +257,6 @@ class _ForumWidgetState extends State<ForumWidget> {
           ],
         ),
       ),
-    );
-  }
-
-  Future<List<DateTime>?> getProgPoint(
-      Query<Map<String, dynamic>> collection) async {
-    var querySnapshot = await collection.where('create_time').get();
-    var tut = querySnapshot.docs
-        .map((doc) => doc.get('create_time').toDate())
-        .toList();
-    if (mounted) {
-      setState(() {
-        dateProg = tut.cast<DateTime>();
-      });
-    }
-    return dateProg;
-  }
-
-  Future<List<DateTime>?> getRoutinePoint(
-      Query<Map<String, dynamic>> collection) async {
-    var querySnapshot = await collection.get();
-    var tut =
-        querySnapshot.docs.map((doc) => doc.get('reccurenceTime')).toList();
-    for (var doc in tut) {
-      final allDataFirst = doc;
-      final listPointFirst =
-          allDataFirst.map((allData1) => allData1.toDate()).toList();
-      for (var doc2 in listPointFirst) {
-        if (mounted) {
-          setState(() {
-            dateRoutineOther.add(doc2);
-          });
-        }
-      }
-    }
-    for (var doc in querySnapshot.docs) {
-      final allData = doc["reccurenceTime"];
-      final listPointSecond =
-          allData.map((allData) => allData.toDate()).toList();
-      if (mounted) {
-        setState(() {
-          dateRoutine = listPointSecond;
-        });
-      }
-    }
-
-    return dateRoutineOther;
-  }
-
-  Future<void> endSubscription() async {
-    if (currentUserDocument?.member == true) {
-      if (currentUserDocument?.dateFinAbo != null) {
-        if (currentUserDocument!.dateFinAbo! < DateTime.now()) {
-          final usersUpdateData = createUsersRecordData(
-            member: false,
-          );
-          await currentUserReference!.update(usersUpdateData);
-        }
-      }
-    }
-  }
-
-  Widget calendar() {
-    return TableCalendar(
-      locale: "fr",
-      firstDay: kFirstDay,
-      lastDay: kLastDay,
-      eventLoader: (day) {
-        DateTime dayTolocal = DateTime(day.year, day.month, day.day);
-        if (dateProg.contains(dayTolocal)) {
-          (date, locale) => DateFormat.E(locale).format(date).toCapitalized();
-
-          return [const Event('Cyclic event')];
-        }
-        if (dateProg.contains(dayTolocal.add(const Duration(hours: 1)))) {
-          return [const Event('Cyclic event')];
-        }
-        if (dateProg.contains(dayTolocal.subtract(const Duration(hours: 1)))) {
-          return [const Event('Cyclic event')];
-        }
-        if (dateRoutine.contains(dayTolocal)) {
-          return [const Event('Cyclic event')];
-        }
-        if (dateRoutine.contains(dayTolocal.add(const Duration(hours: 1)))) {
-          return [const Event('Cyclic event')];
-        }
-        if (dateRoutine
-            .contains(dayTolocal.subtract(const Duration(hours: 1)))) {
-          return [const Event('Cyclic event')];
-        }
-        if (dateRoutineOther
-            .contains(dayTolocal.add(const Duration(hours: 1)))) {
-          return [const Event('Cyclic event')];
-        }
-        if (dateRoutineOther
-            .contains(dayTolocal.subtract(const Duration(hours: 1)))) {
-          return [const Event('Cyclic event')];
-        }
-        if (dateRoutineOther.contains(dayTolocal)) {
-          return [const Event('Cyclic event')];
-        }
-
-        return [];
-      },
-      focusedDay:
-          DateTime(_focusedDay.year, _focusedDay.month, _focusedDay.day),
-      weekendDays: const [DateTime.saturday, DateTime.sunday],
-      calendarFormat: CalendarFormat.month,
-      startingDayOfWeek: StartingDayOfWeek.monday,
-      headerStyle: HeaderStyle(
-        titleCentered: true,
-        formatButtonVisible: false,
-        titleTextStyle: const TextStyle(
-          fontSize: 17.0,
-          fontFamily: 'IBM',
-          color: MizzUpTheme.primaryColor,
-          fontWeight: FontWeight.w700,
-        ),
-        formatButtonTextStyle:
-            const TextStyle(fontSize: 17.0, fontFamily: 'IBM'),
-        formatButtonDecoration: const BoxDecoration(
-          border: Border.fromBorderSide(BorderSide()),
-          borderRadius: BorderRadius.all(Radius.circular(12.0)),
-        ),
-        headerMargin: const EdgeInsets.all(0.0),
-        headerPadding: const EdgeInsets.symmetric(vertical: 8.0),
-        formatButtonPadding: const EdgeInsets.all(10.0),
-        leftChevronPadding: const EdgeInsets.all(12.0),
-        rightChevronPadding: const EdgeInsets.all(12.0),
-        leftChevronMargin: const EdgeInsets.symmetric(horizontal: 8.0),
-        rightChevronMargin: const EdgeInsets.symmetric(horizontal: 8.0),
-        leftChevronIcon: const Icon(Icons.chevron_left),
-        rightChevronIcon: const Icon(Icons.chevron_right),
-        leftChevronVisible: true,
-        rightChevronVisible: true,
-        decoration: const BoxDecoration(),
-        titleTextFormatter: (date, locale) =>
-            DateFormat.yMMMM(locale).format(date).toCapitalized(),
-      ),
-      daysOfWeekStyle: DaysOfWeekStyle(
-        dowTextFormatter: (date, locale) =>
-            DateFormat.E(locale).format(date).toCapitalized(),
-      ),
-      calendarStyle: const CalendarStyle(
-        markerSize: 4,
-        markerMargin: EdgeInsets.symmetric(vertical: 5),
-        todayTextStyle: TextStyle(
-          color: Colors.white,
-          fontSize: 16.0,
-        ),
-        todayDecoration: BoxDecoration(
-          color: MizzUpTheme.secondaryColor,
-          shape: BoxShape.circle,
-        ),
-        selectedTextStyle: TextStyle(
-          color: Colors.white,
-          fontSize: 16.0,
-        ),
-        selectedDecoration: BoxDecoration(
-          color: MizzUpTheme.primaryColor,
-          shape: BoxShape.circle,
-        ),
-      ),
-      selectedDayPredicate: (day) {
-        return isSameDay(_selectedDay, day);
-      },
-      onDaySelected: (selectedDay, focusedDay) {
-        if (!isSameDay(_selectedDay, selectedDay)) {
-          setState(() {
-            _selectedDay = selectedDay;
-            _focusedDay = selectedDay;
-          });
-        }
-      },
-      onFormatChanged: (format) {
-        if (_calendarFormat != format) {
-          setState(() {
-            _calendarFormat = format;
-          });
-        }
-      },
-      onPageChanged: (focusedDay) {
-        _focusedDay = focusedDay;
-      },
-    );
-  }
-
-  Widget calendarMini() {
-    return TableCalendar(
-      locale: "fr",
-      firstDay: kFirstDay,
-      lastDay: kLastDay,
-      eventLoader: (day) {
-        DateTime dayTolocal = DateTime(day.year, day.month, day.day);
-        if (dateProg.contains(dayTolocal)) {
-          (date, locale) => DateFormat.E(locale).format(date).toCapitalized();
-
-          return [const Event('Cyclic event')];
-        }
-        if (dateProg.contains(dayTolocal.add(const Duration(hours: 1)))) {
-          return [const Event('Cyclic event')];
-        }
-        if (dateProg.contains(dayTolocal.subtract(const Duration(hours: 1)))) {
-          return [const Event('Cyclic event')];
-        }
-        if (dateRoutine.contains(dayTolocal)) {
-          return [const Event('Cyclic event')];
-        }
-        if (dateRoutine.contains(dayTolocal.add(const Duration(hours: 1)))) {
-          return [const Event('Cyclic event')];
-        }
-        if (dateRoutine
-            .contains(dayTolocal.subtract(const Duration(hours: 1)))) {
-          return [const Event('Cyclic event')];
-        }
-        if (dateRoutineOther
-            .contains(dayTolocal.add(const Duration(hours: 1)))) {
-          return [const Event('Cyclic event')];
-        }
-        if (dateRoutineOther
-            .contains(dayTolocal.subtract(const Duration(hours: 1)))) {
-          return [const Event('Cyclic event')];
-        }
-        if (dateRoutineOther.contains(dayTolocal)) {
-          return [const Event('Cyclic event')];
-        }
-
-        return [];
-      },
-      focusedDay:
-          DateTime(_focusedDay.year, _focusedDay.month, _focusedDay.day),
-      weekendDays: const [DateTime.saturday, DateTime.sunday],
-      calendarFormat: calendarFormat,
-      startingDayOfWeek: StartingDayOfWeek.monday,
-      headerStyle: HeaderStyle(
-        titleCentered: false,
-        formatButtonVisible: false,
-        formatButtonShowsNext: false,
-        titleTextStyle: const TextStyle(
-          fontSize: 17.0,
-          fontFamily: 'IBM',
-          color: MizzUpTheme.primaryColor,
-          fontWeight: FontWeight.w700,
-        ),
-        formatButtonTextStyle:
-            const TextStyle(fontSize: 17.0, fontFamily: 'IBM'),
-        formatButtonDecoration: const BoxDecoration(
-          border: Border.fromBorderSide(BorderSide()),
-          borderRadius: BorderRadius.all(Radius.circular(12.0)),
-        ),
-        headerMargin: const EdgeInsets.only(left: 10, bottom: 12),
-        headerPadding: const EdgeInsets.symmetric(vertical: 8.0),
-        formatButtonPadding: const EdgeInsets.all(10.0),
-        leftChevronPadding: const EdgeInsets.all(12.0),
-        rightChevronPadding: const EdgeInsets.all(12.0),
-        leftChevronMargin: const EdgeInsets.symmetric(horizontal: 8.0),
-        rightChevronMargin: const EdgeInsets.symmetric(horizontal: 8.0),
-        leftChevronIcon: const Icon(Icons.chevron_left),
-        rightChevronIcon: const Icon(Icons.chevron_right),
-        leftChevronVisible: false,
-        rightChevronVisible: false,
-        decoration: const BoxDecoration(),
-        titleTextFormatter: (date, locale) =>
-            DateFormat.yMMMM(locale).format(date).toCapitalized(),
-      ),
-      availableGestures: AvailableGestures.all,
-      daysOfWeekStyle: DaysOfWeekStyle(
-        dowTextFormatter: (date, locale) =>
-            DateFormat.E(locale).format(date).toCapitalized(),
-      ),
-      calendarStyle: const CalendarStyle(
-        markerSize: 5,
-        markerMargin: EdgeInsets.symmetric(vertical: 5),
-        todayTextStyle: TextStyle(
-          color: Colors.white,
-          fontSize: 16.0,
-        ),
-        todayDecoration: BoxDecoration(
-          color: MizzUpTheme.secondaryColor,
-          shape: BoxShape.circle,
-        ),
-        selectedTextStyle: TextStyle(
-          color: Colors.white,
-          fontSize: 16.0,
-        ),
-        selectedDecoration: BoxDecoration(
-          color: MizzUpTheme.primaryColor,
-          shape: BoxShape.circle,
-        ),
-      ),
-      selectedDayPredicate: (day) {
-        return isSameDay(_selectedDay, day);
-      },
-      onDaySelected: (selectedDay, focusedDay) {
-        if (!isSameDay(_selectedDay, selectedDay)) {
-          setState(() {
-            _selectedDay = selectedDay;
-            _focusedDay = selectedDay;
-          });
-        }
-      },
-      onFormatChanged: (format) {
-        if (_calendarFormat != format) {
-          setState(() {
-            _calendarFormat = format;
-          });
-        }
-      },
-      onPageChanged: (focusedDay) {
-        _focusedDay = focusedDay;
-      },
     );
   }
 
@@ -626,550 +309,6 @@ class _ForumWidgetState extends State<ForumWidget> {
     );
   }
 
-  Widget progUser() {
-    return FutureBuilder<List<ProgUserRecord?>>(
-      future: queryProgUserRecordOnce(
-        queryBuilder: (progUserRecord) =>
-            progUserRecord.where('dateAffichage1', arrayContainsAny: [
-          DateTime(_selectedDay.year, _selectedDay.month, _selectedDay.day)
-              .toLocal(),
-          DateTime(_selectedDay.year, _selectedDay.month, _selectedDay.day)
-              .toLocal()
-              .add(const Duration(hours: 1)),
-          DateTime(_selectedDay.year, _selectedDay.month, _selectedDay.day)
-              .toLocal()
-              .subtract(const Duration(hours: 1))
-        ]).where('userRef', isEqualTo: currentUserReference),
-        singleRecord: true,
-      ),
-      builder: (context, snapshot) {
-        // Customize what your widget looks like when it's loading.
-        if (!snapshot.hasData) {
-          return const Center(
-            child: SizedBox(
-              width: 0,
-              height: 0,
-              child: CircularProgressIndicator(
-                color: MizzUpTheme.primaryColor,
-              ),
-            ),
-          );
-        }
-
-        List<ProgUserRecord?> columnProgUserRecordList = snapshot.data!;
-
-        // Return an empty Container when the document does not exist.
-        if (snapshot.data!.isEmpty) {
-          return SizedBox(
-            width: double.infinity,
-            height: MediaQuery.of(context).size.height * 0.15,
-            child: const PasDeProgEnCoursWidget(),
-          );
-        }
-        final columnProgUserRecord = columnProgUserRecordList.isNotEmpty
-            ? columnProgUserRecordList.first
-            : null;
-
-        return Column(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            Padding(
-              padding: const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
-              child: FutureBuilder<DetailsWeekProgRecord?>(
-                future: DetailsWeekProgRecord.getDocumentOnce(
-                    columnProgUserRecord!.semaineShow!),
-                builder: (context, snapshot) {
-                  // Customize what your widget looks like when it's loading.
-                  if (!snapshot.hasData) {
-                    return const Center(
-                      child: SizedBox(
-                        width: 0,
-                        height: 0,
-                        child: CircularProgressIndicator(
-                          color: MizzUpTheme.primaryColor,
-                        ),
-                      ),
-                    );
-                  }
-                  // ignore: unused_local_variable
-                  final containerDetailsWeekProgRecord = snapshot.data;
-
-                  return Material(
-                    color: Colors.transparent,
-                    elevation: 10,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Container(
-                      width: MediaQuery.of(context).size.width * 0.9,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFF8E7DE),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: FutureBuilder<ProgrammesRecord?>(
-                        future: ProgrammesRecord.getDocumentOnce(
-                            columnProgUserRecord.progRef!),
-                        builder: (context, snapshot) {
-                          // Customize what your widget looks like when it's loading.
-                          if (!snapshot.hasData) {
-                            return const Center(
-                              child: SizedBox(
-                                width: 0,
-                                height: 0,
-                                child: CircularProgressIndicator(
-                                  color: MizzUpTheme.primaryColor,
-                                ),
-                              ),
-                            );
-                          }
-                          final columnProgrammesRecord = snapshot.data;
-                          return Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              InkWell(
-                                onTap: () async {
-                                  await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          ProgrammeSuiteWidget(
-                                        detailsProg: columnProgrammesRecord,
-                                        detailsWeek:
-                                            containerDetailsWeekProgRecord!,
-                                        detailsProgUser: columnProgUserRecord,
-                                        date: _selectedDay,
-                                      ),
-                                    ),
-                                  );
-                                },
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsetsDirectional
-                                              .fromSTEB(0, 20, 0, 20),
-                                          child: Container(
-                                            width: 100,
-                                            decoration: const BoxDecoration(),
-                                            child: Column(
-                                              mainAxisSize: MainAxisSize.max,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              children: [
-                                                Material(
-                                                  color: Colors.transparent,
-                                                  elevation: 5,
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
-                                                  ),
-                                                  child: Container(
-                                                    width: 60,
-                                                    height: 60,
-                                                    decoration: BoxDecoration(
-                                                      color: const Color(
-                                                          0xFFEEEEEE),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10),
-                                                    ),
-                                                    child: ClipRRect(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10),
-                                                      child: Image.network(
-                                                        valueOrDefault<String>(
-                                                          columnProgrammesRecord!
-                                                              .imagePrincipale!,
-                                                          'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/chap-chap-1137ns/assets/z0582h302sn8/Rectangle_29_(1).png',
-                                                        ),
-                                                        width: double.infinity,
-                                                        height: double.infinity,
-                                                        fit: BoxFit.cover,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                        Container(
-                                          width: 200,
-                                          decoration: const BoxDecoration(),
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.max,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Text(
-                                                columnProgrammesRecord.titre!,
-                                                style:
-                                                    MizzUpTheme.title1.override(
-                                                  fontFamily: 'IBM',
-                                                  color: Colors.black,
-                                                  fontSize: 14,
-                                                  useGoogleFonts: false,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Container(
-                                      width: 40,
-                                      height: 40,
-                                      decoration: const BoxDecoration(
-                                        shape: BoxShape.circle,
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsetsDirectional
-                                            .fromSTEB(10, 10, 0, 0),
-                                        child: InkWell(
-                                          onTap: () async {
-                                            await showModalBottomSheet(
-                                              isScrollControlled: true,
-                                              context: context,
-                                              builder: (context) {
-                                                return Padding(
-                                                  padding:
-                                                      MediaQuery.of(context)
-                                                          .viewInsets,
-                                                  child: SizedBox(
-                                                    height:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .height *
-                                                            0.5,
-                                                    child:
-                                                        const SupprimerProgrammeWidget(),
-                                                  ),
-                                                );
-                                              },
-                                            );
-                                          },
-                                          child: const Icon(
-                                            Icons.more_vert,
-                                            color: Colors.black,
-                                            size: 20,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          );
-                        },
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Widget routineUser() {
-    return Padding(
-      padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 200),
-      child: FutureBuilder<List<RoutinesRecord?>>(
-        future: queryRoutinesRecordOnce(
-          queryBuilder: (routinesRecord) => routinesRecord
-              .where('userRef', isEqualTo: currentUserReference)
-              .where('reccurenceTime', arrayContainsAny: [
-            DateTime(_selectedDay.year, _selectedDay.month, _selectedDay.day)
-                .toLocal(),
-            DateTime(_selectedDay.year, _selectedDay.month, _selectedDay.day)
-                .toLocal()
-                .add(
-                  const Duration(hours: 1),
-                ),
-          ]),
-        ),
-        builder: (context, snapshot) {
-          // Customize what your widget looks like when it's loading.
-          if (!snapshot.hasData) {
-            return const Center(
-              child: SizedBox(
-                width: 60,
-                height: 60,
-                child: CircularProgressIndicator(
-                  color: MizzUpTheme.primaryColor,
-                ),
-              ),
-            );
-          }
-          List<RoutinesRecord?>? columnRoutinesRecordList = snapshot.data!;
-          // Return an empty Container when the document does not exist.
-          if (snapshot.data!.isEmpty) {
-            return Container();
-          }
-          final columnRoutinesRecord = columnRoutinesRecordList.isNotEmpty
-              ? columnRoutinesRecordList.first!
-              : null;
-          return Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
-                child: Material(
-                  color: Colors.transparent,
-                  elevation: 10,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Container(
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFF8E7DE),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Column(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisSize: MainAxisSize.max,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsetsDirectional.fromSTEB(
-                                      30, 20, 0, 20),
-                                  child: Material(
-                                    color: Colors.transparent,
-                                    elevation: 5,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: Container(
-                                      width: 60,
-                                      height: 60,
-                                      decoration: BoxDecoration(
-                                        color: const Color(0xFFEEEEEE),
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(10),
-                                        child: Image.network(
-                                          valueOrDefault<String?>(
-                                            columnRoutinesRecord!.photo1,
-                                            'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/chap-chap-1137ns/assets/r8nmesqrsycy/Rectangle_13_(1).png',
-                                          )!,
-                                          width: double.infinity,
-                                          height: double.infinity,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(
-                              10, 20, 20, 20),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding:
-                                        const EdgeInsetsDirectional.fromSTEB(
-                                            0, 0, 0, 10),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        if ((columnRoutinesRecord
-                                                .soinNourissant) ==
-                                            true)
-                                          Text(
-                                            'Soin Nourissant',
-                                            style: MizzUpTheme.title1.override(
-                                              fontFamily: 'IBM',
-                                              color: Colors.black,
-                                              fontSize: 14,
-                                              useGoogleFonts: false,
-                                            ),
-                                          ),
-                                        if ((columnRoutinesRecord
-                                                .shampoingClarifiant) ==
-                                            true)
-                                          Text(
-                                            'Shampoing clarifiant',
-                                            style: MizzUpTheme.title1.override(
-                                              fontFamily: 'IBM',
-                                              color: Colors.black,
-                                              fontSize: 14,
-                                              useGoogleFonts: false,
-                                            ),
-                                          ),
-                                        if ((columnRoutinesRecord
-                                                .shampoingDoux) ==
-                                            true)
-                                          Text(
-                                            'Shampoing doux',
-                                            style: MizzUpTheme.title1.override(
-                                              fontFamily: 'IBM',
-                                              color: Colors.black,
-                                              fontSize: 14,
-                                              useGoogleFonts: false,
-                                            ),
-                                          ),
-                                        if ((columnRoutinesRecord.coWash) ==
-                                            true)
-                                          Text(
-                                            'Co wash',
-                                            style: MizzUpTheme.title1.override(
-                                              fontFamily: 'IBM',
-                                              color: Colors.black,
-                                              fontSize: 14,
-                                              useGoogleFonts: false,
-                                            ),
-                                          ),
-                                        if ((columnRoutinesRecord.noPoo) ==
-                                            true)
-                                          Text(
-                                            'No poo',
-                                            style: MizzUpTheme.title1.override(
-                                              fontFamily: 'IBM',
-                                              color: Colors.black,
-                                              fontSize: 14,
-                                              useGoogleFonts: false,
-                                            ),
-                                          ),
-                                        if ((columnRoutinesRecord
-                                                .apresShampoing) ==
-                                            true)
-                                          Text(
-                                            'Après shampoing',
-                                            style: MizzUpTheme.title1.override(
-                                              fontFamily: 'IBM',
-                                              color: Colors.black,
-                                              fontSize: 14,
-                                              useGoogleFonts: false,
-                                            ),
-                                          ),
-                                        if ((columnRoutinesRecord
-                                                .soinHydratant) ==
-                                            true)
-                                          Text(
-                                            'Soin Hydratant',
-                                            style: MizzUpTheme.title1.override(
-                                              fontFamily: 'IBM',
-                                              color: Colors.black,
-                                              fontSize: 14,
-                                              useGoogleFonts: false,
-                                            ),
-                                          ),
-                                        if ((columnRoutinesRecord
-                                                .soinNourissant) ==
-                                            true)
-                                          Text(
-                                            'Soin protéiné',
-                                            style: MizzUpTheme.title1.override(
-                                              fontFamily: 'IBM',
-                                              color: Colors.black,
-                                              fontSize: 14,
-                                              useGoogleFonts: false,
-                                            ),
-                                          ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Text(
-                                columnRoutinesRecord.recurrence!,
-                                style: MizzUpTheme.bodyText1.override(
-                                  fontFamily: 'IBM',
-                                  fontSize: 10,
-                                  useGoogleFonts: false,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        InkWell(
-                          onTap: () async {
-                            await showModalBottomSheet(
-                              isScrollControlled: true,
-                              context: context,
-                              builder: (context) {
-                                return Padding(
-                                  padding: MediaQuery.of(context).viewInsets,
-                                  child: SizedBox(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.4,
-                                    child: SupprimerRoutinesWidget(
-                                      detailRoutine: columnRoutinesRecord,
-                                    ),
-                                  ),
-                                );
-                              },
-                            );
-                          },
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    10, 10, 0, 0),
-                                child: Icon(
-                                  Icons.more_vert,
-                                  color: Colors.black,
-                                  size: 24,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          );
-        },
-      ),
-    );
-  }
-
   // Définit une fonction asynchrone pour récupérer les favoris de chaque utilisateur
   Future<void> addLikesFromUsers(usersCollection, likesCollection) async {
     // Récupère tous les documents de la collection "users"
@@ -1217,18 +356,22 @@ class _ForumWidgetState extends State<ForumWidget> {
     }
   }
 
-  Widget _buildItem(Item item) {
+  Widget _buildItem(ForumModel item) {
     return GestureDetector(
       onTap: () {
         // Redirection vers une page de contenu
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(builder: (context) => DetailPage(item)),
-        // );
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => DetailForumWidget(
+              forumModel: item,
+            ),
+          ),
+        );
       },
       child: SizedBox(
-        // height: 100,
-        // width: 100,
+        width: MediaQuery.of(context).size.width / 2.2,
+        height: MediaQuery.of(context).size.width / 2.2,
         child: Card(
           elevation: 2,
           child: SingleChildScrollView(
@@ -1236,19 +379,26 @@ class _ForumWidgetState extends State<ForumWidget> {
             child: Column(
               children: <Widget>[
                 Padding(
-                  padding: EdgeInsets.all(10),
-                  child: Image.asset(
-                    item.image!,
+                  padding: EdgeInsets.all(8),
+                  child: Image.network(
+                    item.photo,
+                    width: MediaQuery.of(context).size.width / 3.3,
+                    height: MediaQuery.of(context).size.width / 3.3,
                   ),
                 ),
                 Text(
-                  item.title!,
+                  item.titre,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
                   style: TextStyle(
                     fontFamily: 'IBM',
                     color: MizzUpTheme.primaryColor,
                     fontWeight: FontWeight.bold,
                     fontSize: 14,
                   ),
+                ),
+                SizedBox(
+                  height: 10,
                 ),
               ],
             ),
@@ -1257,12 +407,4 @@ class _ForumWidgetState extends State<ForumWidget> {
       ),
     );
   }
-}
-
-class Item {
-  int? id;
-  String? image;
-  String? title;
-
-  Item({this.id, this.image, this.title});
 }

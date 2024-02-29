@@ -1,6 +1,4 @@
-import 'package:chap_chap/main.dart';
 import '../MizzUp_Code/MizzUp_theme.dart';
-import '../MizzUp_Code/MizzUp_widgets.dart';
 import 'package:flutter/material.dart';
 
 class PasDeProgEnCoursWidget extends StatefulWidget {

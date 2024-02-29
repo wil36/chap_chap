@@ -4,7 +4,6 @@ import 'package:chap_chap/articles/articles_widget.dart';
 // import 'package:in_app_purchase_storekit/in_app_purchase_storekit.dart';
 import 'package:chap_chap/decouvrir_programme/decouvrir_programme_widget.dart';
 import 'package:chap_chap/forum/forum_widget.dart';
-import 'package:chap_chap/profil/profil_widget.dart';
 import 'package:chap_chap/recettes/recettes_widget.dart';
 import 'package:chap_chap/start/launch.dart';
 import 'package:firebase_core/firebase_core.dart';
