@@ -70,23 +70,25 @@ class _RecetteSuite2WidgetState extends State<RecetteSuite2Widget> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.all(
-          Radius.circular(20),
-        ),
-      ),
-      child: Column(
-        children: [
-          headerRecette(),
-          Expanded(
-            child: Container(
-              child: Padding(
-                  padding: EdgeInsets.only(right: 0), child: bodyRecette()),
-            ),
+    return Scaffold(
+      body: Container(
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.all(
+            Radius.circular(20),
           ),
-        ],
+        ),
+        child: Column(
+          children: [
+            headerRecette(),
+            Expanded(
+              child: Container(
+                child: Padding(
+                    padding: EdgeInsets.only(right: 0), child: bodyRecette()),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -642,7 +644,9 @@ class _RecetteSuite2WidgetState extends State<RecetteSuite2Widget> {
                                                           BorderRadius.circular(
                                                               50), // Adjust the radius to your liking
                                                       child: Image.network(
-                                                        user!['photo_url'],
+                                                        valueOrDefault(
+                                                            user!['photo_url'],
+                                                            "https://i.ibb.co/0JxwY2k/placeholder.png"),
                                                         width: 30,
                                                         height: 30,
                                                         fit: BoxFit.cover,

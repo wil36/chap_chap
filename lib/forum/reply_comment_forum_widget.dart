@@ -1,57 +1,58 @@
 import 'package:chap_chap/MizzUp_Code/MizzUp_theme.dart';
-import 'package:chap_chap/MizzUp_Code/MizzUp_util.dart';
 import 'package:chap_chap/backend/backend.dart';
 import 'package:chap_chap/forum/Models/forum_comments_model.dart';
-import 'package:chap_chap/forum/Models/forum_model.dart';
+import 'package:chap_chap/forum/Models/forum_comments_reply_model.dart';
 import 'package:chap_chap/forum/add_comment_forum.dart';
-import 'package:chap_chap/forum/reply_comment_forum_widget.dart';
+import 'package:chap_chap/forum/add_comment_reply_forum.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class DetailForumWidget extends StatefulWidget {
-  const DetailForumWidget({Key? key, required this.forumModel}) : super();
-  final ForumModel forumModel;
+class ReplyCommentForum extends StatefulWidget {
+  const ReplyCommentForum({Key? key, required this.forumCommentModel})
+      : super();
+  final ForumCommentModel forumCommentModel;
 
   @override
-  State<DetailForumWidget> createState() => _DetailForumWidgetState();
+  State<ReplyCommentForum> createState() => _ReplyCommentForumState();
 }
 
-class _DetailForumWidgetState extends State<DetailForumWidget> {
+class _ReplyCommentForumState extends State<ReplyCommentForum> {
   List<ForumCommentModel> items = [];
   ScrollController scrollController = new ScrollController();
   bool isLoading = true;
 
-  Future<List<ForumCommentModel>> getForumCommentData() async {
+  Future<List<ForumCommentReplyModel>> getForumCommentData() async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection('forum_comments')
-        .where('forumId', isEqualTo: widget.forumModel.id)
+        .collection('forum_comments_reply')
+        .where('forumCommentId', isEqualTo: widget.forumCommentModel.id)
         .orderBy('createdDate', descending: true)
         .get();
-    List<ForumCommentModel> forumCommentList = querySnapshot.docs.map((doc) {
+    List<ForumCommentReplyModel> forumCommentReplyList =
+        querySnapshot.docs.map((doc) {
       Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-      ForumCommentModel forum = ForumCommentModel.fromJson(data);
+      ForumCommentReplyModel forum = ForumCommentReplyModel.fromJson(data);
       forum.id = doc.id;
       return forum;
     }).toList();
-    print('hello' + widget.forumModel.id);
-    print(forumCommentList.length);
-    return forumCommentList;
+    print('hello' + widget.forumCommentModel.id);
+    print(forumCommentReplyList.length);
+    return forumCommentReplyList;
   }
 
-  Stream<List<ForumCommentModel>> forumCommentStream = Stream.empty();
+  Stream<List<ForumCommentReplyModel>> forumCommentReplyStream = Stream.empty();
 
   @override
   void initState() {
     super.initState();
 
     setState(() {
-      forumCommentStream = FirebaseFirestore.instance
-          .collection('forum_comments')
-          .where('forumId', isEqualTo: widget.forumModel.id)
+      forumCommentReplyStream = FirebaseFirestore.instance
+          .collection('forum_comments_reply')
+          .where('forumCommentId', isEqualTo: widget.forumCommentModel.id)
           .orderBy('createdDate', descending: true)
           .snapshots()
           .map((querySnapshot) => querySnapshot.docs
-              .map((doc) => ForumCommentModel.fromJson(doc.data()))
+              .map((doc) => ForumCommentReplyModel.fromJson(doc.data()))
               .toList());
 
       isLoading = false;
@@ -73,9 +74,9 @@ class _DetailForumWidgetState extends State<DetailForumWidget> {
                 padding: MediaQuery.of(context).viewInsets,
                 child: Container(
                   height: MediaQuery.of(context).size.height * 0.9,
-                  child: AddCommentForum(
-                      forum: widget.forumModel,
-                      comment: null,
+                  child: AddCommentReplyForum(
+                      forumComment: widget.forumCommentModel,
+                      forumCommentReply: null,
                       isAnAnswer: false),
                 ),
               );
@@ -120,9 +121,6 @@ class _DetailForumWidgetState extends State<DetailForumWidget> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(
-                        height: 20,
-                      ),
                       Row(
                         children: [
                           IconButton(
@@ -132,24 +130,12 @@ class _DetailForumWidgetState extends State<DetailForumWidget> {
                             ),
                             onPressed: () => Navigator.pop(context),
                           ),
-                          InkWell(
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
-                            child: Text(
-                              widget.forumModel.titre,
-                              style: MizzUpTheme.title1,
-                            ),
-                          ),
                         ],
                       ),
                       SizedBox(
                         height: 20,
                       ),
-                      Text(
-                        widget.forumModel.description,
-                        style: MizzUpTheme.bodyText1,
-                      ),
+                      buildItems(widget.forumCommentModel),
                       SizedBox(
                         height: 20,
                       ),
@@ -163,9 +149,9 @@ class _DetailForumWidgetState extends State<DetailForumWidget> {
                           ),
                         )
                       else
-                        StreamBuilder<List<ForumCommentModel>>(
+                        StreamBuilder<List<ForumCommentReplyModel>>(
                           stream:
-                              forumCommentStream, // Remplacez yourStream par votre flux de commentaires de forum
+                              forumCommentReplyStream, // Remplacez yourStream par votre flux de commentaires de forum
                           builder: (context, snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.waiting) {
@@ -196,8 +182,8 @@ class _DetailForumWidgetState extends State<DetailForumWidget> {
                                     return Container(
                                         margin:
                                             EdgeInsets.symmetric(vertical: 10),
-                                        child:
-                                            buildItems(snapshot.data![index]));
+                                        child: buildItemsReply(
+                                            snapshot.data![index]));
                                   },
                                 );
                               }
@@ -277,10 +263,10 @@ class _DetailForumWidgetState extends State<DetailForumWidget> {
                                 child: Container(
                                   height:
                                       MediaQuery.of(context).size.height * 0.9,
-                                  child: AddCommentForum(
-                                      forum: widget.forumModel,
-                                      comment: forumCommentModel,
-                                      isAnAnswer: true),
+                                  // child: AddCommentForum(
+                                  //     forum: widget.forumCommentModel,
+                                  //     comment: forumCommentModel,
+                                  //     isAnAnswer: true),
                                 ),
                               );
                             },
@@ -380,19 +366,7 @@ class _DetailForumWidgetState extends State<DetailForumWidget> {
                     child: Row(
                       children: [
                         IconButton(
-                          onPressed: () async {
-                            await Navigator.push(
-                              context,
-                              PageTransition(
-                                type: PageTransitionType.fade,
-                                duration: Duration(milliseconds: 500),
-                                reverseDuration: Duration(milliseconds: 500),
-                                child: ReplyCommentForum(
-                                  forumCommentModel: forumCommentModel,
-                                ),
-                              ),
-                            );
-                          },
+                          onPressed: () async {},
                           icon: Icon(
                             Icons.comment_outlined,
                             size: 20,
@@ -415,20 +389,175 @@ class _DetailForumWidgetState extends State<DetailForumWidget> {
     );
   }
 
-  Future<void> deleteComment(String commentId) async {
-    // Supprimer les réponses associées au commentaire
-    QuerySnapshot replySnapshot = await FirebaseFirestore.instance
-        .collection('forum_comments_reply')
-        .where('forumCommentId', isEqualTo: commentId)
-        .get();
-    List<QueryDocumentSnapshot> replies = replySnapshot.docs;
-    for (var reply in replies) {
-      await reply.reference.delete();
-    }
+  Widget buildItemsReply(ForumCommentReplyModel forumCommentReplyModel) {
+    return Card(
+      child: Container(
+        decoration: BoxDecoration(
+          color: MizzUpTheme.tertiaryColor,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+        child: SizedBox(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      CircleAvatar(
+                        backgroundColor: Colors.white,
+                        child: Image.network(forumCommentReplyModel
+                                .userProfilePhoto.isEmpty
+                            ? "https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/chap-chap-1137ns/assets/n3ejaipxw085/user-22.jpg"
+                            : forumCommentReplyModel.userProfilePhoto),
+                      ),
+                      SizedBox(
+                        width: 13,
+                      ),
+                      Text(
+                        forumCommentReplyModel.userName,
+                        style: TextStyle(
+                          fontFamily: 'IBM',
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Visibility(
+                    visible: forumCommentReplyModel.userId ==
+                        FirebaseAuth.instance.currentUser!.uid,
+                    child: PopupMenuButton<String>(
+                      onSelected: (value) async {
+                        if (value == 'edit') {
+                          // Logique pour modifier le commentaire
+                          await showModalBottomSheet(
+                            isScrollControlled: true,
+                            backgroundColor: Colors.transparent,
+                            context: context,
+                            builder: (context) {
+                              return Padding(
+                                padding: MediaQuery.of(context).viewInsets,
+                                child: Container(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.9,
+                                  // child: AddCommentForum(
+                                  //     forum: widget.forumCommentModel,
+                                  //     comment: forumCommentModel,
+                                  //     isAnAnswer: true),
+                                ),
+                              );
+                            },
+                          ).then((value) => setState(() {}));
+                        } else if (value == 'delete') {
+                          // Logique pour supprimer le commentaire
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text('Confirmer la suppression'),
+                                content: Text(
+                                    'Voulez-vous vraiment supprimer ce commentaire ?'),
+                                actions: <Widget>[
+                                  TextButton(
+                                    child: Text('Annuler'),
+                                    onPressed: () {
+                                      Navigator.of(context)
+                                          .pop(); // Fermer la boîte de dialogue
+                                    },
+                                  ),
+                                  TextButton(
+                                    child: Text('Supprimer'),
+                                    onPressed: () {
+                                      Navigator.of(context)
+                                          .pop(); // Fermer la boîte de dialogue
+                                      deleteComment(forumCommentReplyModel
+                                          .id); // Appeler la fonction de suppression
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        }
+                      },
+                      itemBuilder: (BuildContext context) =>
+                          <PopupMenuEntry<String>>[
+                        PopupMenuItem<String>(
+                          value: 'edit',
+                          child: Text('Modifier le commentaire'),
+                        ),
+                        PopupMenuItem<String>(
+                          value: 'delete',
+                          child: Text('Supprimer le commentaire'),
+                        ),
+                      ],
+                      child: Icon(
+                        Icons.more_vert,
+                        color: Colors.white,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(forumCommentReplyModel.comment,
+                  style: MizzUpTheme.bodyText3),
+              SizedBox(
+                height: 15,
+              ),
+              Row(
+                children: [
+                  InkWell(
+                    onTap: () {
+                      incrementLikeCount(forumCommentReplyModel.id, 1,
+                          FirebaseAuth.instance.currentUser!.uid);
+                    },
+                    child: Row(
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            incrementLikeCount(forumCommentReplyModel.id, 1,
+                                FirebaseAuth.instance.currentUser!.uid);
+                          },
+                          icon: Icon(
+                            forumCommentReplyModel.likedBy.contains(
+                                    FirebaseAuth.instance.currentUser!.uid)
+                                ? Icons.thumb_up_alt
+                                : Icons.thumb_up_alt_outlined,
+                            size: 20,
+                            color: Colors.white,
+                          ),
+                        ),
+                        Text(
+                            forumCommentReplyModel.likeCount.toString() +
+                                " Vote(s)",
+                            style: MizzUpTheme.bodyText3),
+                      ],
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
+  Future<void> deleteComment(String commentId) async {
     // Supprimer le commentaire
     await FirebaseFirestore.instance
-        .collection('forum_comments')
+        .collection('forum_comments_reply')
         .doc(commentId)
         .delete();
   }
@@ -436,7 +565,7 @@ class _DetailForumWidgetState extends State<DetailForumWidget> {
   Future<void> incrementLikeCount(
       String commentId, int incrementAmount, String likerId) async {
     DocumentSnapshot snapshot = await FirebaseFirestore.instance
-        .collection('forum_comments')
+        .collection('forum_comments_reply')
         .doc(commentId)
         .get();
 

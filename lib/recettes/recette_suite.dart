@@ -11,7 +11,12 @@ import '../decouvrir_programme/prenium_widget.dart';
 import '../notification/notification_widget.dart';
 
 class RecetteSuiteWidget extends StatefulWidget {
-  const RecetteSuiteWidget({Key? key, required this.recetteRef, required this.recetteVisibleRef, required this.recetteListImages}) : super(key: key);
+  const RecetteSuiteWidget(
+      {Key? key,
+      required this.recetteRef,
+      required this.recetteVisibleRef,
+      required this.recetteListImages})
+      : super(key: key);
   final String recetteRef;
   final String recetteVisibleRef;
   final List<String> recetteListImages;
@@ -24,7 +29,8 @@ class _RecetteSuiteWidgetState extends State<RecetteSuiteWidget> {
   String? searchKey;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   List<Image>? mListImage;
-  Future<QuerySnapshot<Map<String, dynamic>>> getUsersWithFavRecipe = getUsersWithFavorisRecipe();
+  Future<QuerySnapshot<Map<String, dynamic>>> getUsersWithFavRecipe =
+      getUsersWithFavorisRecipe();
 
   @override
   void initState() {
@@ -39,7 +45,9 @@ class _RecetteSuiteWidgetState extends State<RecetteSuiteWidget> {
       var _precacheImages = Image.asset(
         image,
         //   cacheWidth: ((MediaQuery.of(context).size.width * 0.35)*(MediaQuery.of(context).devicePixelRatio)).round(),
-        cacheHeight: ((MediaQuery.of(context).size.width * 0.37) * (MediaQuery.of(context).devicePixelRatio)).round(),
+        cacheHeight: ((MediaQuery.of(context).size.width * 0.37) *
+                (MediaQuery.of(context).devicePixelRatio))
+            .round(),
       );
       precacheImage(_precacheImages.image, context);
     }
@@ -127,7 +135,8 @@ class _RecetteSuiteWidgetState extends State<RecetteSuiteWidget> {
                   children: [
                     Expanded(
                       child: Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 20, 0),
+                        padding:
+                            const EdgeInsetsDirectional.fromSTEB(0, 0, 20, 0),
                         child: TextFormField(
                           onChanged: (value) {
                             setState(() {
@@ -160,7 +169,9 @@ class _RecetteSuiteWidgetState extends State<RecetteSuiteWidget> {
                             ),
                             filled: true,
                             fillColor: Colors.white,
-                            contentPadding: const EdgeInsetsDirectional.fromSTEB(0, 15, 0, 0),
+                            contentPadding:
+                                const EdgeInsetsDirectional.fromSTEB(
+                                    0, 15, 0, 0),
                             prefixIcon: const Icon(
                               Icons.search,
                               color: MizzUpTheme.primaryColor,
@@ -199,12 +210,14 @@ class _RecetteSuiteWidgetState extends State<RecetteSuiteWidget> {
                     mainAxisSize: MainAxisSize.max,
                     children: [
                       Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(10, 25, 10, 0),
+                        padding:
+                            const EdgeInsetsDirectional.fromSTEB(10, 25, 10, 0),
                         child: Row(
                           mainAxisSize: MainAxisSize.max,
                           children: [
                             Padding(
-                              padding: const EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
+                              padding: const EdgeInsetsDirectional.fromSTEB(
+                                  10, 0, 0, 0),
                               child: Text(
                                 widget.recetteVisibleRef,
                                 style: MizzUpTheme.bodyText1.override(
@@ -242,7 +255,7 @@ class _RecetteSuiteWidgetState extends State<RecetteSuiteWidget> {
         Padding(
           padding: const EdgeInsetsDirectional.fromSTEB(20, 20, 0, 20),
           child: SizedBox(
-            width: 350,
+            width: MediaQuery.of(context).size.width - 20,
             child: Text(
               "Afin d'accéder à nos recettes, il faudra passer à la version premium de l'application 🙂",
               style: MizzUpTheme.bodyText1.override(
@@ -278,8 +291,10 @@ class _RecetteSuiteWidgetState extends State<RecetteSuiteWidget> {
                   padding: const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(20),
-                    child: Stack(alignment: const AlignmentDirectional(0, 0), children: [
-                      /*
+                    child: Stack(
+                        alignment: const AlignmentDirectional(0, 0),
+                        children: [
+                          /*
                           Image.asset(
                             streamPremium.photoPrincipale!,
                       //   cacheWidth: ((MediaQuery.of(context).size.width * 0.35)*(MediaQuery.of(context).devicePixelRatio)).round(),
@@ -287,28 +302,33 @@ class _RecetteSuiteWidgetState extends State<RecetteSuiteWidget> {
                             fit: BoxFit.cover,
                           ),
                           */
-                      Opacity(
-                        opacity: 0.3,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: Image.asset(
-                                streamPremium.photoPrincipale!,
-                                cacheHeight: ((MediaQuery.of(context).size.width * 0.37) * (MediaQuery.of(context).devicePixelRatio)).round(),
-                              ).image,
+                          Opacity(
+                            opacity: 0.3,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: Image.asset(
+                                    streamPremium.photoPrincipale!,
+                                    cacheHeight:
+                                        ((MediaQuery.of(context).size.width *
+                                                    0.37) *
+                                                (MediaQuery.of(context)
+                                                    .devicePixelRatio))
+                                            .round(),
+                                  ).image,
+                                ),
+                              ),
+                              width: MediaQuery.of(context).size.width * 0.44,
+                              height: MediaQuery.of(context).size.width * 0.46,
                             ),
                           ),
-                          width: MediaQuery.of(context).size.width * 0.44,
-                          height: MediaQuery.of(context).size.width * 0.46,
-                        ),
-                      ),
-                      const Icon(
-                        Icons.lock_outlined,
-                        color: MizzUpTheme.primaryColor,
-                        size: 44,
-                      )
-                    ]),
+                          const Icon(
+                            Icons.lock_outlined,
+                            color: MizzUpTheme.primaryColor,
+                            size: 44,
+                          )
+                        ]),
                   ),
                 ),
               ),
@@ -326,16 +346,22 @@ class _RecetteSuiteWidgetState extends State<RecetteSuiteWidget> {
                   child: ToggleIcon(
                     onPressed: () async {
                       final favorisRecettesElement = streamPremium.reference;
-                      final favorisRecettesUpdate = currentUserDocument!.favorisRecettes!.toList().contains(favorisRecettesElement)
+                      final favorisRecettesUpdate = currentUserDocument!
+                              .favorisRecettes!
+                              .toList()
+                              .contains(favorisRecettesElement)
                           ? FieldValue.arrayRemove([favorisRecettesElement])
                           : FieldValue.arrayUnion([favorisRecettesElement]);
                       final usersUpdateData = {
                         'favorisRecettes': favorisRecettesUpdate,
                       };
-                      await currentUserDocument!.reference!.update(usersUpdateData);
+                      await currentUserDocument!.reference!
+                          .update(usersUpdateData);
                       setState(() {});
                     },
-                    value: currentUserDocument!.favorisRecettes!.toList().contains(streamPremium.reference),
+                    value: currentUserDocument!.favorisRecettes!
+                        .toList()
+                        .contains(streamPremium.reference),
                     onIcon: SvgPicture.asset(
                       'assets/profil/saved_recipe_full_icon.svg',
                       width: 20,
@@ -381,135 +407,155 @@ class _RecetteSuiteWidgetState extends State<RecetteSuiteWidget> {
   }
 
   Widget getFree(RecettesRecord streamFree) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        if (streamFree.free == true)
-          Container(
-            child: InkWell(
-              onTap: () async {
-                showModalBottomSheet(
-                  isScrollControlled: true,
-                  backgroundColor: Colors.transparent,
-                  context: context,
-                  builder: (context) {
-                    return Padding(
-                      padding: MediaQuery.of(context).viewInsets,
-                      child: Container(
-                        height: MediaQuery.of(context).size.height * 0.9,
-                        child: RecetteSuite2Widget(
-                          description: streamFree.description!,
-                          dureePrepa: streamFree.dureePrepa!,
-                          etapes: streamFree.etapes!,
-                          listeIngredients: streamFree.listeIngredients!,
-                          niveauDifficulte: streamFree.niveauDifficulte!,
-                          photoPrincipale: streamFree.photoPrincipale!,
-                          titre: streamFree.titre!,
-                          nbIngredients: streamFree.nbIngredients!,
-                          recetteRef: streamFree.reference!,
-                        ),
-                      ),
-                    );
-                  },
-                ).then((value) => setState(() {}));
-              },
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Stack(
-                    alignment: const AlignmentDirectional(0.7, -1),
-                    children: [
-                      Align(
-                        alignment: const AlignmentDirectional(-0.9, -0.53),
-                        child: Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: Image.asset(
-                                    streamFree.photoPrincipale!,
-                                    cacheHeight: ((MediaQuery.of(context).size.width * 0.37) * (MediaQuery.of(context).devicePixelRatio)).round(),
-                                  ).image,
-                                ),
-                              ),
-                              width: MediaQuery.of(context).size.width * 0.44,
-                              height: MediaQuery.of(context).size.width * 0.46,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Material(
-                        color: Colors.transparent,
-                        elevation: 10,
-                        shape: const CircleBorder(),
+    return SingleChildScrollView(
+      physics: NeverScrollableScrollPhysics(),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          if (streamFree.free == true)
+            SizedBox(
+              child: InkWell(
+                onTap: () async {
+                  showModalBottomSheet(
+                    isScrollControlled: true,
+                    backgroundColor: Colors.transparent,
+                    context: context,
+                    builder: (context) {
+                      return Padding(
+                        padding: MediaQuery.of(context).viewInsets,
                         child: Container(
-                          width: 40,
-                          height: 40,
-                          decoration: const BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.circle,
+                          height: MediaQuery.of(context).size.height * 0.9,
+                          child: RecetteSuite2Widget(
+                            description: streamFree.description!,
+                            dureePrepa: streamFree.dureePrepa!,
+                            etapes: streamFree.etapes!,
+                            listeIngredients: streamFree.listeIngredients!,
+                            niveauDifficulte: streamFree.niveauDifficulte!,
+                            photoPrincipale: streamFree.photoPrincipale!,
+                            titre: streamFree.titre!,
+                            nbIngredients: streamFree.nbIngredients!,
+                            recetteRef: streamFree.reference!,
                           ),
-                          child: ToggleIcon(
-                            onPressed: () async {
-                              final favorisRecettesElement = streamFree.reference;
-                              final favorisRecettesUpdate = currentUserDocument!.favorisRecettes!.toList().contains(favorisRecettesElement)
-                                  ? FieldValue.arrayRemove([favorisRecettesElement])
-                                  : FieldValue.arrayUnion([favorisRecettesElement]);
-                              final usersUpdateData = {
-                                'favorisRecettes': favorisRecettesUpdate,
-                              };
-                              await currentUserDocument!.reference!.update(usersUpdateData);
-                              setState(() {});
-                            },
-                            value: currentUserDocument!.favorisRecettes!.toList().contains(streamFree.reference),
-                            onIcon: SvgPicture.asset(
-                              'assets/profil/saved_recipe_full_icon.svg',
-                              width: 20,
-                              height: 20,
-                            ),
-                            offIcon: SvgPicture.asset(
-                              'assets/profil/saved_recipe_icon.svg',
-                              width: 20,
-                              height: 20,
+                        ),
+                      );
+                    },
+                  ).then((value) => setState(() {}));
+                },
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Stack(
+                      alignment: const AlignmentDirectional(0.7, -1),
+                      children: [
+                        Align(
+                          alignment: const AlignmentDirectional(-0.9, -0.53),
+                          child: Padding(
+                            padding: const EdgeInsetsDirectional.fromSTEB(
+                                0, 20, 0, 0),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(20),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: Image.asset(
+                                      streamFree.photoPrincipale!,
+                                      cacheHeight:
+                                          ((MediaQuery.of(context).size.width *
+                                                      0.37) *
+                                                  (MediaQuery.of(context)
+                                                      .devicePixelRatio))
+                                              .round(),
+                                    ).image,
+                                  ),
+                                ),
+                                width: MediaQuery.of(context).size.width * 0.44,
+                                height:
+                                    MediaQuery.of(context).size.width * 0.46,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.4,
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
-                          child: Text(
-                            streamFree.titre!,
-                            style: MizzUpTheme.bodyText1.override(
-                              fontFamily: 'IBM',
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              useGoogleFonts: false,
+                        Material(
+                          color: Colors.transparent,
+                          elevation: 10,
+                          shape: const CircleBorder(),
+                          child: Container(
+                            width: 40,
+                            height: 40,
+                            decoration: const BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                            ),
+                            child: ToggleIcon(
+                              onPressed: () async {
+                                final favorisRecettesElement =
+                                    streamFree.reference;
+                                final favorisRecettesUpdate =
+                                    currentUserDocument!.favorisRecettes!
+                                            .toList()
+                                            .contains(favorisRecettesElement)
+                                        ? FieldValue.arrayRemove(
+                                            [favorisRecettesElement])
+                                        : FieldValue.arrayUnion(
+                                            [favorisRecettesElement]);
+                                final usersUpdateData = {
+                                  'favorisRecettes': favorisRecettesUpdate,
+                                };
+                                await currentUserDocument!.reference!
+                                    .update(usersUpdateData);
+                                setState(() {});
+                              },
+                              value: currentUserDocument!.favorisRecettes!
+                                  .toList()
+                                  .contains(streamFree.reference),
+                              onIcon: SvgPicture.asset(
+                                'assets/profil/saved_recipe_full_icon.svg',
+                                width: 20,
+                                height: 20,
+                              ),
+                              offIcon: SvgPicture.asset(
+                                'assets/profil/saved_recipe_icon.svg',
+                                width: 20,
+                                height: 20,
+                              ),
                             ),
                           ),
                         ),
                       ],
                     ),
-                  ),
-                ],
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.4,
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsetsDirectional.fromSTEB(
+                                0, 5, 0, 0),
+                            child: Text(
+                              streamFree.titre!,
+                              style: MizzUpTheme.bodyText1.override(
+                                fontFamily: 'IBM',
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                useGoogleFonts: false,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        if (streamFree.free != true) getGoPremium(streamFree)
-      ],
+          if (streamFree.free != true) getGoPremium(streamFree)
+        ],
+      ),
     );
   }
 
@@ -555,7 +601,10 @@ class _RecetteSuiteWidgetState extends State<RecetteSuiteWidget> {
                       fit: BoxFit.cover,
                       image: Image.asset(
                         streamPremium.photoPrincipale!,
-                        cacheHeight: ((MediaQuery.of(context).size.width * 0.37) * (MediaQuery.of(context).devicePixelRatio)).round(),
+                        cacheHeight:
+                            ((MediaQuery.of(context).size.width * 0.37) *
+                                    (MediaQuery.of(context).devicePixelRatio))
+                                .round(),
                       ).image,
                     ),
                   ),
@@ -577,16 +626,22 @@ class _RecetteSuiteWidgetState extends State<RecetteSuiteWidget> {
                   child: ToggleIcon(
                     onPressed: () async {
                       final favorisRecettesElement = streamPremium.reference;
-                      final favorisRecettesUpdate = currentUserDocument!.favorisRecettes!.toList().contains(favorisRecettesElement)
+                      final favorisRecettesUpdate = currentUserDocument!
+                              .favorisRecettes!
+                              .toList()
+                              .contains(favorisRecettesElement)
                           ? FieldValue.arrayRemove([favorisRecettesElement])
                           : FieldValue.arrayUnion([favorisRecettesElement]);
                       final usersUpdateData = {
                         'favorisRecettes': favorisRecettesUpdate,
                       };
-                      await currentUserDocument!.reference!.update(usersUpdateData);
+                      await currentUserDocument!.reference!
+                          .update(usersUpdateData);
                       setState(() {});
                     },
-                    value: currentUserDocument!.favorisRecettes!.toList().contains(streamPremium.reference),
+                    value: currentUserDocument!.favorisRecettes!
+                        .toList()
+                        .contains(streamPremium.reference),
                     onIcon: SvgPicture.asset(
                       'assets/profil/saved_recipe_full_icon.svg',
                       width: 20,
@@ -633,19 +688,31 @@ class _RecetteSuiteWidgetState extends State<RecetteSuiteWidget> {
                       int likesCounter = 0;
                       List<String> usersInitials = [];
                       QuerySnapshot<Map<String, dynamic>> docs = snapshot.data!;
-                      List<DocumentSnapshot<Map<String, dynamic>>> documents = docs.docs;
-                      for (DocumentSnapshot<Map<String, dynamic>> document in documents) {
-                        if (document.data()!['favorisRecettes'].contains(streamPremium.reference)) {
+                      List<DocumentSnapshot<Map<String, dynamic>>> documents =
+                          docs.docs;
+                      for (DocumentSnapshot<Map<String, dynamic>> document
+                          in documents) {
+                        if (document
+                            .data()!['favorisRecettes']
+                            .contains(streamPremium.reference)) {
                           likesCounter++;
                           var firstInitial;
                           var secondInitial;
-                          if (document.data()!.containsKey('Prenom') && document.data()!['Prenom'] != '') {
-                            firstInitial = document.data()!['Prenom'][0].toString().toUpperCase();
+                          if (document.data()!.containsKey('Prenom') &&
+                              document.data()!['Prenom'] != '') {
+                            firstInitial = document
+                                .data()!['Prenom'][0]
+                                .toString()
+                                .toUpperCase();
                           } else {
                             firstInitial = 'L';
                           }
-                          if (document.data()!.containsKey('Nom') && document.data()!['Nom'] != '') {
-                            secondInitial = document.data()!['Nom'][0].toString().toUpperCase();
+                          if (document.data()!.containsKey('Nom') &&
+                              document.data()!['Nom'] != '') {
+                            secondInitial = document
+                                .data()!['Nom'][0]
+                                .toString()
+                                .toUpperCase();
                           } else {
                             secondInitial = 'L';
                           }
@@ -659,13 +726,16 @@ class _RecetteSuiteWidgetState extends State<RecetteSuiteWidget> {
                           : Row(
                               children: [
                                 Container(
-                                  width: MediaQuery.of(context).size.width * 0.15,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.15,
                                   height: 15,
                                   child: Stack(
                                     children: [
                                       for (String userInitial in usersInitials)
                                         Positioned(
-                                          left: (usersInitials.indexOf(userInitial) * 15),
+                                          left: (usersInitials
+                                                  .indexOf(userInitial) *
+                                              15),
                                           child: Container(
                                             width: 15,
                                             height: 15,
@@ -680,7 +750,8 @@ class _RecetteSuiteWidgetState extends State<RecetteSuiteWidget> {
                                             child: Center(
                                               child: Text(
                                                 userInitial,
-                                                style: MizzUpTheme.bodyText1.override(
+                                                style: MizzUpTheme.bodyText1
+                                                    .override(
                                                   color: Colors.white,
                                                   fontFamily: 'IBM',
                                                   fontSize: 8,
@@ -743,7 +814,9 @@ class _RecetteSuiteWidgetState extends State<RecetteSuiteWidget> {
       flex: 1,
       child: Container(
         child: StreamBuilder<List<RecettesRecord?>>(
-            stream: queryRecettesRecord(queryBuilder: (recettesRecord) => recettesRecord.where(widget.recetteRef, isEqualTo: true)),
+            stream: queryRecettesRecord(
+                queryBuilder: (recettesRecord) =>
+                    recettesRecord.where(widget.recetteRef, isEqualTo: true)),
             builder: (context, snapshot) {
               // Customize what your widget looks like when it's loading.
               if (!snapshot.hasData) {
@@ -769,13 +842,17 @@ class _RecetteSuiteWidgetState extends State<RecetteSuiteWidget> {
                   scrollDirection: Axis.vertical,
                   itemCount: wrapRecettesRecordList.length,
                   itemBuilder: (context, gridViewIndex) {
-                    final wrapRecettesRecord = wrapRecettesRecordList[gridViewIndex];
+                    final wrapRecettesRecord =
+                        wrapRecettesRecordList[gridViewIndex];
 
                     return wrapRecettesRecord!.hided != true
                         ? Container(
                             child: Padding(
-                              padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
-                              child: currentUserDocument!.member! ? getIsMember(wrapRecettesRecord) : getNoMember(wrapRecettesRecord),
+                              padding: const EdgeInsetsDirectional.fromSTEB(
+                                  0, 0, 10, 0),
+                              child: currentUserDocument!.member!
+                                  ? getIsMember(wrapRecettesRecord)
+                                  : getNoMember(wrapRecettesRecord),
                             ),
                           )
                         : SizedBox();
@@ -791,7 +868,9 @@ class _RecetteSuiteWidgetState extends State<RecetteSuiteWidget> {
       child: Container(
         decoration: const BoxDecoration(),
         child: StreamBuilder<List<RecettesRecord?>>(
-            stream: queryRecettesRecord(queryBuilder: (recettesRecord) => recettesRecord.where(widget.recetteRef, isEqualTo: true)),
+            stream: queryRecettesRecord(
+                queryBuilder: (recettesRecord) =>
+                    recettesRecord.where(widget.recetteRef, isEqualTo: true)),
             builder: (context, snapshot) {
               // Customize what your widget looks like when it's loading.
               if (!snapshot.hasData) {
@@ -805,7 +884,11 @@ class _RecetteSuiteWidgetState extends State<RecetteSuiteWidget> {
                   ),
                 );
               }
-              List<RecettesRecord?> wrapRecettesRecordList = snapshot.data!.where((element) => element!.titre!.toUpperCase().contains(searchKey!.toUpperCase())).toList();
+              List<RecettesRecord?> wrapRecettesRecordList = snapshot.data!
+                  .where((element) => element!.titre!
+                      .toUpperCase()
+                      .contains(searchKey!.toUpperCase()))
+                  .toList();
               return GridView.builder(
                   padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 10),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -817,13 +900,17 @@ class _RecetteSuiteWidgetState extends State<RecetteSuiteWidget> {
                   scrollDirection: Axis.vertical,
                   itemCount: wrapRecettesRecordList.length,
                   itemBuilder: (context, gridViewIndex) {
-                    final wrapRecettesRecord = wrapRecettesRecordList[gridViewIndex];
+                    final wrapRecettesRecord =
+                        wrapRecettesRecordList[gridViewIndex];
 
                     return wrapRecettesRecord!.hided != true
                         ? Container(
                             child: Padding(
-                              padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
-                              child: currentUserDocument!.member! ? getIsMember(wrapRecettesRecord) : getNoMember(wrapRecettesRecord),
+                              padding: const EdgeInsetsDirectional.fromSTEB(
+                                  0, 0, 10, 0),
+                              child: currentUserDocument!.member!
+                                  ? getIsMember(wrapRecettesRecord)
+                                  : getNoMember(wrapRecettesRecord),
                             ),
                           )
                         : SizedBox();

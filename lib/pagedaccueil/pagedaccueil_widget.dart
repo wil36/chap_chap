@@ -259,9 +259,7 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
                                     );
                                   },
                                   child: Text(
-                                    calendarFormat == CalendarFormat.month
-                                        ? "Voir moins"
-                                        : "Voir plus",
+                                    "Voir plus",
                                   ),
                                 )
                               ],
@@ -299,9 +297,7 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
                                     );
                                   },
                                   child: Text(
-                                    calendarFormat == CalendarFormat.month
-                                        ? "Voir moins"
-                                        : "Voir plus",
+                                    "Voir plus",
                                   ),
                                 )
                               ],
@@ -339,9 +335,7 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
                                     );
                                   },
                                   child: Text(
-                                    calendarFormat == CalendarFormat.month
-                                        ? "Voir moins"
-                                        : "Voir plus",
+                                    "Voir plus",
                                   ),
                                 )
                               ],
@@ -624,7 +618,7 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
         titleTextFormatter: (date, locale) =>
             DateFormat.yMMMM(locale).format(date).toCapitalized(),
       ),
-      availableGestures: AvailableGestures.all,
+      availableGestures: AvailableGestures.horizontalSwipe,
       daysOfWeekStyle: DaysOfWeekStyle(
         dowTextFormatter: (date, locale) =>
             DateFormat.E(locale).format(date).toCapitalized(),
@@ -822,6 +816,7 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
                           return Column(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               InkWell(
                                 onTap: () async {
@@ -845,14 +840,72 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
                                       MainAxisAlignment.spaceBetween,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsetsDirectional
-                                              .fromSTEB(0, 20, 0, 20),
-                                          child: Container(
-                                            width: 100,
+                                    SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsetsDirectional
+                                                .fromSTEB(0, 20, 0, 20),
+                                            child: Container(
+                                              width: 100,
+                                              decoration: const BoxDecoration(),
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.max,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                children: [
+                                                  Material(
+                                                    color: Colors.transparent,
+                                                    elevation: 5,
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
+                                                    ),
+                                                    child: Container(
+                                                      width: 60,
+                                                      height: 60,
+                                                      decoration: BoxDecoration(
+                                                        color: const Color(
+                                                            0xFFEEEEEE),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10),
+                                                      ),
+                                                      child: ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10),
+                                                        child: Image.network(
+                                                          valueOrDefault<
+                                                              String>(
+                                                            columnProgrammesRecord!
+                                                                .imagePrincipale!,
+                                                            'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/chap-chap-1137ns/assets/z0582h302sn8/Rectangle_29_(1).png',
+                                                          ),
+                                                          width:
+                                                              double.infinity,
+                                                          height:
+                                                              double.infinity,
+                                                          fit: BoxFit.cover,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          Container(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width /
+                                                2,
                                             decoration: const BoxDecoration(),
                                             child: Column(
                                               mainAxisSize: MainAxisSize.max,
@@ -861,108 +914,61 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.center,
                                               children: [
-                                                Material(
-                                                  color: Colors.transparent,
-                                                  elevation: 5,
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
-                                                  ),
-                                                  child: Container(
-                                                    width: 60,
-                                                    height: 60,
-                                                    decoration: BoxDecoration(
-                                                      color: const Color(
-                                                          0xFFEEEEEE),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10),
-                                                    ),
-                                                    child: ClipRRect(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10),
-                                                      child: Image.network(
-                                                        valueOrDefault<String>(
-                                                          columnProgrammesRecord!
-                                                              .imagePrincipale!,
-                                                          'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/chap-chap-1137ns/assets/z0582h302sn8/Rectangle_29_(1).png',
-                                                        ),
-                                                        width: double.infinity,
-                                                        height: double.infinity,
-                                                        fit: BoxFit.cover,
-                                                      ),
-                                                    ),
+                                                Text(
+                                                  columnProgrammesRecord.titre!,
+                                                  maxLines: 3,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: MizzUpTheme.title1
+                                                      .override(
+                                                    fontFamily: 'IBM',
+                                                    color: Colors.black,
+                                                    fontSize: 14,
+                                                    useGoogleFonts: false,
                                                   ),
                                                 ),
                                               ],
                                             ),
                                           ),
-                                        ),
-                                        Container(
-                                          width: 200,
-                                          decoration: const BoxDecoration(),
-                                          child: Column(
+                                          Column(
                                             mainAxisSize: MainAxisSize.max,
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.center,
                                             children: [
-                                              Text(
-                                                columnProgrammesRecord.titre!,
-                                                style:
-                                                    MizzUpTheme.title1.override(
-                                                  fontFamily: 'IBM',
+                                              InkWell(
+                                                onTap: () async {
+                                                  await showModalBottomSheet(
+                                                    isScrollControlled: true,
+                                                    context: context,
+                                                    builder: (context) {
+                                                      return Padding(
+                                                        padding: MediaQuery.of(
+                                                                context)
+                                                            .viewInsets,
+                                                        child: SizedBox(
+                                                          height: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .height *
+                                                              0.5,
+                                                          child:
+                                                              const SupprimerProgrammeWidget(),
+                                                        ),
+                                                      );
+                                                    },
+                                                  );
+                                                },
+                                                child: const Icon(
+                                                  Icons.more_vert,
                                                   color: Colors.black,
-                                                  fontSize: 14,
-                                                  useGoogleFonts: false,
+                                                  size: 20,
                                                 ),
                                               ),
                                             ],
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                    Container(
-                                      width: 40,
-                                      height: 40,
-                                      decoration: const BoxDecoration(
-                                        shape: BoxShape.circle,
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsetsDirectional
-                                            .fromSTEB(10, 10, 0, 0),
-                                        child: InkWell(
-                                          onTap: () async {
-                                            await showModalBottomSheet(
-                                              isScrollControlled: true,
-                                              context: context,
-                                              builder: (context) {
-                                                return Padding(
-                                                  padding:
-                                                      MediaQuery.of(context)
-                                                          .viewInsets,
-                                                  child: SizedBox(
-                                                    height:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .height *
-                                                            0.5,
-                                                    child:
-                                                        const SupprimerProgrammeWidget(),
-                                                  ),
-                                                );
-                                              },
-                                            );
-                                          },
-                                          child: const Icon(
-                                            Icons.more_vert,
-                                            color: Colors.black,
-                                            size: 20,
-                                          ),
-                                        ),
+                                        ],
                                       ),
                                     ),
                                   ],

@@ -1,10 +1,10 @@
 import 'package:chap_chap/MizzUp_Code/MizzUp_util.dart';
 import 'package:chap_chap/backend/backend.dart';
 
-class ForumCommentModel {
+class ForumCommentReplyModel {
   String id;
   String userId;
-  String forumId;
+  String forumCommentId;
   DateTime createdDate;
   String userName;
   String userFirstName;
@@ -14,9 +14,9 @@ class ForumCommentModel {
   List<String> likedBy;
   int commentCount;
 
-  ForumCommentModel({
+  ForumCommentReplyModel({
     required this.id,
-    required this.forumId,
+    required this.forumCommentId,
     required this.createdDate,
     required this.userId,
     required this.userName,
@@ -28,11 +28,11 @@ class ForumCommentModel {
     required this.commentCount,
   });
 
-  factory ForumCommentModel.fromJson(Map<String, dynamic> json) {
-    return ForumCommentModel(
+  factory ForumCommentReplyModel.fromJson(Map<String, dynamic> json) {
+    return ForumCommentReplyModel(
       id: valueOrDefault(json['id'], ''),
       userId: valueOrDefault(json['userId'], ''),
-      forumId: valueOrDefault(json['forumId'], ''),
+      forumCommentId: valueOrDefault(json['forumCommentId'], ''),
       createdDate: valueOrDefault(
           (json['createdDate'] as Timestamp).toDate(), DateTime.now()),
       userName: valueOrDefault(json['userName'], ''),
@@ -49,7 +49,7 @@ class ForumCommentModel {
     return {
       'id': id,
       'userId': userId,
-      'forumId': forumId,
+      'forumCommentId': forumCommentId,
       'createdDate': Timestamp.fromDate(createdDate),
       'userName': userName,
       'userFirstName': userFirstName,
