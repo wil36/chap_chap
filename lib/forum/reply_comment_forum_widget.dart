@@ -20,6 +20,7 @@ class _ReplyCommentForumState extends State<ReplyCommentForum> {
   List<ForumCommentModel> items = [];
   ScrollController scrollController = new ScrollController();
   bool isLoading = true;
+  ForumCommentModel? forumComment;
 
   Future<List<ForumCommentReplyModel>> getForumCommentData() async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
@@ -45,6 +46,7 @@ class _ReplyCommentForumState extends State<ReplyCommentForum> {
   void initState() {
     super.initState();
 
+    forumComment = widget.forumCommentModel;
     setState(() {
       forumCommentReplyStream = FirebaseFirestore.instance
           .collection('forum_comments_reply')
@@ -81,7 +83,11 @@ class _ReplyCommentForumState extends State<ReplyCommentForum> {
                 ),
               );
             },
-          ).then((value) => setState(() {}));
+          ).then((value) async {
+            forumComment =
+                await getSingleForumComment(widget.forumCommentModel.id);
+            setState(() {});
+          });
         },
         child: Icon(
           Icons.add,
@@ -132,10 +138,7 @@ class _ReplyCommentForumState extends State<ReplyCommentForum> {
                           ),
                         ],
                       ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      buildItems(widget.forumCommentModel),
+                      buildItems(forumComment!),
                       SizedBox(
                         height: 20,
                       ),
@@ -167,7 +170,7 @@ class _ReplyCommentForumState extends State<ReplyCommentForum> {
                                     ),
                                     child: Center(
                                       child: Text(
-                                        'Aucun commentaire',
+                                        'Aucune réponse',
                                         style: MizzUpTheme.subtitle2,
                                       ),
                                     ),
@@ -180,8 +183,12 @@ class _ReplyCommentForumState extends State<ReplyCommentForum> {
                                   itemCount: snapshot.data!.length,
                                   itemBuilder: (context, index) {
                                     return Container(
-                                        margin:
-                                            EdgeInsets.symmetric(vertical: 10),
+                                        margin: EdgeInsets.only(
+                                          left: MediaQuery.of(context)
+                                                  .size
+                                                  .width /
+                                              25,
+                                        ),
                                         child: buildItemsReply(
                                             snapshot.data![index]));
                                   },
@@ -246,80 +253,6 @@ class _ReplyCommentForumState extends State<ReplyCommentForum> {
                       ),
                     ],
                   ),
-                  Visibility(
-                    visible: forumCommentModel.userId ==
-                        FirebaseAuth.instance.currentUser!.uid,
-                    child: PopupMenuButton<String>(
-                      onSelected: (value) async {
-                        if (value == 'edit') {
-                          // Logique pour modifier le commentaire
-                          await showModalBottomSheet(
-                            isScrollControlled: true,
-                            backgroundColor: Colors.transparent,
-                            context: context,
-                            builder: (context) {
-                              return Padding(
-                                padding: MediaQuery.of(context).viewInsets,
-                                child: Container(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.9,
-                                  // child: AddCommentForum(
-                                  //     forum: widget.forumCommentModel,
-                                  //     comment: forumCommentModel,
-                                  //     isAnAnswer: true),
-                                ),
-                              );
-                            },
-                          ).then((value) => setState(() {}));
-                        } else if (value == 'delete') {
-                          // Logique pour supprimer le commentaire
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: Text('Confirmer la suppression'),
-                                content: Text(
-                                    'Voulez-vous vraiment supprimer ce commentaire ?'),
-                                actions: <Widget>[
-                                  TextButton(
-                                    child: Text('Annuler'),
-                                    onPressed: () {
-                                      Navigator.of(context)
-                                          .pop(); // Fermer la boîte de dialogue
-                                    },
-                                  ),
-                                  TextButton(
-                                    child: Text('Supprimer'),
-                                    onPressed: () {
-                                      Navigator.of(context)
-                                          .pop(); // Fermer la boîte de dialogue
-                                      deleteComment(forumCommentModel
-                                          .id); // Appeler la fonction de suppression
-                                    },
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        }
-                      },
-                      itemBuilder: (BuildContext context) =>
-                          <PopupMenuEntry<String>>[
-                        PopupMenuItem<String>(
-                          value: 'edit',
-                          child: Text('Modifier le commentaire'),
-                        ),
-                        PopupMenuItem<String>(
-                          value: 'delete',
-                          child: Text('Supprimer le commentaire'),
-                        ),
-                      ],
-                      child: Icon(
-                        Icons.more_vert,
-                        color: Colors.white,
-                      ),
-                    ),
-                  )
                 ],
               ),
               SizedBox(
@@ -332,16 +265,22 @@ class _ReplyCommentForumState extends State<ReplyCommentForum> {
               Row(
                 children: [
                   InkWell(
-                    onTap: () {
-                      incrementLikeCount(forumCommentModel.id, 1,
+                    onTap: () async {
+                      await incrementLikeCount(forumCommentModel.id, 1,
                           FirebaseAuth.instance.currentUser!.uid);
+                      forumComment =
+                          await getSingleForumComment(forumComment!.id);
+                      setState(() {});
                     },
                     child: Row(
                       children: [
                         IconButton(
-                          onPressed: () {
-                            incrementLikeCount(forumCommentModel.id, 1,
+                          onPressed: () async {
+                            await incrementLikeCount(forumCommentModel.id, 1,
                                 FirebaseAuth.instance.currentUser!.uid);
+                            forumComment =
+                                await getSingleForumComment(forumComment!.id);
+                            setState(() {});
                           },
                           icon: Icon(
                             forumCommentModel.likedBy.contains(
@@ -391,9 +330,11 @@ class _ReplyCommentForumState extends State<ReplyCommentForum> {
 
   Widget buildItemsReply(ForumCommentReplyModel forumCommentReplyModel) {
     return Card(
+      elevation: 2,
+      shadowColor: MizzUpTheme.tertiaryColor,
       child: Container(
         decoration: BoxDecoration(
-          color: MizzUpTheme.tertiaryColor,
+          color: Colors.white,
           borderRadius: BorderRadius.circular(10),
         ),
         padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
@@ -424,7 +365,7 @@ class _ReplyCommentForumState extends State<ReplyCommentForum> {
                         forumCommentReplyModel.userName,
                         style: TextStyle(
                           fontFamily: 'IBM',
-                          color: Colors.white,
+                          color: Colors.black,
                           fontWeight: FontWeight.bold,
                           fontSize: 18,
                         ),
@@ -448,10 +389,10 @@ class _ReplyCommentForumState extends State<ReplyCommentForum> {
                                 child: Container(
                                   height:
                                       MediaQuery.of(context).size.height * 0.9,
-                                  // child: AddCommentForum(
-                                  //     forum: widget.forumCommentModel,
-                                  //     comment: forumCommentModel,
-                                  //     isAnAnswer: true),
+                                  child: AddCommentReplyForum(
+                                      forumComment: widget.forumCommentModel,
+                                      forumCommentReply: forumCommentReplyModel,
+                                      isAnAnswer: true),
                                 ),
                               );
                             },
@@ -478,7 +419,7 @@ class _ReplyCommentForumState extends State<ReplyCommentForum> {
                                     onPressed: () {
                                       Navigator.of(context)
                                           .pop(); // Fermer la boîte de dialogue
-                                      deleteComment(forumCommentReplyModel
+                                      deleteCommentReply(forumCommentReplyModel
                                           .id); // Appeler la fonction de suppression
                                     },
                                   ),
@@ -501,7 +442,7 @@ class _ReplyCommentForumState extends State<ReplyCommentForum> {
                       ],
                       child: Icon(
                         Icons.more_vert,
-                        color: Colors.white,
+                        color: Colors.black,
                       ),
                     ),
                   )
@@ -511,7 +452,7 @@ class _ReplyCommentForumState extends State<ReplyCommentForum> {
                 height: 20,
               ),
               Text(forumCommentReplyModel.comment,
-                  style: MizzUpTheme.bodyText3),
+                  style: MizzUpTheme.bodyText2),
               SizedBox(
                 height: 15,
               ),
@@ -519,15 +460,15 @@ class _ReplyCommentForumState extends State<ReplyCommentForum> {
                 children: [
                   InkWell(
                     onTap: () {
-                      incrementLikeCount(forumCommentReplyModel.id, 1,
+                      incrementLikeCountReply(forumCommentReplyModel.id, 1,
                           FirebaseAuth.instance.currentUser!.uid);
                     },
                     child: Row(
                       children: [
                         IconButton(
                           onPressed: () {
-                            incrementLikeCount(forumCommentReplyModel.id, 1,
-                                FirebaseAuth.instance.currentUser!.uid);
+                            incrementLikeCountReply(forumCommentReplyModel.id,
+                                1, FirebaseAuth.instance.currentUser!.uid);
                           },
                           icon: Icon(
                             forumCommentReplyModel.likedBy.contains(
@@ -535,13 +476,13 @@ class _ReplyCommentForumState extends State<ReplyCommentForum> {
                                 ? Icons.thumb_up_alt
                                 : Icons.thumb_up_alt_outlined,
                             size: 20,
-                            color: Colors.white,
+                            color: Colors.black,
                           ),
                         ),
                         Text(
                             forumCommentReplyModel.likeCount.toString() +
                                 " Vote(s)",
-                            style: MizzUpTheme.bodyText3),
+                            style: MizzUpTheme.bodyText2),
                       ],
                     ),
                   ),
@@ -554,18 +495,105 @@ class _ReplyCommentForumState extends State<ReplyCommentForum> {
     );
   }
 
-  Future<void> deleteComment(String commentId) async {
+  Future<void> deleteCommentReply(String commentId) async {
     // Supprimer le commentaire
     await FirebaseFirestore.instance
         .collection('forum_comments_reply')
         .doc(commentId)
         .delete();
+    decrementCommentCount(widget.forumCommentModel.id, 1);
+  }
+
+  Future<void> incrementLikeCountReply(
+      String commentId, int incrementAmount, String likerId) async {
+    DocumentSnapshot snapshot = await FirebaseFirestore.instance
+        .collection('forum_comments_reply')
+        .doc(commentId)
+        .get();
+
+    if (snapshot.exists) {
+      ForumCommentReplyModel comment = ForumCommentReplyModel.fromJson(
+          snapshot.data() as Map<String, dynamic>);
+      if (!comment.likedBy.contains(likerId)) {
+        int currentLikeCount = comment.likeCount;
+        int newLikeCount = currentLikeCount + incrementAmount;
+
+        List<String> likedBy = List<String>.from(comment.likedBy);
+        likedBy.add(likerId);
+
+        await snapshot.reference
+            .update({'likeCount': newLikeCount, 'likedBy': likedBy});
+      } else {
+        int currentLikeCount = comment.likeCount;
+        int newLikeCount = currentLikeCount - incrementAmount;
+
+        List<String> likedBy = List<String>.from(comment.likedBy);
+        likedBy.remove(likerId);
+
+        await snapshot.reference
+            .update({'likeCount': newLikeCount, 'likedBy': likedBy});
+      }
+    } else {
+      print('Commentaire introuvable');
+    }
+  }
+
+  Future<void> deleteComment(String commentId) async {
+    // Supprimer les réponses associées au commentaire
+    QuerySnapshot replySnapshot = await FirebaseFirestore.instance
+        .collection('forum_comments_reply')
+        .where('forumCommentId', isEqualTo: commentId)
+        .get();
+    List<QueryDocumentSnapshot> replies = replySnapshot.docs;
+    for (var reply in replies) {
+      await reply.reference.delete();
+    }
+
+    // Supprimer le commentaire
+    await FirebaseFirestore.instance
+        .collection('forum_comments')
+        .doc(commentId)
+        .delete();
+  }
+
+  Future<void> decrementCommentCount(
+      String commentId, int incrementAmount) async {
+    DocumentSnapshot snapshot = await FirebaseFirestore.instance
+        .collection('forum_comments')
+        .doc(commentId)
+        .get();
+
+    if (snapshot.exists) {
+      ForumCommentModel comment =
+          ForumCommentModel.fromJson(snapshot.data() as Map<String, dynamic>);
+
+      int currentCommentCount = comment.commentCount;
+      int newCommentCount = currentCommentCount - incrementAmount;
+
+      await snapshot.reference.update({'commentCount': newCommentCount});
+    } else {
+      print('Commentaire introuvable');
+    }
+  }
+
+  Future<ForumCommentModel> getSingleForumComment(String commentId) async {
+    DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+        .collection('forum_comments')
+        .doc(commentId)
+        .get();
+
+    if (documentSnapshot.exists) {
+      var data = documentSnapshot.data();
+      return ForumCommentModel.fromJson(data as Map<String, dynamic>);
+    } else {
+      throw Exception('Commentaire introuvable.');
+    }
   }
 
   Future<void> incrementLikeCount(
       String commentId, int incrementAmount, String likerId) async {
     DocumentSnapshot snapshot = await FirebaseFirestore.instance
-        .collection('forum_comments_reply')
+        .collection('forum_comments')
         .doc(commentId)
         .get();
 

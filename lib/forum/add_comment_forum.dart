@@ -27,6 +27,7 @@ class AddCommentForum extends StatefulWidget {
 class _AddCommentForumState extends State<AddCommentForum> {
   late TextEditingController commentController = TextEditingController(
       text: widget.isAnAnswer ? widget.comment!.comment : "");
+  bool isSender = false;
 
   @override
   Widget build(BuildContext context) {
@@ -115,11 +116,13 @@ class _AddCommentForumState extends State<AddCommentForum> {
                   borderRadius: BorderRadius.circular(10),
                   color: MizzUpTheme.secondaryColor,
                 ),
-                child: Text(
-                    widget.isAnAnswer
-                        ? 'Modifier mon commentaire'
-                        : 'Ajouter mon commentaire',
-                    style: TextStyle(color: Colors.black, fontSize: 16))),
+                child: isSender
+                    ? CircularProgressIndicator()
+                    : Text(
+                        widget.isAnAnswer
+                            ? 'Modifier mon commentaire'
+                            : 'Ajouter mon commentaire',
+                        style: TextStyle(color: Colors.black, fontSize: 16))),
           ),
         ],
       ),
@@ -127,37 +130,48 @@ class _AddCommentForumState extends State<AddCommentForum> {
   }
 
   Future<void> editComment() async {
-    await FirebaseFirestore.instance
-        .collection('forum_comments')
-        .doc(widget.comment!.id)
-        .update({
-      'comment': commentController.text,
-      'createdDate': DateTime.now(),
-    });
+    if (isSender == false) {
+      setState(() {
+        isSender = true;
+      });
+      await FirebaseFirestore.instance
+          .collection('forum_comments')
+          .doc(widget.comment!.id)
+          .update({
+        'comment': commentController.text,
+        'createdDate': DateTime.now(),
+      });
+    }
   }
 
   Future<void> addComment() async {
-    ForumCommentModel forumCommentModel = new ForumCommentModel(
-      id: "", // L'ID sera mis à jour après l'enregistrement
-      comment: commentController.text,
-      createdDate: DateTime.now(),
-      userId: FirebaseAuth.instance.currentUser!.uid,
-      userName: currentUserDisplayName,
-      commentCount: 0,
-      forumId: widget.forum!.id,
-      likeCount: 0,
-      likedBy: [],
-      userFirstName: currentUserDisplayName,
-      userProfilePhoto: currentUserPhoto,
-    );
+    if (isSender == false) {
+      setState(() {
+        isSender = true;
+      });
+      ForumCommentModel forumCommentModel = new ForumCommentModel(
+        id: "", // L'ID sera mis à jour après l'enregistrement
+        comment: commentController.text,
+        createdDate: DateTime.now(),
+        userId: FirebaseAuth.instance.currentUser!.uid,
+        userName: currentUserDisplayName,
+        commentCount: 0,
+        forumId: widget.forum!.id,
+        likeCount: 0,
+        likedBy: [],
+        userFirstName: currentUserDisplayName,
+        userProfilePhoto: currentUserPhoto,
+      );
 
-    DocumentReference docRef = await FirebaseFirestore.instance
-        .collection('forum_comments')
-        .add(forumCommentModel.toJson());
+      DocumentReference docRef = await FirebaseFirestore.instance
+          .collection('forum_comments')
+          .add(forumCommentModel.toJson());
 
-    String commentId = docRef.id; // Obtient l'ID du document créé
-    forumCommentModel.id = commentId; // Met à jour l'ID dans le modèle
+      String commentId = docRef.id; // Obtient l'ID du document créé
+      forumCommentModel.id = commentId; // Met à jour l'ID dans le modèle
 
-    await docRef.update({'id': commentId}); // Met à jour l'ID dans le document
+      await docRef
+          .update({'id': commentId}); // Met à jour l'ID dans le document
+    }
   }
 }
