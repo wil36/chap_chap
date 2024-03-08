@@ -1,5 +1,8 @@
 // ignore_for_file: unnecessary_const
 
+import 'package:chap_chap/MizzUp_Code/MizzUp_expanded_image_view.dart';
+import 'package:chap_chap/MizzUp_Code/MizzUp_util.dart';
+import 'package:chap_chap/components/modifier_photo_profil_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../auth/auth_util.dart';
@@ -35,7 +38,10 @@ class _MonProfilChapWidgetState extends State<MonProfilChapWidget> {
   FocusNode bioFocusNode = FocusNode();
 
   List<String> hairTypes = ['Lisses', 'Ondulés', 'Frisés', 'Crépus', 'Bouclés'];
-  List<String> hairObjectives = ['Avoir une routine efficace', 'Débuter une transition'];
+  List<String> hairObjectives = [
+    'Avoir une routine efficace',
+    'Débuter une transition'
+  ];
   bool isPrivate = currentUserDocument!.isPrivate!;
   @override
   Widget build(BuildContext context) {
@@ -57,7 +63,8 @@ class _MonProfilChapWidgetState extends State<MonProfilChapWidget> {
           children: [
             StreamBuilder<List<CheveuxUserRecord?>>(
               stream: queryCheveuxUserRecord(
-                queryBuilder: (cheveuxUserRecord) => cheveuxUserRecord.where('userRef', isEqualTo: currentUserReference),
+                queryBuilder: (cheveuxUserRecord) => cheveuxUserRecord
+                    .where('userRef', isEqualTo: currentUserReference),
                 singleRecord: true,
               ),
               builder: (context, snapshot) {
@@ -73,15 +80,20 @@ class _MonProfilChapWidgetState extends State<MonProfilChapWidget> {
                     ),
                   );
                 }
-                List<CheveuxUserRecord?>? columnCheveuxUserRecordList = snapshot.data;
-                final columnCheveuxUserRecord = columnCheveuxUserRecordList!.isNotEmpty ? columnCheveuxUserRecordList.first : null;
+                List<CheveuxUserRecord?>? columnCheveuxUserRecordList =
+                    snapshot.data;
+                final columnCheveuxUserRecord =
+                    columnCheveuxUserRecordList!.isNotEmpty
+                        ? columnCheveuxUserRecordList.first
+                        : null;
                 return Column(
                   mainAxisSize: MainAxisSize.max,
                   children: [
                     Align(
                       alignment: const AlignmentDirectional(0, -0.85),
                       child: Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(0, 30, 0, 0),
+                        padding:
+                            const EdgeInsetsDirectional.fromSTEB(0, 30, 0, 0),
                         child: Row(
                           mainAxisSize: MainAxisSize.max,
                           children: [
@@ -100,7 +112,8 @@ class _MonProfilChapWidgetState extends State<MonProfilChapWidget> {
                               },
                             ),
                             Padding(
-                              padding: const EdgeInsetsDirectional.fromSTEB(20, 0, 0, 0),
+                              padding: const EdgeInsetsDirectional.fromSTEB(
+                                  20, 0, 0, 0),
                               child: Text(
                                 'Modifier mon profil',
                                 style: MizzUpTheme.title1.override(
@@ -115,6 +128,135 @@ class _MonProfilChapWidgetState extends State<MonProfilChapWidget> {
                         ),
                       ),
                     ),
+                    StreamBuilder<UsersRecord?>(
+                        stream: UsersRecord.getDocument(currentUserReference!),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData) {
+                            return const Center(
+                              child: SizedBox(
+                                width: 60,
+                                height: 60,
+                                child: CircularProgressIndicator(
+                                  color: Colors.black,
+                                ),
+                              ),
+                            );
+                          }
+                          final columnUsersRecord = snapshot.data!;
+                          return SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            height: MediaQuery.of(context).size.height * 0.15,
+                            child: Stack(
+                              alignment: const AlignmentDirectional(0, 1),
+                              children: [
+                                Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Expanded(
+                                      child: Align(
+                                        alignment: const AlignmentDirectional(
+                                            0, -0.55),
+                                        child: Container(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.25,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.25,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            border: Border.all(
+                                              color: MizzUpTheme.primaryColor,
+                                              width: 1,
+                                            ),
+                                          ),
+                                          child: InkWell(
+                                            onTap: () async {
+                                              await Navigator.push(
+                                                context,
+                                                PageTransition(
+                                                  type: PageTransitionType.fade,
+                                                  child:
+                                                      MizzUpExpandedImageView(
+                                                    image: Image.network(
+                                                      valueOrDefault<String?>(
+                                                        columnUsersRecord
+                                                            .photoUrl,
+                                                        'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/chap-chap-1137ns/assets/n3ejaipxw085/user-22.jpg',
+                                                      )!,
+                                                      fit: BoxFit.contain,
+                                                    ),
+                                                    allowRotation: false,
+                                                    tag: 'circleImageTag',
+                                                    useHeroAnimation: false,
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                            child: Container(
+                                              clipBehavior: Clip.antiAlias,
+                                              decoration: const BoxDecoration(
+                                                shape: BoxShape.circle,
+                                              ),
+                                              child: Image.network(
+                                                valueOrDefault<String?>(
+                                                  columnUsersRecord.photoUrl,
+                                                  'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/chap-chap-1137ns/assets/n3ejaipxw085/user-22.jpg',
+                                                )!,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    MizzUpIconButton(
+                                      borderColor: Colors.transparent,
+                                      borderRadius: 30,
+                                      borderWidth: 1,
+                                      buttonSize: 40,
+                                      fillColor: MizzUpTheme.secondaryColor,
+                                      icon: const Icon(
+                                        Icons.edit,
+                                        color: MizzUpTheme.primaryColor,
+                                        size: 20,
+                                      ),
+                                      onPressed: () async {
+                                        await showModalBottomSheet(
+                                          isScrollControlled: true,
+                                          context: context,
+                                          builder: (context) {
+                                            return Padding(
+                                              padding: MediaQuery.of(context)
+                                                  .viewInsets,
+                                              child: SizedBox(
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .height *
+                                                    0.45,
+                                                child:
+                                                    const ModifierPhotoProfilWidget(),
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          );
+                        }),
                     Container(
                       width: MediaQuery.of(context).size.width * 0.9,
                       margin: const EdgeInsets.only(bottom: 10, top: 10),
@@ -189,10 +331,15 @@ class _MonProfilChapWidgetState extends State<MonProfilChapWidget> {
                                             context: context,
                                             builder: (context) {
                                               return Padding(
-                                                padding: MediaQuery.of(context).viewInsets,
+                                                padding: MediaQuery.of(context)
+                                                    .viewInsets,
                                                 child: SizedBox(
-                                                  height: MediaQuery.of(context).size.height * 0.45,
-                                                  child: const StyleCheveuxWidget(),
+                                                  height: MediaQuery.of(context)
+                                                          .size
+                                                          .height *
+                                                      0.45,
+                                                  child:
+                                                      const StyleCheveuxWidget(),
                                                 ),
                                               );
                                             },
@@ -205,7 +352,8 @@ class _MonProfilChapWidgetState extends State<MonProfilChapWidget> {
                                         ),
                                       )
                                     : null,
-                                hintText: hairTypes[columnCheveuxUserRecord!.styleCheveux!],
+                                hintText: hairTypes[
+                                    columnCheveuxUserRecord!.styleCheveux!],
                                 hintStyle: const TextStyle(
                                   color: MizzUpTheme.primaryColor,
                                   fontSize: 16,
@@ -251,9 +399,13 @@ class _MonProfilChapWidgetState extends State<MonProfilChapWidget> {
                                           context: context,
                                           builder: (context) {
                                             return Padding(
-                                              padding: MediaQuery.of(context).viewInsets,
+                                              padding: MediaQuery.of(context)
+                                                  .viewInsets,
                                               child: SizedBox(
-                                                height: MediaQuery.of(context).size.height * 0.45,
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .height *
+                                                    0.45,
                                                 child: const RoutineWidget(),
                                               ),
                                             );
@@ -267,7 +419,8 @@ class _MonProfilChapWidgetState extends State<MonProfilChapWidget> {
                                       ),
                                     )
                                   : null,
-                              hintText: hairObjectives[columnCheveuxUserRecord.routineCapillaire!],
+                              hintText: hairObjectives[
+                                  columnCheveuxUserRecord.routineCapillaire!],
                               hintStyle: const TextStyle(
                                 color: MizzUpTheme.primaryColor,
                                 fontSize: 16,
@@ -461,24 +614,31 @@ class _MonProfilChapWidgetState extends State<MonProfilChapWidget> {
                             color: MizzUpTheme.primaryColor.withOpacity(0.2),
                             spreadRadius: 5,
                             blurRadius: 7,
-                            offset: const Offset(0, 3), // changes position of shadow
+                            offset: const Offset(
+                                0, 3), // changes position of shadow
                           ),
                         ],
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          Text('Passer en mode privé', style: TextStyle(color: Colors.black, fontSize: 20)),
+                          Text('Passer en mode privé',
+                              style:
+                                  TextStyle(color: Colors.black, fontSize: 20)),
                           SizedBox(),
                           FlutterSwitch(
                             activeColor: MizzUpTheme.primaryColor,
-                            activeSwitchBorder: Border.all(color: MizzUpTheme.primaryColor, width: 2),
+                            activeSwitchBorder: Border.all(
+                                color: MizzUpTheme.primaryColor, width: 2),
                             inactiveColor: Colors.transparent,
-                            inactiveSwitchBorder: Border.all(color: MizzUpTheme.primaryColor, width: 2),
+                            inactiveSwitchBorder: Border.all(
+                                color: MizzUpTheme.primaryColor, width: 2),
                             activeToggleColor: Colors.white,
                             inactiveToggleColor: Colors.white,
-                            activeToggleBorder: Border.all(color: MizzUpTheme.secondaryColor, width: 2),
-                            inactiveToggleBorder: Border.all(color: MizzUpTheme.primaryColor, width: 2),
+                            activeToggleBorder: Border.all(
+                                color: MizzUpTheme.secondaryColor, width: 2),
+                            inactiveToggleBorder: Border.all(
+                                color: MizzUpTheme.primaryColor, width: 2),
                             width: 60.0,
                             height: 30.0,
                             valueFontSize: 25.0,
@@ -498,49 +658,70 @@ class _MonProfilChapWidgetState extends State<MonProfilChapWidget> {
                     SizedBox(height: 20),
                     Container(
                         width: MediaQuery.of(context).size.width * 0.9,
-                        child: Text(textAlign: TextAlign.center, 'Si tu passes ton profil en mode privé, tu ne pourras pas commenter ou répondre aux commentaires disponibles sous les recettes')),
+                        child: Text(
+                            textAlign: TextAlign.center,
+                            'Si tu passes ton profil en mode privé, tu ne pourras pas commenter ou répondre aux commentaires disponibles sous les recettes')),
                     SizedBox(height: 20),
                     TextButton(
                       onPressed: () async {
                         final user = FirebaseAuth.instance.currentUser;
                         if (user != null) {
                           if (instagramController.text == '') {
-                            instagramController.text = currentUserDocument!.instagram!;
+                            instagramController.text =
+                                currentUserDocument!.instagram!;
                           } else {
                             if (!instagramController.text.startsWith('@')) {
-                              instagramController.text = '@' + instagramController.text;
+                              instagramController.text =
+                                  '@' + instagramController.text;
                             }
                           }
                           if (tikTokController.text == '') {
-                            tikTokController.text = currentUserDocument!.tiktok!;
+                            tikTokController.text =
+                                currentUserDocument!.tiktok!;
                           } else {
                             if (!tikTokController.text.startsWith('@')) {
-                              tikTokController.text = '@' + tikTokController.text;
+                              tikTokController.text =
+                                  '@' + tikTokController.text;
                             }
                           }
                           if (bioController.text == '') {
                             bioController.text = currentUserDocument!.bio!;
                           }
                           if (userNameController.text == '') {
-                            userNameController.text = currentUserDocument!.displayName!;
+                            userNameController.text =
+                                currentUserDocument!.displayName!;
                           }
-                          await FirebaseFirestore.instance.collection('users').doc(user.uid).update({
-                            'instagram': instagramController.text == '' ? currentUserDocument!.instagram : instagramController.text,
-                            'tiktok': tikTokController.text == '' ? currentUserDocument!.tiktok : tikTokController.text,
-                            'bio': bioController.text == '' ? currentUserDocument!.bio : bioController.text,
-                            'display_name': userNameController.text == '' ? currentUserDocument!.displayName : userNameController.text,
+                          await FirebaseFirestore.instance
+                              .collection('users')
+                              .doc(user.uid)
+                              .update({
+                            'instagram': instagramController.text == ''
+                                ? currentUserDocument!.instagram
+                                : instagramController.text,
+                            'tiktok': tikTokController.text == ''
+                                ? currentUserDocument!.tiktok
+                                : tikTokController.text,
+                            'bio': bioController.text == ''
+                                ? currentUserDocument!.bio
+                                : bioController.text,
+                            'display_name': userNameController.text == ''
+                                ? currentUserDocument!.displayName
+                                : userNameController.text,
                             'is_private': isPrivate,
                           });
                         }
                         Navigator.pop(context);
                       },
                       child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 25),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 15, horizontal: 25),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             color: MizzUpTheme.secondaryColor,
                           ),
-                          child: const Text('Enregistrer mes préférences', style: TextStyle(color: Colors.black, fontSize: 16))),
+                          child: const Text('Enregistrer mes préférences',
+                              style: TextStyle(
+                                  color: Colors.black, fontSize: 16))),
                     ),
                     SizedBox(height: 20),
                   ],
@@ -553,7 +734,8 @@ class _MonProfilChapWidgetState extends State<MonProfilChapWidget> {
     );
   }
 
-  Widget editProfileInfosFormField(TextEditingController controller, String hintText, String helperText, bool needKeyboard) {
+  Widget editProfileInfosFormField(TextEditingController controller,
+      String hintText, String helperText, bool needKeyboard) {
     return Container(
       width: MediaQuery.of(context).size.width * 0.9,
       margin: const EdgeInsets.only(bottom: 10, top: 10),
@@ -562,7 +744,8 @@ class _MonProfilChapWidgetState extends State<MonProfilChapWidget> {
         children: [
           Text(helperText),
           TextFormField(
-            textInputAction: needKeyboard ? TextInputAction.next : TextInputAction.none,
+            textInputAction:
+                needKeyboard ? TextInputAction.next : TextInputAction.none,
             controller: controller,
             obscureText: false,
             decoration: InputDecoration(

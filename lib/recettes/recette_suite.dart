@@ -409,152 +409,260 @@ class _RecetteSuiteWidgetState extends State<RecetteSuiteWidget> {
   Widget getFree(RecettesRecord streamFree) {
     return SingleChildScrollView(
       physics: NeverScrollableScrollPhysics(),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          if (streamFree.free == true)
-            SizedBox(
-              child: InkWell(
-                onTap: () async {
-                  showModalBottomSheet(
-                    isScrollControlled: true,
-                    backgroundColor: Colors.transparent,
-                    context: context,
-                    builder: (context) {
-                      return Padding(
-                        padding: MediaQuery.of(context).viewInsets,
-                        child: Container(
-                          height: MediaQuery.of(context).size.height * 0.9,
-                          child: RecetteSuite2Widget(
-                            description: streamFree.description!,
-                            dureePrepa: streamFree.dureePrepa!,
-                            etapes: streamFree.etapes!,
-                            listeIngredients: streamFree.listeIngredients!,
-                            niveauDifficulte: streamFree.niveauDifficulte!,
-                            photoPrincipale: streamFree.photoPrincipale!,
-                            titre: streamFree.titre!,
-                            nbIngredients: streamFree.nbIngredients!,
-                            recetteRef: streamFree.reference!,
-                          ),
-                        ),
-                      );
-                    },
-                  ).then((value) => setState(() {}));
-                },
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Stack(
-                      alignment: const AlignmentDirectional(0.7, -1),
-                      children: [
-                        Align(
-                          alignment: const AlignmentDirectional(-0.9, -0.53),
-                          child: Padding(
-                            padding: const EdgeInsetsDirectional.fromSTEB(
-                                0, 20, 0, 0),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(20),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: Image.asset(
-                                      streamFree.photoPrincipale!,
-                                      cacheHeight:
-                                          ((MediaQuery.of(context).size.width *
-                                                      0.37) *
-                                                  (MediaQuery.of(context)
-                                                      .devicePixelRatio))
-                                              .round(),
-                                    ).image,
-                                  ),
-                                ),
-                                width: MediaQuery.of(context).size.width * 0.44,
-                                height:
-                                    MediaQuery.of(context).size.width * 0.46,
-                              ),
-                            ),
-                          ),
-                        ),
-                        Material(
-                          color: Colors.transparent,
-                          elevation: 10,
-                          shape: const CircleBorder(),
+      child: ConstrainedBox(
+        constraints: BoxConstraints(),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            if (streamFree.free == true)
+              SizedBox(
+                child: InkWell(
+                  onTap: () async {
+                    showModalBottomSheet(
+                      isScrollControlled: true,
+                      backgroundColor: Colors.transparent,
+                      context: context,
+                      builder: (context) {
+                        return Padding(
+                          padding: MediaQuery.of(context).viewInsets,
                           child: Container(
-                            width: 40,
-                            height: 40,
-                            decoration: const BoxDecoration(
-                              color: Colors.white,
-                              shape: BoxShape.circle,
+                            height: MediaQuery.of(context).size.height * 0.9,
+                            child: RecetteSuite2Widget(
+                              description: streamFree.description!,
+                              dureePrepa: streamFree.dureePrepa!,
+                              etapes: streamFree.etapes!,
+                              listeIngredients: streamFree.listeIngredients!,
+                              niveauDifficulte: streamFree.niveauDifficulte!,
+                              photoPrincipale: streamFree.photoPrincipale!,
+                              titre: streamFree.titre!,
+                              nbIngredients: streamFree.nbIngredients!,
+                              recetteRef: streamFree.reference!,
                             ),
-                            child: ToggleIcon(
-                              onPressed: () async {
-                                final favorisRecettesElement =
-                                    streamFree.reference;
-                                final favorisRecettesUpdate =
-                                    currentUserDocument!.favorisRecettes!
-                                            .toList()
-                                            .contains(favorisRecettesElement)
-                                        ? FieldValue.arrayRemove(
-                                            [favorisRecettesElement])
-                                        : FieldValue.arrayUnion(
-                                            [favorisRecettesElement]);
-                                final usersUpdateData = {
-                                  'favorisRecettes': favorisRecettesUpdate,
-                                };
-                                await currentUserDocument!.reference!
-                                    .update(usersUpdateData);
-                                setState(() {});
-                              },
-                              value: currentUserDocument!.favorisRecettes!
-                                  .toList()
-                                  .contains(streamFree.reference),
-                              onIcon: SvgPicture.asset(
-                                'assets/profil/saved_recipe_full_icon.svg',
-                                width: 20,
-                                height: 20,
-                              ),
-                              offIcon: SvgPicture.asset(
-                                'assets/profil/saved_recipe_icon.svg',
-                                width: 20,
-                                height: 20,
+                          ),
+                        );
+                      },
+                    ).then((value) => setState(() {}));
+                  },
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Stack(
+                        alignment: const AlignmentDirectional(0.7, -1),
+                        children: [
+                          Align(
+                            alignment: const AlignmentDirectional(-0.9, -0.53),
+                            child: Padding(
+                              padding: const EdgeInsetsDirectional.fromSTEB(
+                                  0, 20, 0, 0),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(20),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: Image.asset(
+                                        streamFree.photoPrincipale!,
+                                        cacheHeight: ((MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.37) *
+                                                (MediaQuery.of(context)
+                                                    .devicePixelRatio))
+                                            .round(),
+                                      ).image,
+                                    ),
+                                  ),
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.44,
+                                  height:
+                                      MediaQuery.of(context).size.width * 0.46,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.4,
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                      ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsetsDirectional.fromSTEB(
-                                0, 5, 0, 0),
-                            child: Text(
-                              streamFree.titre!,
-                              style: MizzUpTheme.bodyText1.override(
-                                fontFamily: 'IBM',
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                                useGoogleFonts: false,
+                          Material(
+                            color: Colors.transparent,
+                            elevation: 10,
+                            shape: const CircleBorder(),
+                            child: Container(
+                              width: 40,
+                              height: 40,
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                shape: BoxShape.circle,
+                              ),
+                              child: ToggleIcon(
+                                onPressed: () async {
+                                  final favorisRecettesElement =
+                                      streamFree.reference;
+                                  final favorisRecettesUpdate =
+                                      currentUserDocument!
+                                              .favorisRecettes!
+                                              .toList()
+                                              .contains(favorisRecettesElement)
+                                          ? FieldValue.arrayRemove(
+                                              [favorisRecettesElement])
+                                          : FieldValue.arrayUnion(
+                                              [favorisRecettesElement]);
+                                  final usersUpdateData = {
+                                    'favorisRecettes': favorisRecettesUpdate,
+                                  };
+                                  await currentUserDocument!.reference!
+                                      .update(usersUpdateData);
+                                  setState(() {});
+                                },
+                                value: currentUserDocument!.favorisRecettes!
+                                    .toList()
+                                    .contains(streamFree.reference),
+                                onIcon: SvgPicture.asset(
+                                  'assets/profil/saved_recipe_full_icon.svg',
+                                  width: 20,
+                                  height: 20,
+                                ),
+                                offIcon: SvgPicture.asset(
+                                  'assets/profil/saved_recipe_icon.svg',
+                                  width: 20,
+                                  height: 20,
+                                ),
                               ),
                             ),
                           ),
                         ],
                       ),
-                    ),
-                  ],
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.4,
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsetsDirectional.fromSTEB(
+                                  0, 5, 0, 0),
+                              child: Text(
+                                streamFree.titre!,
+                                style: MizzUpTheme.bodyText1.override(
+                                  fontFamily: 'IBM',
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  useGoogleFonts: false,
+                                ),
+                              ),
+                            ),
+                            getUserLikers(streamFree),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          if (streamFree.free != true) getGoPremium(streamFree)
-        ],
+            if (streamFree.free != true) getGoPremium(streamFree),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget getUserLikers(RecettesRecord streamFree) {
+    return Container(
+      margin: const EdgeInsetsDirectional.fromSTEB(20, 20, 20, 0),
+      child: FutureBuilder(
+        future: getUsersWithFavRecipe,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            int likesCounter = 0;
+            List<String> usersInitials = [];
+            QuerySnapshot<Map<String, dynamic>> docs = snapshot.data!;
+            List<DocumentSnapshot<Map<String, dynamic>>> documents = docs.docs;
+            for (DocumentSnapshot<Map<String, dynamic>> document in documents) {
+              if (document
+                  .data()!['favorisRecettes']
+                  .contains(streamFree.reference)) {
+                likesCounter++;
+                var firstInitial;
+                var secondInitial;
+                if (document.data()!.containsKey('Prenom') &&
+                    document.data()!['Prenom'] != '') {
+                  firstInitial =
+                      document.data()!['Prenom'][0].toString().toUpperCase();
+                } else {
+                  firstInitial = 'L';
+                }
+                if (document.data()!.containsKey('Nom') &&
+                    document.data()!['Nom'] != '') {
+                  secondInitial =
+                      document.data()!['Nom'][0].toString().toUpperCase();
+                } else {
+                  secondInitial = 'L';
+                }
+                if (usersInitials.length < 3) {
+                  usersInitials.add(firstInitial + secondInitial);
+                }
+              }
+            }
+            return likesCounter == 0
+                ? SizedBox()
+                : Row(
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.15,
+                        height: 20,
+                        child: Stack(
+                          children: [
+                            for (String userInitial in usersInitials)
+                              Positioned(
+                                left: (usersInitials.indexOf(userInitial) * 15),
+                                child: Container(
+                                  width: 20,
+                                  height: 20,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: MizzUpTheme.primaryColor,
+                                      width: 1,
+                                    ),
+                                    color: MizzUpTheme.primaryColor,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      userInitial,
+                                      style: MizzUpTheme.bodyText1.override(
+                                        color: Colors.white,
+                                        fontFamily: 'IBM',
+                                        fontSize: 10,
+                                        useGoogleFonts: false,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
+                      Text(
+                        '$likesCounter personnes ont enregistré cette recette ',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontFamily: 'IBM',
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  );
+            // ID non trouvé dans aucun document
+          } else if (snapshot.hasError) {
+            // Gestion de l'erreur
+            return Text('Erreur: ${snapshot.error}');
+          }
+          // Chargement des données
+          return Container(
+              width: 50,
+              height: 50,
+              child: Center(child: CircularProgressIndicator()));
+        },
       ),
     );
   }
@@ -685,6 +793,7 @@ class _RecetteSuiteWidgetState extends State<RecetteSuiteWidget> {
                   future: getUsersWithFavRecipe,
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
+                      print('hello' + streamPremium.reference.toString());
                       int likesCounter = 0;
                       List<String> usersInitials = [];
                       QuerySnapshot<Map<String, dynamic>> docs = snapshot.data!;
@@ -694,7 +803,7 @@ class _RecetteSuiteWidgetState extends State<RecetteSuiteWidget> {
                           in documents) {
                         if (document
                             .data()!['favorisRecettes']
-                            .contains(streamPremium.reference)) {
+                            .contains(streamPremium.reference!)) {
                           likesCounter++;
                           var firstInitial;
                           var secondInitial;

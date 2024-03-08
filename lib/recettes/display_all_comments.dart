@@ -83,6 +83,11 @@ class _DisplayAllCommentsState extends State<DisplayAllComments> {
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
                           var user = snapshot.data;
+                          String userPhoto = user!
+                                  .data()!
+                                  .containsKey('photo_url')
+                              ? user['photo_url']
+                              : 'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/chap-chap-1137ns/assets/n3ejaipxw085/user-22.jpg';
                           return Column(
                             children: [
                               SizedBox(height: 10),
@@ -92,36 +97,48 @@ class _DisplayAllCommentsState extends State<DisplayAllComments> {
                                   builder: (context, snapshot) {
                                     var comment = recipe;
                                     return Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 40),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 40),
                                       child: Container(
                                         padding: const EdgeInsets.all(10),
-                                        margin: const EdgeInsets.only(top: 10, bottom: 10),
+                                        margin: const EdgeInsets.only(
+                                            top: 10, bottom: 10),
                                         decoration: BoxDecoration(
                                           color: Colors.white,
-                                          borderRadius: BorderRadius.circular(10),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
                                           boxShadow: [
                                             BoxShadow(
-                                              color: Colors.grey.withOpacity(0.5),
+                                              color:
+                                                  Colors.grey.withOpacity(0.5),
                                               spreadRadius: 1,
                                               blurRadius: 7,
-                                              offset: const Offset(0, 3), // changes position of shadow
+                                              offset: const Offset(0,
+                                                  3), // changes position of shadow
                                             ),
                                           ],
                                         ),
                                         child: LayoutBuilder(
-                                          builder: (BuildContext context, BoxConstraints constraints) {
+                                          builder: (BuildContext context,
+                                              BoxConstraints constraints) {
                                             return Column(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
                                                 Row(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
                                                   children: [
                                                     Row(
                                                       children: [
                                                         ClipRRect(
-                                                          borderRadius: BorderRadius.circular(50), // Adjust the radius to your liking
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                  50), // Adjust the radius to your liking
                                                           child: Image.network(
-                                                            user!['photo_url'],
+                                                            userPhoto,
                                                             width: 30,
                                                             height: 30,
                                                             fit: BoxFit.cover,
@@ -129,16 +146,26 @@ class _DisplayAllCommentsState extends State<DisplayAllComments> {
                                                         ),
                                                         SizedBox(width: 10),
                                                         Column(
-                                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
                                                           children: [
                                                             Text(
-                                                              user['display_name'],
-                                                              style: MizzUpTheme.bodyText1.override(
-                                                                color: Colors.black,
-                                                                fontFamily: 'IBM',
+                                                              user![
+                                                                  'display_name'],
+                                                              style: MizzUpTheme
+                                                                  .bodyText1
+                                                                  .override(
+                                                                color: Colors
+                                                                    .black,
+                                                                fontFamily:
+                                                                    'IBM',
                                                                 fontSize: 14,
-                                                                fontWeight: FontWeight.w600,
-                                                                useGoogleFonts: false,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600,
+                                                                useGoogleFonts:
+                                                                    false,
                                                               ),
                                                             ),
                                                           ],
@@ -146,8 +173,13 @@ class _DisplayAllCommentsState extends State<DisplayAllComments> {
                                                       ],
                                                     ),
                                                     Text(
-                                                      recipe['date'].toDate().toString().substring(0, 10),
-                                                      style: MizzUpTheme.bodyText1.override(
+                                                      recipe['date']
+                                                          .toDate()
+                                                          .toString()
+                                                          .substring(0, 10),
+                                                      style: MizzUpTheme
+                                                          .bodyText1
+                                                          .override(
                                                         color: Colors.black,
                                                         fontFamily: 'IBM',
                                                         fontSize: 12,
@@ -158,12 +190,19 @@ class _DisplayAllCommentsState extends State<DisplayAllComments> {
                                                 ),
                                                 SizedBox(height: 15),
                                                 Container(
-                                                  width: MediaQuery.of(context).size.width * 0.6,
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.6,
                                                   child: Center(
                                                     child: Text(
-                                                      textAlign: TextAlign.center,
-                                                      comment['comment'].toString(),
-                                                      style: MizzUpTheme.bodyText1.override(
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      comment['comment']
+                                                          .toString(),
+                                                      style: MizzUpTheme
+                                                          .bodyText1
+                                                          .override(
                                                         color: Colors.black,
                                                         fontFamily: 'IBM',
                                                         fontSize: 12,
@@ -174,62 +213,120 @@ class _DisplayAllCommentsState extends State<DisplayAllComments> {
                                                 ),
                                                 SizedBox(height: 5),
                                                 Row(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
                                                   children: [
                                                     //repondre button
                                                     TextButton(
                                                       onPressed: () async {
                                                         await showModalBottomSheet(
-                                                          isScrollControlled: true,
-                                                          backgroundColor: Colors.transparent,
+                                                          isScrollControlled:
+                                                              true,
+                                                          backgroundColor:
+                                                              Colors
+                                                                  .transparent,
                                                           context: context,
                                                           builder: (context) {
                                                             return Padding(
-                                                              padding: MediaQuery.of(context).viewInsets,
+                                                              padding: MediaQuery
+                                                                      .of(context)
+                                                                  .viewInsets,
                                                               child: Container(
-                                                                height: MediaQuery.of(context).size.height * 0.9,
-                                                                child: ReplyComment(comment: comment, user: user),
+                                                                height: MediaQuery.of(
+                                                                            context)
+                                                                        .size
+                                                                        .height *
+                                                                    0.9,
+                                                                child: ReplyComment(
+                                                                    comment:
+                                                                        comment,
+                                                                    user: user),
                                                               ),
                                                             );
                                                           },
-                                                        ).then((value) => setState(() {}));
+                                                        ).then((value) =>
+                                                            setState(() {}));
                                                       },
                                                       child: Container(
-                                                          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-                                                          decoration: BoxDecoration(
-                                                            borderRadius: BorderRadius.circular(5),
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .symmetric(
+                                                                  vertical: 5,
+                                                                  horizontal:
+                                                                      15),
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        5),
                                                             color: Colors.white,
                                                             boxShadow: [
                                                               BoxShadow(
-                                                                color: Colors.grey.withOpacity(0.3),
+                                                                color: Colors
+                                                                    .grey
+                                                                    .withOpacity(
+                                                                        0.3),
                                                                 spreadRadius: 0,
                                                                 blurRadius: 5,
-                                                                offset: const Offset(0, 4), // changes position of shadow
+                                                                offset: const Offset(
+                                                                    0,
+                                                                    4), // changes position of shadow
                                                               ),
                                                             ],
                                                           ),
-                                                          child: const Text('Répondre', style: TextStyle(color: MizzUpTheme.primaryColor, fontSize: 12, fontWeight: FontWeight.w300))),
+                                                          child: const Text(
+                                                              'Répondre',
+                                                              style: TextStyle(
+                                                                  color: MizzUpTheme
+                                                                      .primaryColor,
+                                                                  fontSize: 12,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w300))),
                                                     ),
                                                     //like button
                                                     Row(
                                                       children: [
                                                         Text(
-                                                          comment['likes'].length.toString(),
-                                                          style: MizzUpTheme.bodyText1.override(
+                                                          comment['likes']
+                                                              .length
+                                                              .toString(),
+                                                          style: MizzUpTheme
+                                                              .bodyText1
+                                                              .override(
                                                             color: Colors.black,
                                                             fontFamily: 'IBM',
                                                             fontSize: 14,
-                                                            useGoogleFonts: false,
+                                                            useGoogleFonts:
+                                                                false,
                                                           ),
                                                         ),
                                                         ToggleIcon(
                                                           onPressed: () async {
-                                                            comment['likes'].contains(currentUserUid) ? await unlikeComment(comment.id) : await likeComment(comment.id);
+                                                            comment['likes']
+                                                                    .contains(
+                                                                        currentUserUid)
+                                                                ? await unlikeComment(
+                                                                    comment.id)
+                                                                : await likeComment(
+                                                                    comment.id);
                                                             setState(() {});
                                                           },
-                                                          value: comment['likes'].contains(currentUserUid),
-                                                          onIcon: Icon(Icons.favorite, color: MizzUpTheme.primaryColor),
-                                                          offIcon: Icon(Icons.favorite_border, color: MizzUpTheme.primaryColor),
+                                                          value: comment[
+                                                                  'likes']
+                                                              .contains(
+                                                                  currentUserUid),
+                                                          onIcon: Icon(
+                                                              Icons.favorite,
+                                                              color: MizzUpTheme
+                                                                  .primaryColor),
+                                                          offIcon: Icon(
+                                                              Icons
+                                                                  .favorite_border,
+                                                              color: MizzUpTheme
+                                                                  .primaryColor),
                                                         ),
                                                       ],
                                                     ),
@@ -238,157 +335,185 @@ class _DisplayAllCommentsState extends State<DisplayAllComments> {
                                                 SizedBox(height: 10),
                                                 //replies
                                                 StreamBuilder(
-                                                    stream: getCommentReplies(comment.id),
-                                                    builder: ((context, snapshot) {
+                                                    stream: getCommentReplies(
+                                                        comment.id),
+                                                    builder:
+                                                        ((context, snapshot) {
                                                       if (snapshot.hasData) {
-                                                        var replies = snapshot.data!.docs;
-                                                        if (replies.length == 0) return Container();
+                                                        var replies =
+                                                            snapshot.data!.docs;
+                                                        if (replies.length == 0)
+                                                          return Container();
                                                         return Column(
                                                           children: [
                                                             GestureDetector(
                                                               onTap: () async {
-                                                                comment['show_replies'] ? await hideReplies(comment.id) : await showReplies(comment.id);
+                                                                comment['show_replies']
+                                                                    ? await hideReplies(
+                                                                        comment
+                                                                            .id)
+                                                                    : await showReplies(
+                                                                        comment
+                                                                            .id);
                                                               },
                                                               child: Align(
-                                                                alignment: Alignment.centerLeft,
+                                                                alignment: Alignment
+                                                                    .centerLeft,
                                                                 child: Row(
                                                                   children: [
                                                                     Text(
-                                                                      replies.length > 1 ? '${replies.length} réponses' : '${replies.length} réponse',
-                                                                      style: TextStyle(
-                                                                        color: MizzUpTheme.primaryColor,
-                                                                        fontSize: 12,
-                                                                        fontWeight: FontWeight.w300,
-                                                                        decoration: TextDecoration.underline,
+                                                                      replies.length >
+                                                                              1
+                                                                          ? '${replies.length} réponses'
+                                                                          : '${replies.length} réponse',
+                                                                      style:
+                                                                          TextStyle(
+                                                                        color: MizzUpTheme
+                                                                            .primaryColor,
+                                                                        fontSize:
+                                                                            12,
+                                                                        fontWeight:
+                                                                            FontWeight.w300,
+                                                                        decoration:
+                                                                            TextDecoration.underline,
                                                                       ),
                                                                     ),
-                                                                    Icon(Icons.arrow_drop_down, color: MizzUpTheme.primaryColor),
+                                                                    Icon(
+                                                                        Icons
+                                                                            .arrow_drop_down,
+                                                                        color: MizzUpTheme
+                                                                            .primaryColor),
                                                                   ],
                                                                 ),
                                                               ),
                                                             ),
-                                                            comment['show_replies']
-                                                                ? Column(children: [
-                                                                    for (var reply in replies)
-                                                                      FutureBuilder(
-                                                                          future: getUserById(reply['user']),
-                                                                          builder: (context, snapshot) {
-                                                                            if (snapshot.hasData) {
-                                                                              var user = snapshot.data;
-                                                                              String userPhoto = user!.data()!.containsKey('photo_url')
-                                                                                  ? user['photo_url']
-                                                                                  : 'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/chap-chap-1137ns/assets/n3ejaipxw085/user-22.jpg';
-                                                                              return Padding(
-                                                                                padding: const EdgeInsets.only(right: 10),
-                                                                                child: Align(
-                                                                                  alignment: Alignment.centerRight,
-                                                                                  child: Container(
-                                                                                    width: MediaQuery.of(context).size.width * 0.5,
-                                                                                    padding: const EdgeInsets.all(10),
-                                                                                    margin: const EdgeInsets.only(top: 10, bottom: 10),
-                                                                                    decoration: BoxDecoration(
-                                                                                      color: Colors.white,
-                                                                                      borderRadius: BorderRadius.circular(10),
-                                                                                      boxShadow: [
-                                                                                        BoxShadow(
-                                                                                          color: Colors.grey.withOpacity(0.5),
-                                                                                          spreadRadius: 1,
-                                                                                          blurRadius: 7,
-                                                                                          offset: const Offset(0, 3), // changes position of shadow
+                                                            comment[
+                                                                    'show_replies']
+                                                                ? Column(
+                                                                    children: [
+                                                                        for (var reply
+                                                                            in replies)
+                                                                          FutureBuilder(
+                                                                              future: getUserById(reply['user']),
+                                                                              builder: (context, snapshot) {
+                                                                                if (snapshot.hasData) {
+                                                                                  var user = snapshot.data;
+                                                                                  String userPhoto = user!.data()!.containsKey('photo_url') ? user['photo_url'] : 'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/chap-chap-1137ns/assets/n3ejaipxw085/user-22.jpg';
+                                                                                  return Padding(
+                                                                                    padding: const EdgeInsets.only(right: 10),
+                                                                                    child: Align(
+                                                                                      alignment: Alignment.centerRight,
+                                                                                      child: Container(
+                                                                                        width: MediaQuery.of(context).size.width,
+                                                                                        padding: const EdgeInsets.all(10),
+                                                                                        margin: const EdgeInsets.only(top: 10, bottom: 10, left: 30),
+                                                                                        decoration: BoxDecoration(
+                                                                                          color: Colors.white,
+                                                                                          borderRadius: BorderRadius.circular(10),
+                                                                                          boxShadow: [
+                                                                                            BoxShadow(
+                                                                                              color: Colors.grey.withOpacity(0.5),
+                                                                                              spreadRadius: 1,
+                                                                                              blurRadius: 7,
+                                                                                              offset: const Offset(0, 3), // changes position of shadow
+                                                                                            ),
+                                                                                          ],
                                                                                         ),
-                                                                                      ],
-                                                                                    ),
-                                                                                    child: LayoutBuilder(
-                                                                                      builder: (BuildContext context, BoxConstraints constraints) {
-                                                                                        return Column(
-                                                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                                          children: [
-                                                                                            Row(
+                                                                                        child: LayoutBuilder(
+                                                                                          builder: (BuildContext context, BoxConstraints constraints) {
+                                                                                            return Column(
                                                                                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                                                               children: [
                                                                                                 Row(
+                                                                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                                                                   children: [
-                                                                                                    ClipRRect(
-                                                                                                      borderRadius: BorderRadius.circular(50), // Adjust the radius to your liking
-                                                                                                      child: Image.network(
-                                                                                                        userPhoto,
-                                                                                                        width: 30,
-                                                                                                        height: 30,
-                                                                                                        fit: BoxFit.cover,
-                                                                                                      ),
-                                                                                                    ),
-                                                                                                    SizedBox(width: 10),
-                                                                                                    Column(
-                                                                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                                    Row(
                                                                                                       children: [
-                                                                                                        Text(
-                                                                                                          user['display_name'],
-                                                                                                          style: MizzUpTheme.bodyText1.override(
-                                                                                                            color: Colors.black,
-                                                                                                            fontFamily: 'IBM',
-                                                                                                            fontSize: 14,
-                                                                                                            fontWeight: FontWeight.w600,
-                                                                                                            useGoogleFonts: false,
+                                                                                                        ClipRRect(
+                                                                                                          borderRadius: BorderRadius.circular(50), // Adjust the radius to your liking
+                                                                                                          child: Image.network(
+                                                                                                            userPhoto,
+                                                                                                            width: 30,
+                                                                                                            height: 30,
+                                                                                                            fit: BoxFit.cover,
                                                                                                           ),
+                                                                                                        ),
+                                                                                                        SizedBox(width: 10),
+                                                                                                        Column(
+                                                                                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                                          children: [
+                                                                                                            Text(
+                                                                                                              user['display_name'],
+                                                                                                              style: MizzUpTheme.bodyText1.override(
+                                                                                                                color: Colors.black,
+                                                                                                                fontFamily: 'IBM',
+                                                                                                                fontSize: 14,
+                                                                                                                fontWeight: FontWeight.w600,
+                                                                                                                useGoogleFonts: false,
+                                                                                                              ),
+                                                                                                            ),
+                                                                                                          ],
                                                                                                         ),
                                                                                                       ],
                                                                                                     ),
+                                                                                                    Text(
+                                                                                                      DateFormat.yMd('fr_FR').format(reply['date'].toDate()),
+                                                                                                      style: MizzUpTheme.bodyText1.override(
+                                                                                                        color: Colors.grey,
+                                                                                                        fontFamily: 'IBM',
+                                                                                                        fontSize: 10,
+                                                                                                        useGoogleFonts: false,
+                                                                                                      ),
+                                                                                                    ),
+                                                                                                    SizedBox(width: 5),
+                                                                                                    reply["user"] == currentUserUid
+                                                                                                        ? GestureDetector(
+                                                                                                            onTap: () {
+                                                                                                              showCommentOptions(context, reply);
+                                                                                                            },
+                                                                                                            child: Icon(
+                                                                                                              Icons.more_vert,
+                                                                                                              color: Colors.grey,
+                                                                                                              size: 20,
+                                                                                                            ),
+                                                                                                          )
+                                                                                                        : SizedBox()
                                                                                                   ],
                                                                                                 ),
                                                                                                 Text(
-                                                                                                  DateFormat.yMd('fr_FR').format(reply['date'].toDate()),
+                                                                                                  reply['comment_reply'],
                                                                                                   style: MizzUpTheme.bodyText1.override(
-                                                                                                    color: Colors.grey,
+                                                                                                    color: Colors.black,
                                                                                                     fontFamily: 'IBM',
-                                                                                                    fontSize: 10,
+                                                                                                    fontSize: 12,
                                                                                                     useGoogleFonts: false,
                                                                                                   ),
                                                                                                 ),
-                                                                                                SizedBox(width: 5),
-                                                                                                reply["user"] == currentUserUid
-                                                                                                    ? GestureDetector(
-                                                                                                        onTap: () {
-                                                                                                          showCommentOptions(context, reply);
-                                                                                                        },
-                                                                                                        child: Icon(
-                                                                                                          Icons.more_vert,
-                                                                                                          color: Colors.grey,
-                                                                                                          size: 20,
-                                                                                                        ),
-                                                                                                      )
-                                                                                                    : SizedBox()
                                                                                               ],
-                                                                                            ),
-                                                                                            Text(
-                                                                                              reply['comment_reply'],
-                                                                                              style: MizzUpTheme.bodyText1.override(
-                                                                                                color: Colors.black,
-                                                                                                fontFamily: 'IBM',
-                                                                                                fontSize: 12,
-                                                                                                useGoogleFonts: false,
-                                                                                              ),
-                                                                                            ),
-                                                                                          ],
-                                                                                        );
-                                                                                      },
+                                                                                            );
+                                                                                          },
+                                                                                        ),
+                                                                                      ),
                                                                                     ),
-                                                                                  ),
-                                                                                ),
-                                                                              );
-                                                                            } else if (snapshot.hasError) {
-                                                                              return Text('Erreur: ${snapshot.error}');
-                                                                            } else {
-                                                                              return const Center(child: CircularProgressIndicator());
-                                                                            }
-                                                                          })
-                                                                  ])
+                                                                                  );
+                                                                                } else if (snapshot.hasError) {
+                                                                                  return Text('Erreur: ${snapshot.error}');
+                                                                                } else {
+                                                                                  return const Center(child: CircularProgressIndicator());
+                                                                                }
+                                                                              })
+                                                                      ])
                                                                 : Divider(),
                                                           ],
                                                         );
-                                                      } else if (snapshot.hasError) {
-                                                        return Text('Erreur: ${snapshot.error}');
+                                                      } else if (snapshot
+                                                          .hasError) {
+                                                        return Text(
+                                                            'Erreur: ${snapshot.error}');
                                                       } else {
-                                                        return const Center(child: CircularProgressIndicator());
+                                                        return const Center(
+                                                            child:
+                                                                CircularProgressIndicator());
                                                       }
                                                     })),
                                               ],
@@ -404,7 +529,8 @@ class _DisplayAllCommentsState extends State<DisplayAllComments> {
                         } else if (snapshot.hasError) {
                           return Text('Erreur: ${snapshot.error}');
                         } else {
-                          return const Center(child: CircularProgressIndicator());
+                          return const Center(
+                              child: CircularProgressIndicator());
                         }
                       },
                     );
@@ -418,9 +544,12 @@ class _DisplayAllCommentsState extends State<DisplayAllComments> {
       ),
     );
   }
-  void showCommentOptions(BuildContext context, QueryDocumentSnapshot<Map<String, dynamic>> comment) {
+
+  void showCommentOptions(BuildContext context,
+      QueryDocumentSnapshot<Map<String, dynamic>> comment) {
     final RenderBox button = context.findRenderObject() as RenderBox;
-    final RenderBox overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
+    final RenderBox overlay =
+        Overlay.of(context).context.findRenderObject() as RenderBox;
     final Offset offset = button.localToGlobal(Offset.zero, ancestor: overlay);
 
     showMenu<String>(
@@ -429,11 +558,13 @@ class _DisplayAllCommentsState extends State<DisplayAllComments> {
       items: [
         PopupMenuItem<String>(
           value: 'edit',
-          child: Text('Modifier', style: TextStyle(color: Colors.black, fontSize: 12)),
+          child: Text('Modifier',
+              style: TextStyle(color: Colors.black, fontSize: 12)),
         ),
         PopupMenuItem<String>(
           value: 'delete',
-          child: Text('Supprimer', style: TextStyle(color: Colors.black, fontSize: 12)),
+          child: Text('Supprimer',
+              style: TextStyle(color: Colors.black, fontSize: 12)),
         ),
       ],
       elevation: 8.0,
@@ -449,7 +580,10 @@ class _DisplayAllCommentsState extends State<DisplayAllComments> {
               padding: MediaQuery.of(context).viewInsets,
               child: Container(
                 height: MediaQuery.of(context).size.height * 0.9,
-                child: EditReply(comment: comment, isAnAnswer: true,),
+                child: EditReply(
+                  comment: comment,
+                  isAnAnswer: true,
+                ),
               ),
             );
           },
@@ -461,24 +595,35 @@ class _DisplayAllCommentsState extends State<DisplayAllComments> {
   }
 
   Future<void> deleteCommentAnswer(String commentId) async {
-    await FirebaseFirestore.instance.collection('comments_reply').doc(commentId).delete();
+    await FirebaseFirestore.instance
+        .collection('comments_reply')
+        .doc(commentId)
+        .delete();
   }
 }
 
-Stream<QuerySnapshot<Map<String, dynamic>>> getCommentReplies(String commentId) {
-  return FirebaseFirestore.instance.collection('comments_reply').where('comment_id'.split('/comments/')[0], isEqualTo: commentId).snapshots();
+Stream<QuerySnapshot<Map<String, dynamic>>> getCommentReplies(
+    String commentId) {
+  return FirebaseFirestore.instance
+      .collection('comments_reply')
+      .where('comment_id'.split('/comments/')[0], isEqualTo: commentId)
+      .snapshots();
 }
 
 Future<void> showReplies(String commentId) async {
-  await FirebaseFirestore.instance.collection('comments').doc(commentId).update({
+  await FirebaseFirestore.instance
+      .collection('comments')
+      .doc(commentId)
+      .update({
     'show_replies': true,
   });
 }
 
 Future<void> hideReplies(String commentId) async {
-  await FirebaseFirestore.instance.collection('comments').doc(commentId).update({
+  await FirebaseFirestore.instance
+      .collection('comments')
+      .doc(commentId)
+      .update({
     'show_replies': false,
   });
-
-  
 }

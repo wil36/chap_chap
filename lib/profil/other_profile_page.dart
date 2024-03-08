@@ -34,6 +34,9 @@ class _OtherProfilePageState extends State<OtherProfilePage> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               var userDoc = snapshot.data;
+              String userPhoto = userDoc!.data()!.containsKey('photo_url')
+                  ? userDoc['photo_url']
+                  : 'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/chap-chap-1137ns/assets/n3ejaipxw085/user-22.jpg';
               return Column(
                 children: [
                   SizedBox(height: MediaQuery.of(context).size.width * 0.06),
@@ -51,7 +54,8 @@ class _OtherProfilePageState extends State<OtherProfilePage> {
                             borderRadius: BorderRadius.circular(12),
                           ),
                           margin: const EdgeInsets.only(left: 14),
-                          child: Icon(Icons.arrow_back, color: MizzUpTheme.primaryColor),
+                          child: Icon(Icons.arrow_back,
+                              color: MizzUpTheme.primaryColor),
                         ),
                       ),
                     ],
@@ -59,7 +63,8 @@ class _OtherProfilePageState extends State<OtherProfilePage> {
                   Stack(
                     children: [
                       Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(0, MediaQuery.of(context).size.height * 0.425, 0, 0),
+                        padding: EdgeInsetsDirectional.fromSTEB(0,
+                            MediaQuery.of(context).size.height * 0.425, 0, 0),
                         child: Container(
                             height: MediaQuery.of(context).size.height * 0.50,
                             width: double.infinity,
@@ -74,15 +79,29 @@ class _OtherProfilePageState extends State<OtherProfilePage> {
                             ),
                             child: Column(
                               children: [
-                                SizedBox(height: MediaQuery.of(context).size.height * 0.13),
-                                Text(textAlign: TextAlign.center, userDoc!['display_name'].toString(), style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold, fontFamily: 'Montserrat')),
+                                SizedBox(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.13),
+                                Text(
+                                    textAlign: TextAlign.center,
+                                    userDoc!['display_name'].toString(),
+                                    style: TextStyle(
+                                        fontSize: 24.0,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'Montserrat')),
                                 SizedBox(height: 16),
                                 Container(
-                                  width: MediaQuery.of(context).size.width * 0.6,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.6,
                                   child: Text(
                                       textAlign: TextAlign.center,
-                                      userDoc!['bio'] != '' ? userDoc!['bio'].toString() : 'Aucune bio enregistrée',
-                                      style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.normal, fontFamily: 'Montserrat')),
+                                      userDoc!['bio'] != ''
+                                          ? userDoc!['bio'].toString()
+                                          : 'Aucune bio enregistrée',
+                                      style: TextStyle(
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.normal,
+                                          fontFamily: 'Montserrat')),
                                 ),
                                 SizedBox(height: 20),
                                 Row(
@@ -92,31 +111,42 @@ class _OtherProfilePageState extends State<OtherProfilePage> {
                                         ? SizedBox()
                                         : GestureDetector(
                                             onTap: () async {
-                                              await _launchUrl(Uri.parse('https://www.instagram.com/${userDoc["instagram"].split('@')[1]}'));
+                                              await _launchUrl(Uri.parse(
+                                                  'https://www.instagram.com/${userDoc["instagram"].split('@')[1]}'));
                                             },
                                             child: Container(
-                                              margin: const EdgeInsets.only(right: 20),
+                                              margin: const EdgeInsets.only(
+                                                  right: 20),
                                               padding: const EdgeInsets.all(8),
                                               decoration: BoxDecoration(
-                                                color: MizzUpTheme.secondaryColor,
-                                                borderRadius: BorderRadius.circular(5),
+                                                color:
+                                                    MizzUpTheme.secondaryColor,
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
                                               ),
-                                              child: SvgPicture.asset('assets/profil/instagram_logo.svg'),
+                                              child: SvgPicture.asset(
+                                                  'assets/profil/instagram_logo.svg'),
                                             ),
                                           ),
                                     userDoc["tiktok"] == ''
                                         ? SizedBox()
                                         : GestureDetector(
                                             onTap: () async {
-                                              await _launchUrl(Uri.parse('https://www.tiktok.com/${userDoc["tiktok"].split('@')[1]}'));
+                                              await _launchUrl(Uri.parse(
+                                                  'https://www.tiktok.com/${userDoc["tiktok"].split('@')[1]}'));
                                             },
                                             child: Container(
-                                                padding: const EdgeInsets.all(8),
+                                                padding:
+                                                    const EdgeInsets.all(8),
                                                 decoration: BoxDecoration(
-                                                  color: MizzUpTheme.secondaryColor,
-                                                  borderRadius: BorderRadius.circular(5),
+                                                  color: MizzUpTheme
+                                                      .secondaryColor,
+                                                  borderRadius:
+                                                      BorderRadius.circular(5),
                                                 ),
-                                                child: Icon(Icons.tiktok, color: MizzUpTheme.primaryColor)),
+                                                child: Icon(Icons.tiktok,
+                                                    color: MizzUpTheme
+                                                        .primaryColor)),
                                           ),
                                   ],
                                 ),
@@ -126,7 +156,8 @@ class _OtherProfilePageState extends State<OtherProfilePage> {
                       Align(
                         alignment: const AlignmentDirectional(0, -1),
                         child: Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(0, MediaQuery.of(context).size.height * 0.25, 0, 0),
+                          padding: EdgeInsetsDirectional.fromSTEB(0,
+                              MediaQuery.of(context).size.height * 0.25, 0, 0),
                           child: Material(
                             elevation: 2,
                             shape: CircleBorder(),
@@ -142,12 +173,13 @@ class _OtherProfilePageState extends State<OtherProfilePage> {
                                       await Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => MizzUpExpandedImageView(
+                                          builder: (context) =>
+                                              MizzUpExpandedImageView(
                                             image: Image.network(
-                                              valueOrDefault<String>(
-                                                userDoc["photo_url"],
+                                              valueOrDefault<String?>(
+                                                userPhoto,
                                                 'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/chap-chap-1137ns/assets/n3ejaipxw085/user-22.jpg',
-                                              ),
+                                              )!,
                                               fit: BoxFit.contain,
                                             ),
                                             allowRotation: false,
@@ -158,7 +190,7 @@ class _OtherProfilePageState extends State<OtherProfilePage> {
                                     },
                                     child: Hero(
                                       tag: valueOrDefault<String>(
-                                        userDoc["photo_url"],
+                                        userPhoto,
                                         'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/chap-chap-1137ns/assets/n3ejaipxw085/user-22.jpg',
                                       ),
                                       transitionOnUserGestures: true,
@@ -171,7 +203,7 @@ class _OtherProfilePageState extends State<OtherProfilePage> {
                                         ),
                                         child: Image.network(
                                           valueOrDefault<String>(
-                                            userDoc["photo_url"],
+                                            userPhoto,
                                             'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/chap-chap-1137ns/assets/n3ejaipxw085/user-22.jpg',
                                           ),
                                           fit: BoxFit.cover,
@@ -190,7 +222,9 @@ class _OtherProfilePageState extends State<OtherProfilePage> {
             } else if (snapshot.hasError) {
               return Center(child: Text('Impossible de récupérer le profil'));
             } else {
-              return Center(child: CircularProgressIndicator(color: MizzUpTheme.primaryColor));
+              return Center(
+                  child: CircularProgressIndicator(
+                      color: MizzUpTheme.primaryColor));
             }
           },
         ),
@@ -199,7 +233,10 @@ class _OtherProfilePageState extends State<OtherProfilePage> {
   }
 
   Stream getUsersInfo(String userId) {
-    return FirebaseFirestore.instance.collection('users').doc(userId).snapshots();
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .snapshots();
   }
 }
 

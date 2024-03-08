@@ -594,6 +594,11 @@ class _RecetteSuite2WidgetState extends State<RecetteSuite2Widget> {
                             future: getUserById(recipeComments[i]['user_id']),
                             builder: (context, snapshot) {
                               var comment = recipeComments[i];
+                              String userPhoto = user!
+                                      .data()!
+                                      .containsKey('photo_url')
+                                  ? user['photo_url']
+                                  : 'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/chap-chap-1137ns/assets/n3ejaipxw085/user-22.jpg';
                               return Padding(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 40),
@@ -644,9 +649,9 @@ class _RecetteSuite2WidgetState extends State<RecetteSuite2Widget> {
                                                           BorderRadius.circular(
                                                               50), // Adjust the radius to your liking
                                                       child: Image.network(
-                                                        valueOrDefault<String>(
-                                                            user!['photo_url'],
-                                                            "https://i.ibb.co/0JxwY2k/placeholder.png"),
+                                                        valueOrDefault<String?>(
+                                                            userPhoto,
+                                                            "https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/chap-chap-1137ns/assets/n3ejaipxw085/user-22.jpg")!,
                                                         width: 30,
                                                         height: 30,
                                                         fit: BoxFit.cover,

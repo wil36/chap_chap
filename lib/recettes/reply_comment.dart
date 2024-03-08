@@ -91,7 +91,8 @@ class _ReplyCommentState extends State<ReplyComment> {
                           Row(
                             children: [
                               ClipRRect(
-                                borderRadius: BorderRadius.circular(50), // Adjust the radius to your liking
+                                borderRadius: BorderRadius.circular(
+                                    50), // Adjust the radius to your liking
                                 child: Image.network(
                                   widget.user['photo_url'],
                                   width: 30,
@@ -118,7 +119,10 @@ class _ReplyCommentState extends State<ReplyComment> {
                             ],
                           ),
                           Text(
-                            widget.comment['date'].toDate().toString().substring(0, 10),
+                            widget.comment['date']
+                                .toDate()
+                                .toString()
+                                .substring(0, 10),
                             style: MizzUpTheme.bodyText1.override(
                               color: Colors.black,
                               fontFamily: 'IBM',
@@ -133,7 +137,7 @@ class _ReplyCommentState extends State<ReplyComment> {
                         width: MediaQuery.of(context).size.width * 0.6,
                         child: Center(
                           child: Text(
-                            textAlign: TextAlign.center,
+                            textAlign: TextAlign.left,
                             widget.comment['comment'].toString(),
                             style: MizzUpTheme.bodyText1.override(
                               color: Colors.black,
@@ -191,12 +195,14 @@ class _ReplyCommentState extends State<ReplyComment> {
               Navigator.pop(context);
             },
             child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 25),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 15, horizontal: 25),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: MizzUpTheme.secondaryColor,
                 ),
-                child: const Text('Valider mon commentaire', style: TextStyle(color: Colors.black, fontSize: 16))),
+                child: const Text('Valider mon commentaire',
+                    style: TextStyle(color: Colors.black, fontSize: 16))),
           ),
         ],
       ),

@@ -111,14 +111,17 @@ class _ReplyCommentForumState extends State<ReplyCommentForum> {
                 margin: EdgeInsets.only(
                   top: MediaQuery.of(context).size.height * 0.08,
                 ),
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(0),
-                    bottomRight: Radius.circular(0),
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
-                  ),
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 1,
+                      blurRadius: 7,
+                      offset: const Offset(0, 3), // changes position of shadow
+                    ),
+                  ],
                 ),
                 child: SingleChildScrollView(
                   physics: BouncingScrollPhysics(),
