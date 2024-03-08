@@ -240,11 +240,10 @@ class _DetailForumWidgetState extends State<DetailForumWidget> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       CircleAvatar(
-                        backgroundColor: Colors.white,
-                        child: Image.network(forumCommentModel
-                                .userProfilePhoto.isEmpty
-                            ? "https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/chap-chap-1137ns/assets/n3ejaipxw085/user-22.jpg"
-                            : forumCommentModel.userProfilePhoto),
+                        backgroundColor: Colors.transparent,
+                        child: Image.network(valueOrDefault<String>(
+                            forumCommentModel.userProfilePhoto,
+                            "https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/chap-chap-1137ns/assets/n3ejaipxw085/user-22.jpg")),
                       ),
                       SizedBox(
                         width: 13,

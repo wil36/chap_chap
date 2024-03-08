@@ -644,7 +644,7 @@ class _RecetteSuite2WidgetState extends State<RecetteSuite2Widget> {
                                                           BorderRadius.circular(
                                                               50), // Adjust the radius to your liking
                                                       child: Image.network(
-                                                        valueOrDefault(
+                                                        valueOrDefault<String>(
                                                             user!['photo_url'],
                                                             "https://i.ibb.co/0JxwY2k/placeholder.png"),
                                                         width: 30,

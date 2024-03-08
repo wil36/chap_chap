@@ -1,8 +1,8 @@
 import 'package:chap_chap/MizzUp_Code/MizzUp_theme.dart';
+import 'package:chap_chap/MizzUp_Code/MizzUp_util.dart';
 import 'package:chap_chap/backend/backend.dart';
 import 'package:chap_chap/forum/Models/forum_comments_model.dart';
 import 'package:chap_chap/forum/Models/forum_comments_reply_model.dart';
-import 'package:chap_chap/forum/add_comment_forum.dart';
 import 'package:chap_chap/forum/add_comment_reply_forum.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -353,10 +353,11 @@ class _ReplyCommentForumState extends State<ReplyCommentForum> {
                     children: [
                       CircleAvatar(
                         backgroundColor: Colors.white,
-                        child: Image.network(forumCommentReplyModel
-                                .userProfilePhoto.isEmpty
-                            ? "https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/chap-chap-1137ns/assets/n3ejaipxw085/user-22.jpg"
-                            : forumCommentReplyModel.userProfilePhoto),
+                        child: Image.network(
+                          (valueOrDefault<String>(
+                              forumCommentReplyModel.userProfilePhoto,
+                              "https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/chap-chap-1137ns/assets/n3ejaipxw085/user-22.jpg")),
+                        ),
                       ),
                       SizedBox(
                         width: 13,

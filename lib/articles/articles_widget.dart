@@ -163,171 +163,204 @@ class _ArticlesWidgetState extends State<ArticlesWidget> {
               decoration: const BoxDecoration(
                 color: Colors.white,
               ),
-              child: StreamBuilder<List<ArticlesRecord?>>(
-                stream: queryArticlesRecord(
-                  queryBuilder: (articlesRecord) => articlesRecord
-                      .orderBy('create_time', descending: true)
-                      .where('categorie',
-                          isEqualTo: defaultChoiceIndex != 0
-                              ? categoryIds[_choicesList[defaultChoiceIndex]]
-                              : null),
-                ),
-                builder: (context, snapshot) {
-                  // Customize what your widget looks like when it's loading.
-                  if (!snapshot.hasData) {
-                    return const Center(
-                      child: SizedBox(
-                        width: 60,
-                        height: 60,
-                        child: CircularProgressIndicator(
-                          color: Colors.black,
+              child: StreamBuilder<UsersRecord?>(
+                  stream: UsersRecord.getDocument(currentUserReference!),
+                  builder: (context, snapshot) {
+                    // Customize what your widget looks like when it's loading.
+                    if (!snapshot.hasData) {
+                      return const Center(
+                        child: SizedBox(
+                          width: 60,
+                          height: 60,
+                          child: CircularProgressIndicator(
+                            color: Colors.black,
+                          ),
                         ),
+                      );
+                    }
+                    return StreamBuilder<List<ArticlesRecord?>>(
+                      stream: queryArticlesRecord(
+                        queryBuilder: (articlesRecord) => articlesRecord
+                            .orderBy('create_time', descending: true)
+                            .where('categorie',
+                                isEqualTo: defaultChoiceIndex != 0
+                                    ? categoryIds[
+                                        _choicesList[defaultChoiceIndex]]
+                                    : null),
                       ),
-                    );
-                  }
-                  List<ArticlesRecord?> rowArticlesRecordList = snapshot.data!;
-                  print(categoryIds[_choicesList[defaultChoiceIndex]]);
-                  return Column(
-                    mainAxisSize: MainAxisSize.max,
-                    children: List.generate(
-                      rowArticlesRecordList.length,
-                      (rowIndex) {
-                        final rowArticlesRecord =
-                            rowArticlesRecordList[rowIndex]!;
-                        return Padding(
-                          padding: EdgeInsets.only(top: 20),
-                          child: InkWell(
-                            onTap: () async {
-                              await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => PageDeArticleWidget(
-                                    detailArticle: rowArticlesRecord,
+                      builder: (context, snapshot) {
+                        // Customize what your widget looks like when it's loading.
+                        if (!snapshot.hasData) {
+                          return const Center(
+                            child: SizedBox(
+                              width: 60,
+                              height: 60,
+                              child: CircularProgressIndicator(
+                                color: Colors.black,
+                              ),
+                            ),
+                          );
+                        }
+                        List<ArticlesRecord?> rowArticlesRecordList =
+                            snapshot.data!;
+                        print(categoryIds[_choicesList[defaultChoiceIndex]]);
+                        return Column(
+                          mainAxisSize: MainAxisSize.max,
+                          children: List.generate(
+                            rowArticlesRecordList.length,
+                            (rowIndex) {
+                              final rowArticlesRecord =
+                                  rowArticlesRecordList[rowIndex]!;
+                              return Padding(
+                                padding: EdgeInsets.only(top: 20),
+                                child: InkWell(
+                                  onTap: () async {
+                                    await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            PageDeArticleWidget(
+                                          detailArticle: rowArticlesRecord,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Stack(
+                                        alignment:
+                                            const AlignmentDirectional(1, -1),
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsetsDirectional
+                                                .fromSTEB(0, 20, 0, 0),
+                                            child: Material(
+                                              elevation: 2,
+                                              color: Colors.transparent,
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(20)),
+                                              child: Container(
+                                                width: 350,
+                                                decoration: BoxDecoration(
+                                                    color: Colors.white,
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                            Radius.circular(
+                                                                20))),
+                                                child: Column(
+                                                  children: [
+                                                    Padding(
+                                                      padding:
+                                                          EdgeInsets.all(2),
+                                                      child: ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(20),
+                                                        child: Image.network(
+                                                          rowArticlesRecord
+                                                              .imagePrincipale!,
+                                                          width:
+                                                              double.infinity,
+                                                          height: 200,
+                                                          fit: BoxFit.cover,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      child: Column(
+                                                        children: [
+                                                          Padding(
+                                                              padding:
+                                                                  EdgeInsets
+                                                                      .fromLTRB(
+                                                                          10,
+                                                                          0,
+                                                                          10,
+                                                                          0),
+                                                              child: Html(
+                                                                  data: '<div style="text-align: center; color: #844631;"><strong>' +
+                                                                      HtmlUnescape()
+                                                                          .convert(
+                                                                              rowArticlesRecord.titre!) +
+                                                                      '</strong></div>')),
+                                                          SizedBox(
+                                                            height: 10,
+                                                          ),
+                                                          Align(
+                                                            alignment:
+                                                                AlignmentDirectional(
+                                                                    0.9, 0),
+                                                            child: Text(
+                                                              'Lire plus',
+                                                              style: TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          SizedBox(
+                                                            height: 10,
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Material(
+                                            color: Colors.transparent,
+                                            elevation: 10,
+                                            shape: const CircleBorder(),
+                                            child: Container(
+                                              width: 40,
+                                              height: 40,
+                                              decoration: const BoxDecoration(
+                                                color: Colors.white,
+                                                shape: BoxShape.circle,
+                                              ),
+                                              child: ToggleIcon(
+                                                onPressed: () async {
+                                                  favoriteScript(
+                                                      rowArticlesRecord);
+                                                },
+                                                value: currentUserDocument!
+                                                    .favorisArticles!
+                                                    .toList()
+                                                    .contains(rowArticlesRecord
+                                                        .reference),
+                                                onIcon: const Icon(
+                                                  Icons.favorite_sharp,
+                                                  color:
+                                                      MizzUpTheme.primaryColor,
+                                                  size: 20,
+                                                ),
+                                                offIcon: const Icon(
+                                                  Icons.favorite_border,
+                                                  color:
+                                                      MizzUpTheme.primaryColor,
+                                                  size: 20,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
                                 ),
                               );
                             },
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Stack(
-                                  alignment: const AlignmentDirectional(1, -1),
-                                  children: [
-                                    Padding(
-                                      padding:
-                                          const EdgeInsetsDirectional.fromSTEB(
-                                              0, 20, 0, 0),
-                                      child: Material(
-                                        elevation: 2,
-                                        color: Colors.transparent,
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(20)),
-                                        child: Container(
-                                          width: 350,
-                                          decoration: BoxDecoration(
-                                              color: Colors.white,
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(20))),
-                                          child: Column(
-                                            children: [
-                                              Padding(
-                                                padding: EdgeInsets.all(2),
-                                                child: ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(20),
-                                                  child: Image.network(
-                                                    rowArticlesRecord
-                                                        .imagePrincipale!,
-                                                    width: double.infinity,
-                                                    height: 200,
-                                                    fit: BoxFit.cover,
-                                                  ),
-                                                ),
-                                              ),
-                                              Container(
-                                                child: Column(
-                                                  children: [
-                                                    Padding(
-                                                        padding:
-                                                            EdgeInsets.fromLTRB(
-                                                                10, 0, 10, 0),
-                                                        child: Html(
-                                                            data: '<div style="text-align: center; color: #844631;"><strong>' +
-                                                                HtmlUnescape().convert(
-                                                                    rowArticlesRecord
-                                                                        .titre!) +
-                                                                '</strong></div>')),
-                                                    SizedBox(
-                                                      height: 10,
-                                                    ),
-                                                    Align(
-                                                      alignment:
-                                                          AlignmentDirectional(
-                                                              0.9, 0),
-                                                      child: Text(
-                                                        'Lire plus',
-                                                        style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                      height: 10,
-                                                    ),
-                                                  ],
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Material(
-                                      color: Colors.transparent,
-                                      elevation: 10,
-                                      shape: const CircleBorder(),
-                                      child: Container(
-                                        width: 40,
-                                        height: 40,
-                                        decoration: const BoxDecoration(
-                                          color: Colors.white,
-                                          shape: BoxShape.circle,
-                                        ),
-                                        child: ToggleIcon(
-                                          onPressed: () async {
-                                            favoriteScript(rowArticlesRecord);
-                                          },
-                                          value: currentUserDocument!
-                                              .favorisArticles!
-                                              .toList()
-                                              .contains(
-                                                  rowArticlesRecord.reference),
-                                          onIcon: const Icon(
-                                            Icons.favorite_sharp,
-                                            color: MizzUpTheme.primaryColor,
-                                            size: 20,
-                                          ),
-                                          offIcon: const Icon(
-                                            Icons.favorite_border,
-                                            color: MizzUpTheme.primaryColor,
-                                            size: 20,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
                           ),
                         );
                       },
-                    ),
-                  );
-                },
-              ),
+                    );
+                  }),
             ),
           ],
         ),

@@ -203,11 +203,9 @@ class _PreniumWidgetState extends State<PreniumWidget> {
       );
     }
 
-    return MaterialApp(
-      home: Scaffold(
-        body: Stack(
-          children: stack,
-        ),
+    return Scaffold(
+      body: Stack(
+        children: stack,
       ),
     );
   }
@@ -306,7 +304,7 @@ class _PreniumWidgetState extends State<PreniumWidget> {
           TextButton(
             style: TextButton.styleFrom(
               foregroundColor: Colors.white,
-              backgroundColor:MizzUpTheme.primaryColor,
+              backgroundColor: MizzUpTheme.primaryColor,
             ),
             onPressed: () => _inAppPurchase.restorePurchases(),
             child: const Text('Restaurer les achats'),
@@ -509,7 +507,8 @@ class _PreniumWidgetState extends State<PreniumWidget> {
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
                                   Align(
-                                    alignment: const AlignmentDirectional(-1, 0),
+                                    alignment:
+                                        const AlignmentDirectional(-1, 0),
                                     child: Padding(
                                       padding:
                                           const EdgeInsetsDirectional.fromSTEB(
@@ -530,18 +529,16 @@ class _PreniumWidgetState extends State<PreniumWidget> {
                                     mainAxisSize: MainAxisSize.max,
                                     children: [
                                       Padding(
-                                        padding:
-                                            const EdgeInsetsDirectional.fromSTEB(
-                                                0, 10, 0, 0),
+                                        padding: const EdgeInsetsDirectional
+                                            .fromSTEB(0, 10, 0, 0),
                                         child: Row(
                                           mainAxisSize: MainAxisSize.max,
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
                                             const Padding(
-                                              padding:
-                                                  EdgeInsetsDirectional.fromSTEB(
-                                                      10, 0, 0, 0),
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(10, 0, 0, 0),
                                               child: Icon(
                                                 Icons.check_circle_outlined,
                                                 color: MizzUpTheme.primaryColor,
@@ -549,8 +546,9 @@ class _PreniumWidgetState extends State<PreniumWidget> {
                                               ),
                                             ),
                                             Padding(
-                                              padding: const EdgeInsetsDirectional
-                                                  .fromSTEB(10, 0, 0, 0),
+                                              padding:
+                                                  const EdgeInsetsDirectional
+                                                      .fromSTEB(10, 0, 0, 0),
                                               child: Text(
                                                 'Recettes variées',
                                                 style: MizzUpTheme.bodyText1
@@ -567,18 +565,16 @@ class _PreniumWidgetState extends State<PreniumWidget> {
                                         ),
                                       ),
                                       Padding(
-                                        padding:
-                                            const EdgeInsetsDirectional.fromSTEB(
-                                                0, 10, 0, 0),
+                                        padding: const EdgeInsetsDirectional
+                                            .fromSTEB(0, 10, 0, 0),
                                         child: Row(
                                           mainAxisSize: MainAxisSize.max,
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
                                             const Padding(
-                                              padding:
-                                                  EdgeInsetsDirectional.fromSTEB(
-                                                      10, 0, 0, 0),
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(10, 0, 0, 0),
                                               child: Icon(
                                                 Icons.check_circle_outlined,
                                                 color: MizzUpTheme.primaryColor,
@@ -586,8 +582,9 @@ class _PreniumWidgetState extends State<PreniumWidget> {
                                               ),
                                             ),
                                             Padding(
-                                              padding: const EdgeInsetsDirectional
-                                                  .fromSTEB(10, 0, 0, 0),
+                                              padding:
+                                                  const EdgeInsetsDirectional
+                                                      .fromSTEB(10, 0, 0, 0),
                                               child: Text(
                                                 'Des ingrédients 100% naturels',
                                                 style: MizzUpTheme.bodyText1
@@ -604,18 +601,16 @@ class _PreniumWidgetState extends State<PreniumWidget> {
                                         ),
                                       ),
                                       Padding(
-                                        padding:
-                                            const EdgeInsetsDirectional.fromSTEB(
-                                                0, 10, 0, 0),
+                                        padding: const EdgeInsetsDirectional
+                                            .fromSTEB(0, 10, 0, 0),
                                         child: Row(
                                           mainAxisSize: MainAxisSize.max,
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
                                             const Padding(
-                                              padding:
-                                                  EdgeInsetsDirectional.fromSTEB(
-                                                      10, 0, 0, 0),
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(10, 0, 0, 0),
                                               child: Icon(
                                                 Icons.check_circle_outlined,
                                                 color: MizzUpTheme.primaryColor,
@@ -623,8 +618,9 @@ class _PreniumWidgetState extends State<PreniumWidget> {
                                               ),
                                             ),
                                             Padding(
-                                              padding: const EdgeInsetsDirectional
-                                                  .fromSTEB(10, 0, 0, 0),
+                                              padding:
+                                                  const EdgeInsetsDirectional
+                                                      .fromSTEB(10, 0, 0, 0),
                                               child: Text(
                                                 'Adaptés à tous les budgets',
                                                 style: MizzUpTheme.bodyText1
@@ -641,18 +637,16 @@ class _PreniumWidgetState extends State<PreniumWidget> {
                                         ),
                                       ),
                                       Padding(
-                                        padding:
-                                            const EdgeInsetsDirectional.fromSTEB(
-                                                0, 10, 0, 10),
+                                        padding: const EdgeInsetsDirectional
+                                            .fromSTEB(0, 10, 0, 10),
                                         child: Row(
                                           mainAxisSize: MainAxisSize.max,
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
                                             const Padding(
-                                              padding:
-                                                  EdgeInsetsDirectional.fromSTEB(
-                                                      10, 0, 0, 0),
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(10, 0, 0, 0),
                                               child: Icon(
                                                 Icons.check_circle_outlined,
                                                 color: MizzUpTheme.primaryColor,
@@ -660,8 +654,9 @@ class _PreniumWidgetState extends State<PreniumWidget> {
                                               ),
                                             ),
                                             Padding(
-                                              padding: const EdgeInsetsDirectional
-                                                  .fromSTEB(10, 0, 0, 0),
+                                              padding:
+                                                  const EdgeInsetsDirectional
+                                                      .fromSTEB(10, 0, 0, 0),
                                               child: Text(
                                                 'Simples et efficaces',
                                                 style: MizzUpTheme.bodyText2
@@ -707,7 +702,8 @@ class _PreniumWidgetState extends State<PreniumWidget> {
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
                                   Align(
-                                    alignment: const AlignmentDirectional(-1, 0),
+                                    alignment:
+                                        const AlignmentDirectional(-1, 0),
                                     child: Padding(
                                       padding:
                                           const EdgeInsetsDirectional.fromSTEB(
@@ -728,18 +724,16 @@ class _PreniumWidgetState extends State<PreniumWidget> {
                                     mainAxisSize: MainAxisSize.max,
                                     children: [
                                       Padding(
-                                        padding:
-                                            const EdgeInsetsDirectional.fromSTEB(
-                                                0, 10, 0, 0),
+                                        padding: const EdgeInsetsDirectional
+                                            .fromSTEB(0, 10, 0, 0),
                                         child: Row(
                                           mainAxisSize: MainAxisSize.max,
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
                                             const Padding(
-                                              padding:
-                                                  EdgeInsetsDirectional.fromSTEB(
-                                                      10, 0, 0, 0),
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(10, 0, 0, 0),
                                               child: Icon(
                                                 Icons.check_circle_outlined,
                                                 color: MizzUpTheme.primaryColor,
@@ -747,8 +741,9 @@ class _PreniumWidgetState extends State<PreniumWidget> {
                                               ),
                                             ),
                                             Padding(
-                                              padding: const EdgeInsetsDirectional
-                                                  .fromSTEB(10, 0, 0, 0),
+                                              padding:
+                                                  const EdgeInsetsDirectional
+                                                      .fromSTEB(10, 0, 0, 0),
                                               child: Text(
                                                 'Programmes avec des objectifs ou des\n problèmatiques spécifiques',
                                                 style: MizzUpTheme.bodyText1
@@ -765,9 +760,8 @@ class _PreniumWidgetState extends State<PreniumWidget> {
                                         ),
                                       ),
                                       Padding(
-                                        padding:
-                                            const EdgeInsetsDirectional.fromSTEB(
-                                                0, 10, 0, 0),
+                                        padding: const EdgeInsetsDirectional
+                                            .fromSTEB(0, 10, 0, 0),
                                         child: Row(
                                           mainAxisSize: MainAxisSize.max,
                                           mainAxisAlignment:
@@ -776,9 +770,8 @@ class _PreniumWidgetState extends State<PreniumWidget> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             const Padding(
-                                              padding:
-                                                  EdgeInsetsDirectional.fromSTEB(
-                                                      10, 0, 0, 0),
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(10, 0, 0, 0),
                                               child: Icon(
                                                 Icons.check_circle_outlined,
                                                 color: MizzUpTheme.primaryColor,
@@ -786,8 +779,9 @@ class _PreniumWidgetState extends State<PreniumWidget> {
                                               ),
                                             ),
                                             Padding(
-                                              padding: const EdgeInsetsDirectional
-                                                  .fromSTEB(10, 0, 0, 0),
+                                              padding:
+                                                  const EdgeInsetsDirectional
+                                                      .fromSTEB(10, 0, 0, 0),
                                               child: Text(
                                                 'Un planning sur 3 mois synchronisé \nautomatiquement à ton calendrier capillaire \navec des rappels',
                                                 style: MizzUpTheme.bodyText1
@@ -804,18 +798,16 @@ class _PreniumWidgetState extends State<PreniumWidget> {
                                         ),
                                       ),
                                       Padding(
-                                        padding:
-                                            const EdgeInsetsDirectional.fromSTEB(
-                                                0, 10, 0, 0),
+                                        padding: const EdgeInsetsDirectional
+                                            .fromSTEB(0, 10, 0, 0),
                                         child: Row(
                                           mainAxisSize: MainAxisSize.max,
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
                                             const Padding(
-                                              padding:
-                                                  EdgeInsetsDirectional.fromSTEB(
-                                                      10, 0, 0, 0),
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(10, 0, 0, 0),
                                               child: Icon(
                                                 Icons.check_circle_outlined,
                                                 color: MizzUpTheme.primaryColor,
@@ -823,8 +815,9 @@ class _PreniumWidgetState extends State<PreniumWidget> {
                                               ),
                                             ),
                                             Padding(
-                                              padding: const EdgeInsetsDirectional
-                                                  .fromSTEB(10, 0, 0, 0),
+                                              padding:
+                                                  const EdgeInsetsDirectional
+                                                      .fromSTEB(10, 0, 0, 0),
                                               child: Text(
                                                 'Un accompagnement hebdomadaire pour\n simplifier la routine capillaire',
                                                 style: MizzUpTheme.bodyText1
@@ -841,18 +834,16 @@ class _PreniumWidgetState extends State<PreniumWidget> {
                                         ),
                                       ),
                                       Padding(
-                                        padding:
-                                            const EdgeInsetsDirectional.fromSTEB(
-                                                0, 10, 0, 10),
+                                        padding: const EdgeInsetsDirectional
+                                            .fromSTEB(0, 10, 0, 10),
                                         child: Row(
                                           mainAxisSize: MainAxisSize.max,
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
                                             const Padding(
-                                              padding:
-                                                  EdgeInsetsDirectional.fromSTEB(
-                                                      10, 0, 0, 0),
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(10, 0, 0, 0),
                                               child: Icon(
                                                 Icons.check_circle_outlined,
                                                 color: MizzUpTheme.primaryColor,
@@ -860,8 +851,9 @@ class _PreniumWidgetState extends State<PreniumWidget> {
                                               ),
                                             ),
                                             Padding(
-                                              padding: const EdgeInsetsDirectional
-                                                  .fromSTEB(10, 0, 0, 0),
+                                              padding:
+                                                  const EdgeInsetsDirectional
+                                                      .fromSTEB(10, 0, 0, 0),
                                               child: Text(
                                                 'Une liste de courses pré-établie pour\n bien démarrer',
                                                 style: MizzUpTheme.bodyText2
@@ -885,9 +877,7 @@ class _PreniumWidgetState extends State<PreniumWidget> {
                           ),
                         ),
                       ),
-                    
                       _buildProductList(),
-             
                       Padding(
                         padding:
                             const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 20),
@@ -914,8 +904,8 @@ class _PreniumWidgetState extends State<PreniumWidget> {
                                 return Padding(
                                   padding: MediaQuery.of(context).viewInsets,
                                   child: SizedBox(
-                                    height:
-                                        MediaQuery.of(context).size.height * 0.7,
+                                    height: MediaQuery.of(context).size.height *
+                                        0.7,
                                     child: const CgvWidget(),
                                   ),
                                 );

@@ -68,8 +68,11 @@ class _ProfilWidgetState extends State<ProfilWidget> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Padding(
-                                padding: const EdgeInsetsDirectional.fromSTEB(
-                                    0, 20, 0, 0),
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    0,
+                                    MediaQuery.of(context).size.height * 0.17,
+                                    0,
+                                    0),
                                 child: AuthUserStreamWidget(
                                   child: Text(
                                     currentUserDisplayName,
@@ -88,7 +91,7 @@ class _ProfilWidgetState extends State<ProfilWidget> {
                                   child: Padding(
                                     padding:
                                         const EdgeInsetsDirectional.fromSTEB(
-                                            0, 80, 0, 0),
+                                            0, 20, 0, 0),
                                     child: FFButtonWidget(
                                       onPressed: () async {
                                         Navigator.push(
@@ -123,10 +126,6 @@ class _ProfilWidgetState extends State<ProfilWidget> {
                                     ),
                                   ),
                                 ),
-                              Container(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.03,
-                              ),
                             ],
                           ),
                           SizedBox(
@@ -713,34 +712,38 @@ class _ProfilWidgetState extends State<ProfilWidget> {
                   ),
                 ),
               ),
-              Align(
-                alignment: AlignmentDirectional(0, -0.55),
-                child: InkWell(
-                  onTap: () async {
-                    Navigator.push(
-                        context,
-                        PageTransition(
-                            type: PageTransitionType.fade,
-                            duration: Duration(milliseconds: 500),
-                            reverseDuration: Duration(milliseconds: 500),
-                            child: ProfilSettings()));
-                  },
-                  child: Material(
-                    elevation: 1,
-                    borderRadius: BorderRadius.circular(100),
-                    child: Container(
-                      width: 30,
-                      height: 30,
-                      decoration: BoxDecoration(
-                        color: MizzUpTheme.secondaryColor,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: const Align(
-                        alignment: AlignmentDirectional(0, 0),
-                        child: Icon(
-                          Icons.create,
-                          color: MizzUpTheme.primaryColor,
-                          size: 18,
+              Positioned(
+                top: MediaQuery.of(context).size.height * 0.15 + 90,
+                left: MediaQuery.of(context).size.width * 0.5 - 15,
+                child: Align(
+                  alignment: AlignmentDirectional(0, -0.55),
+                  child: InkWell(
+                    onTap: () async {
+                      Navigator.push(
+                          context,
+                          PageTransition(
+                              type: PageTransitionType.fade,
+                              duration: Duration(milliseconds: 500),
+                              reverseDuration: Duration(milliseconds: 500),
+                              child: ProfilSettings()));
+                    },
+                    child: Material(
+                      elevation: 1,
+                      borderRadius: BorderRadius.circular(100),
+                      child: Container(
+                        width: 30,
+                        height: 30,
+                        decoration: BoxDecoration(
+                          color: MizzUpTheme.secondaryColor,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: const Align(
+                          alignment: AlignmentDirectional(0, 0),
+                          child: Icon(
+                            Icons.create,
+                            color: MizzUpTheme.primaryColor,
+                            size: 18,
+                          ),
                         ),
                       ),
                     ),

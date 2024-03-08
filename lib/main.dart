@@ -203,7 +203,7 @@ class _NavBarPageState extends State<NavBarPage> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: SizedBox(
-            height: 80,
+            height: 85,
             child: Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -235,6 +235,17 @@ class _NavBarPageState extends State<NavBarPage> {
                         fontSize: 11,
                       ),
                     ),
+                    Visibility(
+                        visible: _index == 5,
+                        child: Container(
+                          margin: EdgeInsets.only(top: 2),
+                          height: 5,
+                          width: 5,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            color: MizzUpTheme.primaryColor,
+                          ),
+                        )),
                   ],
                 ),
                 Column(
@@ -264,6 +275,17 @@ class _NavBarPageState extends State<NavBarPage> {
                         fontSize: 11,
                       ),
                     ),
+                    Visibility(
+                        visible: _index == 0,
+                        child: Container(
+                          margin: EdgeInsets.only(top: 2),
+                          height: 5,
+                          width: 5,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            color: MizzUpTheme.primaryColor,
+                          ),
+                        )),
                   ],
                 ),
                 Column(
@@ -291,6 +313,17 @@ class _NavBarPageState extends State<NavBarPage> {
                         fontSize: 11,
                       ),
                     ),
+                    Visibility(
+                        visible: _index == 3,
+                        child: Container(
+                          margin: EdgeInsets.only(top: 2),
+                          height: 5,
+                          width: 5,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            color: MizzUpTheme.primaryColor,
+                          ),
+                        )),
                   ],
                 ),
                 Column(
@@ -318,6 +351,17 @@ class _NavBarPageState extends State<NavBarPage> {
                         fontSize: 11,
                       ),
                     ),
+                    Visibility(
+                        visible: _index == 1,
+                        child: Container(
+                          margin: EdgeInsets.only(top: 2),
+                          height: 5,
+                          width: 5,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            color: MizzUpTheme.primaryColor,
+                          ),
+                        )),
                   ],
                 ),
                 Column(
@@ -345,6 +389,17 @@ class _NavBarPageState extends State<NavBarPage> {
                         fontSize: 11,
                       ),
                     ),
+                    Visibility(
+                        visible: _index == 4,
+                        child: Container(
+                          margin: EdgeInsets.only(top: 2),
+                          height: 5,
+                          width: 5,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            color: MizzUpTheme.primaryColor,
+                          ),
+                        )),
                   ],
                 ),
               ],

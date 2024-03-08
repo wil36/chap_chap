@@ -721,7 +721,7 @@ class _RecetteSuiteWidgetState extends State<RecetteSuiteWidget> {
                           }
                         }
                       }
-                      return likesCounter == 0
+                      return likesCounter != 0
                           ? SizedBox()
                           : Row(
                               children: [
