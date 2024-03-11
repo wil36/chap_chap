@@ -63,7 +63,11 @@ class _LeaveReviewState extends State<LeaveReview> {
           SizedBox(
             height: 20,
           ),
-          Text('N\'hésitez pas à laisser ton avis pour aider la communauté'),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+                'N\'hésitez pas à laisser ton avis pour aider la communauté'),
+          ),
           SizedBox(
             height: 20,
           ),
@@ -167,12 +171,14 @@ class _LeaveReviewState extends State<LeaveReview> {
               Navigator.pop(context);
             },
             child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 25),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 15, horizontal: 25),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: MizzUpTheme.secondaryColor,
                 ),
-                child: const Text('Valider mon commentaire', style: TextStyle(color: Colors.black, fontSize: 16))),
+                child: const Text('Valider mon commentaire',
+                    style: TextStyle(color: Colors.black, fontSize: 16))),
           ),
         ],
       ),

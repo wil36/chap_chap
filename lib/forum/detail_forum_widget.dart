@@ -1,5 +1,6 @@
 import 'package:chap_chap/MizzUp_Code/MizzUp_theme.dart';
 import 'package:chap_chap/MizzUp_Code/MizzUp_util.dart';
+import 'package:chap_chap/auth/auth_util.dart';
 import 'package:chap_chap/backend/backend.dart';
 import 'package:chap_chap/forum/Models/forum_comments_model.dart';
 import 'package:chap_chap/forum/Models/forum_model.dart';
@@ -226,190 +227,217 @@ class _DetailForumWidgetState extends State<DetailForumWidget> {
           borderRadius: BorderRadius.circular(10),
         ),
         padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-        child: SizedBox(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      CircleAvatar(
-                        backgroundColor: Colors.transparent,
-                        child: Image.network(valueOrDefault<String>(
-                            forumCommentModel.userProfilePhoto,
-                            "https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/chap-chap-1137ns/assets/n3ejaipxw085/user-22.jpg")),
-                      ),
-                      SizedBox(
-                        width: 13,
-                      ),
-                      Text(
-                        forumCommentModel.userName,
-                        style: TextStyle(
-                          fontFamily: 'IBM',
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Visibility(
-                    visible: forumCommentModel.userId ==
-                        FirebaseAuth.instance.currentUser!.uid,
-                    child: PopupMenuButton<String>(
-                      onSelected: (value) async {
-                        if (value == 'edit') {
-                          // Logique pour modifier le commentaire
-                          await showModalBottomSheet(
-                            isScrollControlled: true,
-                            backgroundColor: Colors.transparent,
-                            context: context,
-                            builder: (context) {
-                              return Padding(
-                                padding: MediaQuery.of(context).viewInsets,
-                                child: Container(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.9,
-                                  child: AddCommentForum(
-                                      forum: widget.forumModel,
-                                      comment: forumCommentModel,
-                                      isAnAnswer: true),
-                                ),
-                              );
-                            },
-                          ).then((value) => setState(() {}));
-                        } else if (value == 'delete') {
-                          // Logique pour supprimer le commentaire
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: Text('Confirmer la suppression'),
-                                content: Text(
-                                    'Voulez-vous vraiment supprimer ce commentaire ?'),
-                                actions: <Widget>[
-                                  TextButton(
-                                    child: Text('Annuler'),
-                                    onPressed: () {
-                                      Navigator.of(context)
-                                          .pop(); // Fermer la boîte de dialogue
-                                    },
-                                  ),
-                                  TextButton(
-                                    child: Text('Supprimer'),
-                                    onPressed: () {
-                                      Navigator.of(context)
-                                          .pop(); // Fermer la boîte de dialogue
-                                      deleteComment(forumCommentModel
-                                          .id); // Appeler la fonction de suppression
-                                    },
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        }
-                      },
-                      itemBuilder: (BuildContext context) =>
-                          <PopupMenuEntry<String>>[
-                        PopupMenuItem<String>(
-                          value: 'edit',
-                          child: Text('Modifier le commentaire'),
-                        ),
-                        PopupMenuItem<String>(
-                          value: 'delete',
-                          child: Text('Supprimer le commentaire'),
-                        ),
-                      ],
-                      child: Icon(
-                        Icons.more_vert,
-                        color: Colors.white,
-                      ),
+        child: StreamBuilder<UsersRecord?>(
+            stream: UsersRecord.getDocument(currentUserReference!),
+            builder: (context, snapshot) {
+              // Customize what your widget looks like when it's loading.
+              if (!snapshot.hasData) {
+                return const Center(
+                  child: SizedBox(
+                    width: 60,
+                    height: 60,
+                    child: CircularProgressIndicator(
+                      color: Colors.black,
                     ),
-                  )
-                ],
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Text(forumCommentModel.comment, style: MizzUpTheme.bodyText3),
-              SizedBox(
-                height: 15,
-              ),
-              Row(
-                children: [
-                  InkWell(
-                    onTap: () {
-                      incrementLikeCount(forumCommentModel.id, 1,
-                          FirebaseAuth.instance.currentUser!.uid);
-                    },
-                    child: Row(
+                  ),
+                );
+              }
+              var user = snapshot.data;
+              String userPhoto = user!.photoUrl!.isNotEmpty
+                  ? user.photoUrl!
+                  : 'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/chap-chap-1137ns/assets/n3ejaipxw085/user-22.jpg';
+              return SizedBox(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        IconButton(
-                          onPressed: () {
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            CircleAvatar(
+                              radius: 20,
+                              backgroundImage: NetworkImage(valueOrDefault<
+                                      String?>(userPhoto,
+                                  "https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/chap-chap-1137ns/assets/n3ejaipxw085/user-22.jpg")!),
+                              backgroundColor: Colors.transparent,
+                            ),
+                            SizedBox(
+                              width: 13,
+                            ),
+                            Text(
+                              forumCommentModel.userName,
+                              style: TextStyle(
+                                fontFamily: 'IBM',
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Visibility(
+                          visible: forumCommentModel.userId ==
+                              FirebaseAuth.instance.currentUser!.uid,
+                          child: PopupMenuButton<String>(
+                            onSelected: (value) async {
+                              if (value == 'edit') {
+                                // Logique pour modifier le commentaire
+                                await showModalBottomSheet(
+                                  isScrollControlled: true,
+                                  backgroundColor: Colors.transparent,
+                                  context: context,
+                                  builder: (context) {
+                                    return Padding(
+                                      padding:
+                                          MediaQuery.of(context).viewInsets,
+                                      child: Container(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.9,
+                                        child: AddCommentForum(
+                                            forum: widget.forumModel,
+                                            comment: forumCommentModel,
+                                            isAnAnswer: true),
+                                      ),
+                                    );
+                                  },
+                                ).then((value) => setState(() {}));
+                              } else if (value == 'delete') {
+                                // Logique pour supprimer le commentaire
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text('Confirmer la suppression'),
+                                      content: Text(
+                                          'Voulez-vous vraiment supprimer ce commentaire ?'),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          child: Text('Annuler'),
+                                          onPressed: () {
+                                            Navigator.of(context)
+                                                .pop(); // Fermer la boîte de dialogue
+                                          },
+                                        ),
+                                        TextButton(
+                                          child: Text('Supprimer'),
+                                          onPressed: () {
+                                            Navigator.of(context)
+                                                .pop(); // Fermer la boîte de dialogue
+                                            deleteComment(forumCommentModel
+                                                .id); // Appeler la fonction de suppression
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              }
+                            },
+                            itemBuilder: (BuildContext context) =>
+                                <PopupMenuEntry<String>>[
+                              PopupMenuItem<String>(
+                                value: 'edit',
+                                child: Text('Modifier le commentaire'),
+                              ),
+                              PopupMenuItem<String>(
+                                value: 'delete',
+                                child: Text('Supprimer le commentaire'),
+                              ),
+                            ],
+                            child: Icon(
+                              Icons.more_vert,
+                              color: Colors.white,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Text(forumCommentModel.comment,
+                        style: MizzUpTheme.bodyText3),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Row(
+                      children: [
+                        InkWell(
+                          onTap: () {
                             incrementLikeCount(forumCommentModel.id, 1,
                                 FirebaseAuth.instance.currentUser!.uid);
                           },
-                          icon: Icon(
-                            forumCommentModel.likedBy.contains(
-                                    FirebaseAuth.instance.currentUser!.uid)
-                                ? Icons.thumb_up_alt
-                                : Icons.thumb_up_alt_outlined,
-                            size: 20,
-                            color: Colors.white,
-                          ),
-                        ),
-                        Text(
-                            forumCommentModel.likeCount.toString() + " Vote(s)",
-                            style: MizzUpTheme.bodyText3),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    width: 15,
-                  ),
-                  InkWell(
-                    onTap: () {},
-                    child: Row(
-                      children: [
-                        IconButton(
-                          onPressed: () async {
-                            await Navigator.push(
-                              context,
-                              PageTransition(
-                                type: PageTransitionType.fade,
-                                duration: Duration(milliseconds: 500),
-                                reverseDuration: Duration(milliseconds: 500),
-                                child: ReplyCommentForum(
-                                  forumCommentModel: forumCommentModel,
+                          child: Row(
+                            children: [
+                              IconButton(
+                                onPressed: () {
+                                  incrementLikeCount(forumCommentModel.id, 1,
+                                      FirebaseAuth.instance.currentUser!.uid);
+                                },
+                                icon: Icon(
+                                  forumCommentModel.likedBy.contains(
+                                          FirebaseAuth
+                                              .instance.currentUser!.uid)
+                                      ? Icons.thumb_up_alt
+                                      : Icons.thumb_up_alt_outlined,
+                                  size: 20,
+                                  color: Colors.white,
                                 ),
                               ),
-                            );
-                          },
-                          icon: Icon(
-                            Icons.comment_outlined,
-                            size: 20,
-                            color: Colors.white,
+                              Text(
+                                  forumCommentModel.likeCount.toString() +
+                                      " Vote(s)",
+                                  style: MizzUpTheme.bodyText3),
+                            ],
                           ),
                         ),
-                        Text(
-                            forumCommentModel.commentCount.toString() +
-                                " Replies",
-                            style: MizzUpTheme.bodyText3),
+                        SizedBox(
+                          width: 15,
+                        ),
+                        InkWell(
+                          onTap: () {},
+                          child: Row(
+                            children: [
+                              IconButton(
+                                onPressed: () async {
+                                  await Navigator.push(
+                                    context,
+                                    PageTransition(
+                                      type: PageTransitionType.fade,
+                                      duration: Duration(milliseconds: 500),
+                                      reverseDuration:
+                                          Duration(milliseconds: 500),
+                                      child: ReplyCommentForum(
+                                        forumCommentModel: forumCommentModel,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                icon: Icon(
+                                  Icons.comment_outlined,
+                                  size: 20,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              Text(
+                                  forumCommentModel.commentCount.toString() +
+                                      " Replies",
+                                  style: MizzUpTheme.bodyText3),
+                            ],
+                          ),
+                        ),
                       ],
-                    ),
-                  ),
-                ],
-              )
-            ],
-          ),
-        ),
+                    )
+                  ],
+                ),
+              );
+            }),
       ),
     );
   }
@@ -464,5 +492,9 @@ class _DetailForumWidgetState extends State<DetailForumWidget> {
     } else {
       print('Commentaire introuvable');
     }
+  }
+
+  Future<DocumentSnapshot<Map<String, dynamic>>> getUserById(String userId) {
+    return FirebaseFirestore.instance.collection('users').doc(userId).get();
   }
 }

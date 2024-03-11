@@ -78,16 +78,24 @@ class _RecetteSuite2WidgetState extends State<RecetteSuite2Widget> {
             Radius.circular(20),
           ),
         ),
-        child: Column(
-          children: [
-            headerRecette(),
-            Expanded(
-              child: Container(
-                child: Padding(
-                    padding: EdgeInsets.only(right: 0), child: bodyRecette()),
-              ),
+        child: SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(context).size.height,
             ),
-          ],
+            child: Column(
+              children: [
+                headerRecette(),
+                Expanded(
+                  child: Container(
+                    child: Padding(
+                        padding: EdgeInsets.only(right: 0),
+                        child: bodyRecette()),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -537,7 +545,6 @@ class _RecetteSuite2WidgetState extends State<RecetteSuite2Widget> {
                 return FutureBuilder(
                   future: getUserById(recipeComments[0]['user_id']),
                   builder: (context, snapshot) {
-                    var user = snapshot.data;
                     return Column(
                       children: [
                         Row(
@@ -593,6 +600,18 @@ class _RecetteSuite2WidgetState extends State<RecetteSuite2Widget> {
                           FutureBuilder(
                             future: getUserById(recipeComments[i]['user_id']),
                             builder: (context, snapshot) {
+                              if (!snapshot.hasData) {
+                                return const Center(
+                                  child: SizedBox(
+                                    width: 60,
+                                    height: 60,
+                                    child: CircularProgressIndicator(
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                );
+                              }
+                              var user = snapshot.data;
                               var comment = recipeComments[i];
                               String userPhoto = user!
                                       .data()!
@@ -889,6 +908,9 @@ class _RecetteSuite2WidgetState extends State<RecetteSuite2Widget> {
               child: const Text('Laisser un commentaire',
                   style: TextStyle(color: Colors.black, fontSize: 16))),
         ),
+        SizedBox(
+          height: MediaQuery.of(context).size.height * 0.2,
+        )
       ],
     );
   }

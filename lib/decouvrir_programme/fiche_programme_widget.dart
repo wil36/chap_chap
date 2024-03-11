@@ -45,7 +45,8 @@ class _FicheProgrammeWidgetState extends State<FicheProgrammeWidget> {
       key: scaffoldKey,
       backgroundColor: Colors.white,
       body: StreamBuilder<ProgrammesRecord?>(
-        stream: ProgrammesRecord.getDocument(widget.detailsProgramme!.reference!),
+        stream:
+            ProgrammesRecord.getDocument(widget.detailsProgramme!.reference!),
         builder: (context, snapshot) {
           // Customize what your widget looks like when it's loading.
           if (!snapshot.hasData) {
@@ -60,8 +61,10 @@ class _FicheProgrammeWidgetState extends State<FicheProgrammeWidget> {
             );
           }
           final columnProgrammesRecord = snapshot.data!;
-          final textDescription = columnProgrammesRecord.description!.replaceAll('\\n', '\n');
-          final textAvantages = columnProgrammesRecord.listeAvantages!.replaceAll('\\n', '\n');
+          final textDescription =
+              columnProgrammesRecord.description!.replaceAll('\\n', '\n');
+          final textAvantages =
+              columnProgrammesRecord.listeAvantages!.replaceAll('\\n', '\n');
           return SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.max,
@@ -106,7 +109,8 @@ class _FicheProgrammeWidgetState extends State<FicheProgrammeWidget> {
                           mainAxisSize: MainAxisSize.max,
                           children: [
                             Padding(
-                              padding: const EdgeInsetsDirectional.fromSTEB(0, 40, 0, 0),
+                              padding: const EdgeInsetsDirectional.fromSTEB(
+                                  0, 40, 0, 0),
                               child: MizzUpIconButton(
                                 borderColor: Colors.transparent,
                                 borderRadius: 30,
@@ -215,7 +219,8 @@ class _FicheProgrammeWidgetState extends State<FicheProgrammeWidget> {
                 Align(
                   alignment: const AlignmentDirectional(-1, 0),
                   child: Padding(
-                    padding: const EdgeInsetsDirectional.fromSTEB(50, 20, 20, 0),
+                    padding:
+                        const EdgeInsetsDirectional.fromSTEB(50, 20, 20, 0),
                     child: Text(
                       'Un planning personnalisé avec : ',
                       style: MizzUpTheme.bodyText1.override(
@@ -231,7 +236,8 @@ class _FicheProgrammeWidgetState extends State<FicheProgrammeWidget> {
                 Align(
                   alignment: const AlignmentDirectional(-1, 0),
                   child: Padding(
-                    padding: const EdgeInsetsDirectional.fromSTEB(50, 20, 20, 0),
+                    padding:
+                        const EdgeInsetsDirectional.fromSTEB(50, 20, 20, 0),
                     child: StyledText(
                       newLineAsBreaks: true,
                       text: textAvantages,
@@ -288,11 +294,13 @@ class _FicheProgrammeWidgetState extends State<FicheProgrammeWidget> {
                   ),
                   SizedBox(height: 20),
                   StreamBuilder(
-                      stream: getAllProgramReviews(widget.detailsProgramme!.reference!.id),
+                      stream: getAllProgramReviews(
+                          widget.detailsProgramme!.reference!.id),
                       builder: (context, reviewsFetched) {
                         if (reviewsFetched.hasData) {
                           if (reviewsFetched.data!.docs.length == 0) {
-                            return Center(child: Text('Pas encore de commentaires'));
+                            return Center(
+                                child: Text('Pas encore de commentaires'));
                           }
                           var reviews = reviewsFetched.data!.docs;
                           return FutureBuilder(
@@ -302,12 +310,22 @@ class _FicheProgrammeWidgetState extends State<FicheProgrammeWidget> {
                               return Column(
                                 children: [
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Container(
-                                          margin: const EdgeInsets.only(left: 40),
-                                          child: Text('Avis (${reviews.length})',
-                                              style: MizzUpTheme.bodyText1.override(fontFamily: 'IBM', color: Colors.black, useGoogleFonts: false, fontWeight: FontWeight.w800, fontSize: 15))),
+                                          margin:
+                                              const EdgeInsets.only(left: 40),
+                                          child: Text(
+                                              'Avis (${reviews.length})',
+                                              style: MizzUpTheme.bodyText1
+                                                  .override(
+                                                      fontFamily: 'IBM',
+                                                      color: Colors.black,
+                                                      useGoogleFonts: false,
+                                                      fontWeight:
+                                                          FontWeight.w800,
+                                                      fontSize: 15))),
                                       GestureDetector(
                                         onTap: () async {
                                           await showModalBottomSheet(
@@ -316,20 +334,35 @@ class _FicheProgrammeWidgetState extends State<FicheProgrammeWidget> {
                                             context: context,
                                             builder: (context) {
                                               return Padding(
-                                                padding: MediaQuery.of(context).viewInsets,
+                                                padding: MediaQuery.of(context)
+                                                    .viewInsets,
                                                 child: Container(
-                                                  height: MediaQuery.of(context).size.height * 0.9,
-                                                  child: DisplayAllReviews(programmeId: widget.detailsProgramme!.reference!.id),
+                                                  height: MediaQuery.of(context)
+                                                          .size
+                                                          .height *
+                                                      0.9,
+                                                  child: DisplayAllReviews(
+                                                      programmeId: widget
+                                                          .detailsProgramme!
+                                                          .reference!
+                                                          .id),
                                                 ),
                                               );
                                             },
                                           ).then((value) => setState(() {}));
                                         },
                                         child: Container(
-                                            margin: const EdgeInsets.only(right: 40),
+                                            margin: const EdgeInsets.only(
+                                                right: 40),
                                             child: Text(
                                               'Voir tout',
-                                              style: TextStyle(color: Colors.black, fontFamily: 'IBM', fontSize: 12, fontWeight: FontWeight.w400, decoration: TextDecoration.underline),
+                                              style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontFamily: 'IBM',
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w400,
+                                                  decoration:
+                                                      TextDecoration.underline),
                                             )),
                                       ),
                                     ],
@@ -337,7 +370,11 @@ class _FicheProgrammeWidgetState extends State<FicheProgrammeWidget> {
                                   SizedBox(height: 10),
                                   Container(
                                     height: 200,
-                                    margin: const EdgeInsets.only(top: 10, bottom: 10, left: 20, right: 20),
+                                    margin: const EdgeInsets.only(
+                                        top: 10,
+                                        bottom: 10,
+                                        left: 20,
+                                        right: 20),
                                     child: PageView.builder(
                                       onPageChanged: (index) {
                                         setState(() {
@@ -347,44 +384,93 @@ class _FicheProgrammeWidgetState extends State<FicheProgrammeWidget> {
                                       itemCount: reviews.length,
                                       itemBuilder: (context, index) {
                                         return FutureBuilder(
-                                          future: getUserById(reviews[index]['user_id']),
+                                          future: getUserById(
+                                              reviews[index]['user_id']),
                                           builder: (context, snapshot) {
+                                            if (!snapshot.hasData) {
+                                              return const Center(
+                                                child: SizedBox(
+                                                  width: 60,
+                                                  height: 60,
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                              );
+                                            }
                                             var review = reviews[index];
+                                            String userPhoto = user!
+                                                    .data()!
+                                                    .containsKey('photo_url')
+                                                ? user['photo_url']
+                                                : 'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/chap-chap-1137ns/assets/n3ejaipxw085/user-22.jpg';
                                             return Card(
-                                              margin: const EdgeInsets.only(top: 10, bottom: 10, left: 20, right: 20),
+                                              margin: const EdgeInsets.only(
+                                                  top: 10,
+                                                  bottom: 10,
+                                                  left: 20,
+                                                  right: 20),
                                               child: LayoutBuilder(
-                                                builder: (BuildContext context, BoxConstraints constraints) {
+                                                builder: (BuildContext context,
+                                                    BoxConstraints
+                                                        constraints) {
                                                   return Container(
-                                                    padding: const EdgeInsets.all(10),
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            10),
                                                     child: Column(
-                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
                                                       children: [
                                                         Row(
-                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
                                                           children: [
                                                             Row(
                                                               children: [
                                                                 ClipRRect(
-                                                                  borderRadius: BorderRadius.circular(50), // Adjust the radius to your liking
-                                                                  child: Image.network(
-                                                                    user!['photo_url'],
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              50), // Adjust the radius to your liking
+                                                                  child: Image
+                                                                      .network(
+                                                                    valueOrDefault<
+                                                                            String?>(
+                                                                        userPhoto,
+                                                                        "https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/chap-chap-1137ns/assets/n3ejaipxw085/user-22.jpg")!,
                                                                     width: 30,
                                                                     height: 30,
-                                                                    fit: BoxFit.cover,
+                                                                    fit: BoxFit
+                                                                        .cover,
                                                                   ),
                                                                 ),
-                                                                SizedBox(width: 10),
+                                                                SizedBox(
+                                                                    width: 10),
                                                                 Column(
-                                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .start,
                                                                   children: [
                                                                     Text(
-                                                                      user['display_name'],
-                                                                      style: MizzUpTheme.bodyText1.override(
-                                                                        color: Colors.black,
-                                                                        fontFamily: 'IBM',
-                                                                        fontSize: 14,
-                                                                        fontWeight: FontWeight.w600,
-                                                                        useGoogleFonts: false,
+                                                                      user[
+                                                                          'display_name'],
+                                                                      style: MizzUpTheme
+                                                                          .bodyText1
+                                                                          .override(
+                                                                        color: Colors
+                                                                            .black,
+                                                                        fontFamily:
+                                                                            'IBM',
+                                                                        fontSize:
+                                                                            14,
+                                                                        fontWeight:
+                                                                            FontWeight.w600,
+                                                                        useGoogleFonts:
+                                                                            false,
                                                                       ),
                                                                     ),
                                                                   ],
@@ -392,56 +478,108 @@ class _FicheProgrammeWidgetState extends State<FicheProgrammeWidget> {
                                                               ],
                                                             ),
                                                             Text(
-                                                              reviews[index]['date'].toDate().toString().substring(0, 10),
-                                                              style: MizzUpTheme.bodyText1.override(
-                                                                color: Colors.black,
-                                                                fontFamily: 'IBM',
+                                                              reviews[index]
+                                                                      ['date']
+                                                                  .toDate()
+                                                                  .toString()
+                                                                  .substring(
+                                                                      0, 10),
+                                                              style: MizzUpTheme
+                                                                  .bodyText1
+                                                                  .override(
+                                                                color: Colors
+                                                                    .black,
+                                                                fontFamily:
+                                                                    'IBM',
                                                                 fontSize: 12,
-                                                                useGoogleFonts: false,
+                                                                useGoogleFonts:
+                                                                    false,
                                                               ),
                                                             ),
                                                           ],
                                                         ),
                                                         SizedBox(height: 15),
                                                         Container(
-                                                          width: MediaQuery.of(context).size.width * 0.6,
+                                                          width: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width *
+                                                              0.6,
                                                           child: Center(
                                                             child: Text(
-                                                              textAlign: TextAlign.center,
-                                                              reviews[index]['review'].toString(),
-                                                              style: MizzUpTheme.bodyText1.override(
-                                                                color: Colors.black,
-                                                                fontFamily: 'IBM',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              reviews[index]
+                                                                      ['review']
+                                                                  .toString(),
+                                                              style: MizzUpTheme
+                                                                  .bodyText1
+                                                                  .override(
+                                                                color: Colors
+                                                                    .black,
+                                                                fontFamily:
+                                                                    'IBM',
                                                                 fontSize: 12,
-                                                                useGoogleFonts: false,
+                                                                useGoogleFonts:
+                                                                    false,
                                                               ),
                                                             ),
                                                           ),
                                                         ),
                                                         SizedBox(height: 5),
                                                         Row(
-                                                          mainAxisAlignment: MainAxisAlignment.end,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .end,
                                                           children: [
                                                             Row(
                                                               children: [
                                                                 Text(
-                                                                  review['likes'].length.toString(),
-                                                                  style: MizzUpTheme.bodyText1.override(
-                                                                    color: Colors.black,
-                                                                    fontFamily: 'IBM',
-                                                                    fontSize: 14,
-                                                                    useGoogleFonts: false,
+                                                                  review['likes']
+                                                                      .length
+                                                                      .toString(),
+                                                                  style: MizzUpTheme
+                                                                      .bodyText1
+                                                                      .override(
+                                                                    color: Colors
+                                                                        .black,
+                                                                    fontFamily:
+                                                                        'IBM',
+                                                                    fontSize:
+                                                                        14,
+                                                                    useGoogleFonts:
+                                                                        false,
                                                                   ),
                                                                 ),
                                                                 ToggleIcon(
-                                                                  onPressed: () async {
-                                                                    print(review.id);
-                                                                    reviews[index]['likes'].contains(currentUserUid) ? await unlikeReview(reviews[index].id) : await likeReview(reviews[index].id);
-                                                                    setState(() {});
+                                                                  onPressed:
+                                                                      () async {
+                                                                    print(review
+                                                                        .id);
+                                                                    reviews[index]['likes'].contains(
+                                                                            currentUserUid)
+                                                                        ? await unlikeReview(reviews[index]
+                                                                            .id)
+                                                                        : await likeReview(
+                                                                            reviews[index].id);
+                                                                    setState(
+                                                                        () {});
                                                                   },
-                                                                  value: review['likes'].contains(currentUserUid),
-                                                                  onIcon: Icon(Icons.favorite, color: MizzUpTheme.primaryColor),
-                                                                  offIcon: Icon(Icons.favorite_border, color: MizzUpTheme.primaryColor),
+                                                                  value: review[
+                                                                          'likes']
+                                                                      .contains(
+                                                                          currentUserUid),
+                                                                  onIcon: Icon(
+                                                                      Icons
+                                                                          .favorite,
+                                                                      color: MizzUpTheme
+                                                                          .primaryColor),
+                                                                  offIcon: Icon(
+                                                                      Icons
+                                                                          .favorite_border,
+                                                                      color: MizzUpTheme
+                                                                          .primaryColor),
                                                                 ),
                                                               ],
                                                             ),
@@ -463,9 +601,12 @@ class _FicheProgrammeWidgetState extends State<FicheProgrammeWidget> {
                                     children: List.generate(
                                       reviews.length,
                                       (index) {
-                                        final color = index == _currentIndex ? MizzUpTheme.primaryColor : Colors.grey;
+                                        final color = index == _currentIndex
+                                            ? MizzUpTheme.primaryColor
+                                            : Colors.grey;
                                         return Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 4.0),
                                           child: CircleAvatar(
                                             radius: 4.0,
                                             backgroundColor: color,
@@ -495,7 +636,9 @@ class _FicheProgrammeWidgetState extends State<FicheProgrammeWidget> {
                             padding: MediaQuery.of(context).viewInsets,
                             child: Container(
                               height: MediaQuery.of(context).size.height * 0.9,
-                              child: LeaveReview(programmeId: widget.detailsProgramme!.reference!.id),
+                              child: LeaveReview(
+                                  programmeId:
+                                      widget.detailsProgramme!.reference!.id),
                             ),
                           );
                         },
@@ -503,20 +646,24 @@ class _FicheProgrammeWidgetState extends State<FicheProgrammeWidget> {
                     },
                     child: Center(
                       child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 25),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 15, horizontal: 25),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             color: MizzUpTheme.secondaryColor,
                           ),
-                          child: const Text('Laisser un avis', style: TextStyle(color: Colors.black, fontSize: 16))),
+                          child: const Text('Laisser un avis',
+                              style: TextStyle(
+                                  color: Colors.black, fontSize: 16))),
                     ),
                   ),
                 } else ...{
-                  if (columnProgrammesRecord.free == true)
+                  if (columnProgrammesRecord.free == true) ...{
                     Align(
                       alignment: const AlignmentDirectional(0.05, 0),
                       child: Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 20),
+                        padding:
+                            const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 20),
                         child: FFButtonWidget(
                           onPressed: () async {
                             await Navigator.push(
@@ -547,12 +694,370 @@ class _FicheProgrammeWidgetState extends State<FicheProgrammeWidget> {
                         ),
                       ),
                     ),
+                    SizedBox(height: 20),
+                    StreamBuilder(
+                        stream: getAllProgramReviews(
+                            widget.detailsProgramme!.reference!.id),
+                        builder: (context, reviewsFetched) {
+                          if (reviewsFetched.hasData) {
+                            if (reviewsFetched.data!.docs.length == 0) {
+                              return Center(
+                                  child: Text('Pas encore de commentaires'));
+                            }
+                            var reviews = reviewsFetched.data!.docs;
+                            return Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Container(
+                                        margin: const EdgeInsets.only(left: 40),
+                                        child: Text('Avis (${reviews.length})',
+                                            style: MizzUpTheme.bodyText1
+                                                .override(
+                                                    fontFamily: 'IBM',
+                                                    color: Colors.black,
+                                                    useGoogleFonts: false,
+                                                    fontWeight: FontWeight.w800,
+                                                    fontSize: 15))),
+                                    GestureDetector(
+                                      onTap: () async {
+                                        await showModalBottomSheet(
+                                          isScrollControlled: true,
+                                          backgroundColor: Colors.transparent,
+                                          context: context,
+                                          builder: (context) {
+                                            return Padding(
+                                              padding: MediaQuery.of(context)
+                                                  .viewInsets,
+                                              child: Container(
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .height *
+                                                    0.9,
+                                                child: DisplayAllReviews(
+                                                    programmeId: widget
+                                                        .detailsProgramme!
+                                                        .reference!
+                                                        .id),
+                                              ),
+                                            );
+                                          },
+                                        ).then((value) => setState(() {}));
+                                      },
+                                      child: Container(
+                                          margin:
+                                              const EdgeInsets.only(right: 40),
+                                          child: Text(
+                                            'Voir tout',
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontFamily: 'IBM',
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w400,
+                                                decoration:
+                                                    TextDecoration.underline),
+                                          )),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 10),
+                                Container(
+                                  height: 200,
+                                  margin: const EdgeInsets.only(
+                                      top: 10, bottom: 10, left: 20, right: 20),
+                                  child: PageView.builder(
+                                    onPageChanged: (index) {
+                                      setState(() {
+                                        _currentIndex = index;
+                                      });
+                                    },
+                                    itemCount: reviews.length,
+                                    itemBuilder: (context, index) {
+                                      return FutureBuilder(
+                                        future: getUserById(
+                                            reviews[index]['user_id']),
+                                        builder: (context, snapshot) {
+                                          var review = reviews[index];
+                                          if (!snapshot.hasData) {
+                                            return const Center(
+                                              child: SizedBox(
+                                                width: 60,
+                                                height: 60,
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                          var user = snapshot.data;
+                                          String userPhoto = user!
+                                                  .data()!
+                                                  .containsKey('photo_url')
+                                              ? user['photo_url']
+                                              : 'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/chap-chap-1137ns/assets/n3ejaipxw085/user-22.jpg';
+                                          return Card(
+                                            margin: const EdgeInsets.only(
+                                                top: 10,
+                                                bottom: 10,
+                                                left: 20,
+                                                right: 20),
+                                            child: LayoutBuilder(
+                                              builder: (BuildContext context,
+                                                  BoxConstraints constraints) {
+                                                return Container(
+                                                  padding:
+                                                      const EdgeInsets.all(10),
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          Row(
+                                                            children: [
+                                                              ClipRRect(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            50), // Adjust the radius to your liking
+                                                                child: Image
+                                                                    .network(
+                                                                  valueOrDefault<
+                                                                          String?>(
+                                                                      userPhoto,
+                                                                      "https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/chap-chap-1137ns/assets/n3ejaipxw085/user-22.jpg")!,
+                                                                  width: 30,
+                                                                  height: 30,
+                                                                  fit: BoxFit
+                                                                      .cover,
+                                                                ),
+                                                              ),
+                                                              SizedBox(
+                                                                  width: 10),
+                                                              Column(
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .start,
+                                                                children: [
+                                                                  Text(
+                                                                    user[
+                                                                        'display_name'],
+                                                                    style: MizzUpTheme
+                                                                        .bodyText1
+                                                                        .override(
+                                                                      color: Colors
+                                                                          .black,
+                                                                      fontFamily:
+                                                                          'IBM',
+                                                                      fontSize:
+                                                                          14,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w600,
+                                                                      useGoogleFonts:
+                                                                          false,
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          Text(
+                                                            reviews[index]
+                                                                    ['date']
+                                                                .toDate()
+                                                                .toString()
+                                                                .substring(
+                                                                    0, 10),
+                                                            style: MizzUpTheme
+                                                                .bodyText1
+                                                                .override(
+                                                              color:
+                                                                  Colors.black,
+                                                              fontFamily: 'IBM',
+                                                              fontSize: 12,
+                                                              useGoogleFonts:
+                                                                  false,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      SizedBox(height: 15),
+                                                      Container(
+                                                        width: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width *
+                                                            0.6,
+                                                        child: Center(
+                                                          child: Text(
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            reviews[index]
+                                                                    ['review']
+                                                                .toString(),
+                                                            style: MizzUpTheme
+                                                                .bodyText1
+                                                                .override(
+                                                              color:
+                                                                  Colors.black,
+                                                              fontFamily: 'IBM',
+                                                              fontSize: 12,
+                                                              useGoogleFonts:
+                                                                  false,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      SizedBox(height: 5),
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .end,
+                                                        children: [
+                                                          Row(
+                                                            children: [
+                                                              Text(
+                                                                review['likes']
+                                                                    .length
+                                                                    .toString(),
+                                                                style: MizzUpTheme
+                                                                    .bodyText1
+                                                                    .override(
+                                                                  color: Colors
+                                                                      .black,
+                                                                  fontFamily:
+                                                                      'IBM',
+                                                                  fontSize: 14,
+                                                                  useGoogleFonts:
+                                                                      false,
+                                                                ),
+                                                              ),
+                                                              ToggleIcon(
+                                                                onPressed:
+                                                                    () async {
+                                                                  print(review
+                                                                      .id);
+                                                                  reviews[index]
+                                                                              [
+                                                                              'likes']
+                                                                          .contains(
+                                                                              currentUserUid)
+                                                                      ? await unlikeReview(
+                                                                          reviews[index]
+                                                                              .id)
+                                                                      : await likeReview(
+                                                                          reviews[index]
+                                                                              .id);
+                                                                  setState(
+                                                                      () {});
+                                                                },
+                                                                value: review[
+                                                                        'likes']
+                                                                    .contains(
+                                                                        currentUserUid),
+                                                                onIcon: Icon(
+                                                                    Icons
+                                                                        .favorite,
+                                                                    color: MizzUpTheme
+                                                                        .primaryColor),
+                                                                offIcon: Icon(
+                                                                    Icons
+                                                                        .favorite_border,
+                                                                    color: MizzUpTheme
+                                                                        .primaryColor),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ],
+                                                      )
+                                                    ],
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    },
+                                  ),
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: List.generate(
+                                    reviews.length,
+                                    (index) {
+                                      final color = index == _currentIndex
+                                          ? MizzUpTheme.primaryColor
+                                          : Colors.grey;
+                                      return Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 4.0),
+                                        child: CircleAvatar(
+                                          radius: 4.0,
+                                          backgroundColor: color,
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                )
+                              ],
+                            );
+                          } else if (reviewsFetched.hasError) {
+                            return Text('Erreur: ${reviewsFetched.error}');
+                          }
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        }),
+                    SizedBox(height: 20),
+                    TextButton(
+                      onPressed: () async {
+                        await showModalBottomSheet(
+                          isScrollControlled: true,
+                          backgroundColor: Colors.transparent,
+                          context: context,
+                          builder: (context) {
+                            return Padding(
+                              padding: MediaQuery.of(context).viewInsets,
+                              child: Container(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.9,
+                                child: LeaveReview(
+                                    programmeId:
+                                        widget.detailsProgramme!.reference!.id),
+                              ),
+                            );
+                          },
+                        ).then((value) => setState(() {}));
+                      },
+                      child: Center(
+                        child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 15, horizontal: 25),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: MizzUpTheme.secondaryColor,
+                            ),
+                            child: const Text('Laisser un avis',
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 16))),
+                      ),
+                    ),
+                  },
                   Visibility(
                     visible: columnProgrammesRecord.free != true,
                     child: Align(
                       alignment: const AlignmentDirectional(0.05, 0),
                       child: Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 20),
+                        padding:
+                            const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 20),
                         child: InkWell(
                           onTap: () async {
                             await Navigator.push(
@@ -575,7 +1080,8 @@ class _FicheProgrammeWidgetState extends State<FicheProgrammeWidget> {
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Padding(
-                                padding: const EdgeInsetsDirectional.fromSTEB(10, 7, 10, 7),
+                                padding: const EdgeInsetsDirectional.fromSTEB(
+                                    10, 7, 10, 7),
                                 child: Text(
                                   'Passer à la version Premium pour accéder aux programmes',
                                   textAlign: TextAlign.center,
@@ -593,7 +1099,8 @@ class _FicheProgrammeWidgetState extends State<FicheProgrammeWidget> {
                   Align(
                     alignment: const AlignmentDirectional(-1, 0),
                     child: Padding(
-                      padding: const EdgeInsetsDirectional.fromSTEB(35, 20, 20, 50),
+                      padding:
+                          const EdgeInsetsDirectional.fromSTEB(35, 20, 20, 50),
                       child: StyledText(
                         text:
                             '<bold>N.B :</bold> Pour encore plus de résultats, nous te recommandons de faire une cure de <gras><link href="https://madamelapresidente.fr/e-shop/?gclid=EAIaIQobChMIvIuU0aag9gIVkgwGAB38IwvdEAAYASAAEgJOXvD_BwE">Madame la Présidente</link></gras> en complément de ce programme.\n\n<bold>Code promo : -10% sur la cure de ton choix avec le code CHAPCHAP (valable uniquement sur le site de Madame La Présidente).</bold>',
@@ -606,15 +1113,23 @@ class _FicheProgrammeWidgetState extends State<FicheProgrammeWidget> {
                         ),
                         tags: {
                           'gras': StyledTextTag(
-                            style: const TextStyle(decoration: TextDecoration.underline, color: MizzUpTheme.primaryColor, fontWeight: FontWeight.bold),
+                            style: const TextStyle(
+                                decoration: TextDecoration.underline,
+                                color: MizzUpTheme.primaryColor,
+                                fontWeight: FontWeight.bold),
                           ),
                           // ignore: equal_keys_in_map
                           'link': StyledTextActionTag(
                             (_, attrs) => _openLink(context, attrs),
-                            style: const TextStyle(decoration: TextDecoration.underline, color: MizzUpTheme.primaryColor, fontWeight: FontWeight.bold),
+                            style: const TextStyle(
+                                decoration: TextDecoration.underline,
+                                color: MizzUpTheme.primaryColor,
+                                fontWeight: FontWeight.bold),
                           ),
                           'bold': StyledTextTag(
-                            style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                            style: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
                           ),
                         },
                       ),
@@ -629,7 +1144,8 @@ class _FicheProgrammeWidgetState extends State<FicheProgrammeWidget> {
                       children: [
                         InkWell(
                           onTap: () async {
-                            await launchURL('https://madamelapresidente.fr/e-shop/?gclid=EAIaIQobChMIvIuU0aag9gIVkgwGAB38IwvdEAAYASAAEgJOXvD_BwE');
+                            await launchURL(
+                                'https://madamelapresidente.fr/e-shop/?gclid=EAIaIQobChMIvIuU0aag9gIVkgwGAB38IwvdEAAYASAAEgJOXvD_BwE');
                           },
                           child: Image.asset(
                             'assets/images/madamePresidenteLogo.png',
@@ -640,7 +1156,8 @@ class _FicheProgrammeWidgetState extends State<FicheProgrammeWidget> {
                         ),
                         InkWell(
                           onTap: () async {
-                            await launchURL('https://madamelapresidente.fr/e-shop/?gclid=EAIaIQobChMIvIuU0aag9gIVkgwGAB38IwvdEAAYASAAEgJOXvD_BwE');
+                            await launchURL(
+                                'https://madamelapresidente.fr/e-shop/?gclid=EAIaIQobChMIvIuU0aag9gIVkgwGAB38IwvdEAAYASAAEgJOXvD_BwE');
                           },
                           child: Image.asset(
                             'assets/images/gummies.png',
@@ -651,7 +1168,8 @@ class _FicheProgrammeWidgetState extends State<FicheProgrammeWidget> {
                         ),
                         InkWell(
                           onTap: () async {
-                            await launchURL('https://madamelapresidente.fr/e-shop/?gclid=EAIaIQobChMIvIuU0aag9gIVkgwGAB38IwvdEAAYASAAEgJOXvD_BwE');
+                            await launchURL(
+                                'https://madamelapresidente.fr/e-shop/?gclid=EAIaIQobChMIvIuU0aag9gIVkgwGAB38IwvdEAAYASAAEgJOXvD_BwE');
                           },
                           child: Image.asset(
                             'assets/images/complementsMLP.png',
@@ -674,7 +1192,10 @@ class _FicheProgrammeWidgetState extends State<FicheProgrammeWidget> {
 }
 
 Stream getAllProgramReviews(String programmeId) {
-  return FirebaseFirestore.instance.collection('reviews').where('programme_id', isEqualTo: programmeId).snapshots();
+  return FirebaseFirestore.instance
+      .collection('reviews')
+      .where('programme_id', isEqualTo: programmeId)
+      .snapshots();
 }
 
 Future<void> likeReview(String reviewId) async {

@@ -29,6 +29,7 @@ class _DisplayAllCommentsState extends State<DisplayAllComments> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
+        height: MediaQuery.of(context).size.height * 0.9,
         decoration: const BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.all(
@@ -151,7 +152,7 @@ class _DisplayAllCommentsState extends State<DisplayAllComments> {
                                                                   .start,
                                                           children: [
                                                             Text(
-                                                              user![
+                                                              user[
                                                                   'display_name'],
                                                               style: MizzUpTheme
                                                                   .bodyText1
@@ -194,20 +195,16 @@ class _DisplayAllCommentsState extends State<DisplayAllComments> {
                                                           .size
                                                           .width *
                                                       0.6,
-                                                  child: Center(
-                                                    child: Text(
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      comment['comment']
-                                                          .toString(),
-                                                      style: MizzUpTheme
-                                                          .bodyText1
-                                                          .override(
-                                                        color: Colors.black,
-                                                        fontFamily: 'IBM',
-                                                        fontSize: 12,
-                                                        useGoogleFonts: false,
-                                                      ),
+                                                  child: Text(
+                                                    textAlign: TextAlign.left,
+                                                    comment['comment']
+                                                        .toString(),
+                                                    style: MizzUpTheme.bodyText1
+                                                        .override(
+                                                      color: Colors.black,
+                                                      fontFamily: 'IBM',
+                                                      fontSize: 12,
+                                                      useGoogleFonts: false,
                                                     ),
                                                   ),
                                                 ),
@@ -482,6 +479,7 @@ class _DisplayAllCommentsState extends State<DisplayAllComments> {
                                                                                                 ),
                                                                                                 Text(
                                                                                                   reply['comment_reply'],
+                                                                                                  textAlign: TextAlign.left,
                                                                                                   style: MizzUpTheme.bodyText1.override(
                                                                                                     color: Colors.black,
                                                                                                     fontFamily: 'IBM',

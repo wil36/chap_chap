@@ -5,7 +5,6 @@ import '../backend/backend.dart';
 import 'fiche_programme_widget.dart';
 import '../MizzUp_Code/MizzUp_icon_button.dart';
 import '../MizzUp_Code/MizzUp_theme.dart';
-import 'package:chap_chap/notification/notification_widget.dart';
 import 'prenium_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';

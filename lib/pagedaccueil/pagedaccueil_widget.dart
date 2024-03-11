@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print, unnecessary_statements
 import 'package:chap_chap/articles/page_de_article_widget.dart';
+import 'package:chap_chap/auth/firebase_user_provider.dart';
 import 'package:chap_chap/components/pas_de_prog_en_cours_widget.dart';
 import 'package:chap_chap/MizzUp_Code/MizzUp_Calendar.dart';
 import 'package:chap_chap/decouvrir_programme/fiche_programme_widget.dart';
@@ -94,238 +95,549 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
       decoration: const BoxDecoration(
         color: MizzUpTheme.tertiaryColor,
       ),
-      child: SingleChildScrollView(
-        controller: scrollController,
-        scrollDirection: Axis.vertical,
-        child: Flex(
-          direction: Axis.vertical,
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Padding(
-              padding: const EdgeInsetsDirectional.fromSTEB(0, 40, 20, 0),
-              child: Row(
+      child: StreamBuilder<UsersRecord?>(
+          stream: UsersRecord.getDocument(currentUserReference!),
+          builder: (context, snapshot) {
+            // Customize what your widget looks like when it's loading.
+            if (!snapshot.hasData) {
+              return const Center(
+                child: SizedBox(
+                  width: 60,
+                  height: 60,
+                  child: CircularProgressIndicator(
+                    color: Colors.black,
+                  ),
+                ),
+              );
+            }
+            final bool isAdmin = snapshot.data!.member!;
+            return SingleChildScrollView(
+              controller: scrollController,
+              scrollDirection: Axis.vertical,
+              child: Flex(
+                direction: Axis.vertical,
                 mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  MizzUpIconButton(
-                    borderColor: Colors.transparent,
-                    borderRadius: 30,
-                    borderWidth: 1,
-                    buttonSize: 40,
-                    fillColor: MizzUpTheme.secondaryColor,
-                    icon: const FaIcon(
-                      FontAwesomeIcons.user,
-                      color: MizzUpTheme.primaryColor,
-                      size: 20,
-                    ),
-                    onPressed: () async {
-                      await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const ProfilWidget(),
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.02,
-            ),
-            Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Align(
-                  alignment: const AlignmentDirectional(-1, 0),
-                  child: Padding(
-                    padding: const EdgeInsetsDirectional.fromSTEB(40, 5, 0, 10),
-                    child: GestureDetector(
-                      onTap: () async {
-                        // Récupère la référence de la collection "users"
-                        final usersCollection =
-                            FirebaseFirestore.instance.collection('users');
-                        print(usersCollection);
-
-// Récupère la référence de la collection "likes"
-                        final likesCollection =
-                            FirebaseFirestore.instance.collection('likes');
-                        print(likesCollection);
-
-                        await addLikesFromUsers(
-                            usersCollection, likesCollection);
-                      },
-                      child: Text(
-                        'Bonjour $currentUserDisplayName!',
-                        textAlign: TextAlign.start,
-                        style: MizzUpTheme.title1.override(
-                          fontFamily: 'IBM',
-                          color: Colors.white,
-                          useGoogleFonts: false,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Align(
-                  alignment: const AlignmentDirectional(-1, 0),
-                  child: Padding(
-                    padding: const EdgeInsetsDirectional.fromSTEB(40, 0, 0, 10),
-                    child: Text(
-                      'Bienvenue dans ton appli Chap Chap',
-                      style: MizzUpTheme.bodyText1.override(
-                        fontFamily: 'IBM',
-                        color: Colors.white,
-                        useGoogleFonts: false,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.05,
-                ),
-                Align(
-                  alignment: const AlignmentDirectional(-0.8, 0),
-                  child: Container(
-                    width: double.infinity,
-                    // height: MediaQuery.of(context).size.height * 1,
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(0),
-                        bottomRight: Radius.circular(0),
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20),
-                      ),
-                    ),
-                    child: Column(
+                  Padding(
+                    padding: const EdgeInsetsDirectional.fromSTEB(0, 40, 20, 0),
+                    child: Row(
                       mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.01,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "Mon calendrier",
-                                style: TextStyle(
-                                  fontSize: 25.0,
-                                  fontFamily: 'IBM',
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  setState(() {
-                                    calendarFormat =
-                                        calendarFormat == CalendarFormat.month
-                                            ? CalendarFormat.week
-                                            : CalendarFormat.month;
-                                  });
-                                },
-                                child: Text(
-                                  calendarFormat == CalendarFormat.month
-                                      ? "Voir moins"
-                                      : "Voir plus",
-                                ),
-                              )
-                            ],
+                        MizzUpIconButton(
+                          borderColor: Colors.transparent,
+                          borderRadius: 30,
+                          borderWidth: 1,
+                          buttonSize: 40,
+                          fillColor: MizzUpTheme.secondaryColor,
+                          icon: const FaIcon(
+                            FontAwesomeIcons.user,
+                            color: MizzUpTheme.primaryColor,
+                            size: 20,
                           ),
+                          onPressed: () async {
+                            await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const ProfilWidget(),
+                              ),
+                            );
+                          },
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                          child: Material(
-                            borderRadius: BorderRadius.circular(18.0),
-                            elevation: 2,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                children: [
-                                  calendarMini(),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  progUser(),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                ],
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.02,
+                  ),
+                  Column(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Align(
+                        alignment: const AlignmentDirectional(-1, 0),
+                        child: Padding(
+                          padding: const EdgeInsetsDirectional.fromSTEB(
+                              40, 5, 0, 10),
+                          child: GestureDetector(
+                            onTap: () async {
+                              // Récupère la référence de la collection "users"
+                              final usersCollection = FirebaseFirestore.instance
+                                  .collection('users');
+                              print(usersCollection);
+
+                              // Récupère la référence de la collection "likes"
+                              final likesCollection = FirebaseFirestore.instance
+                                  .collection('likes');
+                              print(likesCollection);
+
+                              await addLikesFromUsers(
+                                  usersCollection, likesCollection);
+                            },
+                            child: Text(
+                              'Bonjour $currentUserDisplayName!',
+                              textAlign: TextAlign.start,
+                              style: MizzUpTheme.title1.override(
+                                fontFamily: 'IBM',
+                                color: Colors.white,
+                                useGoogleFonts: false,
                               ),
                             ),
                           ),
                         ),
-
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.01,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "Recettes",
-                                style: TextStyle(
-                                  fontSize: 25.0,
-                                  fontFamily: 'IBM',
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                              TextButton(
-                                onPressed: () async {
-                                  await Navigator.push(
-                                    context,
-                                    PageTransition(
-                                      type: PageTransitionType.fade,
-                                      duration: Duration(milliseconds: 500),
-                                      reverseDuration:
-                                          Duration(milliseconds: 500),
-                                      child: NavBarPage(index: 1),
-                                    ),
-                                  );
-                                },
-                                child: Text(
-                                  "Voir plus",
-                                ),
-                              )
-                            ],
+                      ),
+                      Align(
+                        alignment: const AlignmentDirectional(-1, 0),
+                        child: Padding(
+                          padding: const EdgeInsetsDirectional.fromSTEB(
+                              40, 0, 0, 10),
+                          child: Text(
+                            'Bienvenue dans ton appli Chap Chap',
+                            style: MizzUpTheme.bodyText1.override(
+                              fontFamily: 'IBM',
+                              color: Colors.white,
+                              useGoogleFonts: false,
+                            ),
                           ),
                         ),
-
-                        StreamBuilder<UsersRecord?>(
-                          stream:
-                              UsersRecord.getDocument(currentUserReference!),
-                          builder: (context, snapshot) {
-                            // Customize what your widget looks like when it's loading.
-                            if (!snapshot.hasData) {
-                              return const Center(
-                                child: SizedBox(
-                                  width: 60,
-                                  height: 60,
-                                  child: CircularProgressIndicator(
-                                    color: Colors.black,
+                      ),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.05,
+                      ),
+                      Align(
+                        alignment: const AlignmentDirectional(-0.8, 0),
+                        child: Container(
+                          width: double.infinity,
+                          // height: MediaQuery.of(context).size.height * 1,
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(0),
+                              bottomRight: Radius.circular(0),
+                              topLeft: Radius.circular(20),
+                              topRight: Radius.circular(20),
+                            ),
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.01,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "Mon calendrier",
+                                      style: TextStyle(
+                                        fontSize: 25.0,
+                                        fontFamily: 'IBM',
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          calendarFormat = calendarFormat ==
+                                                  CalendarFormat.month
+                                              ? CalendarFormat.week
+                                              : CalendarFormat.month;
+                                        });
+                                      },
+                                      child: Text(
+                                        calendarFormat == CalendarFormat.month
+                                            ? "Voir moins"
+                                            : "Voir plus",
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 12.0),
+                                child: Material(
+                                  borderRadius: BorderRadius.circular(18.0),
+                                  elevation: 2,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      children: [
+                                        calendarMini(),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        progUser(),
+                                        SizedBox(
+                                          height: 20,
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              );
-                            }
-                            return Padding(
-                              padding: const EdgeInsetsDirectional.fromSTEB(
-                                  10, 10, 10, 0),
-                              child: FutureBuilder<List<RecettesRecord?>>(
-                                future: queryRecettesRecordOnce(
-                                  queryBuilder: (recettesRecord) =>
-                                      recettesRecord.where('isUp',
-                                          isEqualTo: true),
-                                  limit: 6,
+                              ),
+
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.01,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "Recettes",
+                                      style: TextStyle(
+                                        fontSize: 25.0,
+                                        fontFamily: 'IBM',
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    TextButton(
+                                      onPressed: () async {
+                                        await Navigator.push(
+                                          context,
+                                          PageTransition(
+                                            type: PageTransitionType.fade,
+                                            duration:
+                                                Duration(milliseconds: 500),
+                                            reverseDuration:
+                                                Duration(milliseconds: 500),
+                                            child: NavBarPage(index: 1),
+                                          ),
+                                        );
+                                      },
+                                      child: Text(
+                                        "Voir plus",
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+
+                              Padding(
+                                padding: const EdgeInsetsDirectional.fromSTEB(
+                                    10, 10, 10, 0),
+                                child: FutureBuilder<List<RecettesRecord?>>(
+                                  future: queryRecettesRecordOnce(
+                                    queryBuilder: (recettesRecord) =>
+                                        recettesRecord.where('isUp',
+                                            isEqualTo: true),
+                                    limit: 6,
+                                  ),
+                                  builder: (context, snapshot) {
+                                    // Customize what your widget looks like when it's loading.
+                                    if (!snapshot.hasData) {
+                                      return const Center(
+                                        child: SizedBox(
+                                          width: 60,
+                                          height: 60,
+                                          child: CircularProgressIndicator(
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                    List<RecettesRecord?>
+                                        pageViewRecettesRecordList =
+                                        snapshot.data!;
+                                    return SizedBox(
+                                      width: double.infinity,
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.35,
+                                      child: Stack(
+                                        children: [
+                                          ListView.builder(
+                                            // controller: scrollController,
+                                            physics:
+                                                const BouncingScrollPhysics(),
+                                            scrollDirection: Axis.horizontal,
+                                            itemCount:
+                                                pageViewRecettesRecordList
+                                                    .length,
+                                            itemBuilder:
+                                                (context, pageViewIndex) {
+                                              final pageViewRecettesRecord =
+                                                  pageViewRecettesRecordList[
+                                                      pageViewIndex]!;
+                                              return Visibility(
+                                                visible: (pageViewRecettesRecord
+                                                        .hided) ==
+                                                    false,
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  children: [
+                                                    Stack(
+                                                      alignment:
+                                                          const AlignmentDirectional(
+                                                              1, -1),
+                                                      children: [
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsetsDirectional
+                                                                  .fromSTEB(
+                                                                  10, 0, 10, 0),
+                                                          child: Container(
+                                                            width: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width /
+                                                                2.5,
+                                                            height: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .height *
+                                                                0.29,
+                                                            decoration:
+                                                                const BoxDecoration(),
+                                                            child: Stack(
+                                                              children: [
+                                                                Padding(
+                                                                  padding:
+                                                                      const EdgeInsetsDirectional
+                                                                          .fromSTEB(
+                                                                          0,
+                                                                          20,
+                                                                          0,
+                                                                          0),
+                                                                  child:
+                                                                      InkWell(
+                                                                    onTap:
+                                                                        () async {
+                                                                      showModalBottomSheet(
+                                                                        isScrollControlled:
+                                                                            true,
+                                                                        backgroundColor:
+                                                                            Colors.transparent,
+                                                                        context:
+                                                                            context,
+                                                                        builder:
+                                                                            (context) {
+                                                                          return Padding(
+                                                                            padding:
+                                                                                MediaQuery.of(context).viewInsets,
+                                                                            child:
+                                                                                Container(
+                                                                              height: MediaQuery.of(context).size.height * 0.9,
+                                                                              child: RecetteSuite2Widget(
+                                                                                description: pageViewRecettesRecord.description!,
+                                                                                dureePrepa: pageViewRecettesRecord.dureePrepa!,
+                                                                                etapes: pageViewRecettesRecord.etapes!,
+                                                                                listeIngredients: pageViewRecettesRecord.listeIngredients!,
+                                                                                niveauDifficulte: pageViewRecettesRecord.niveauDifficulte!,
+                                                                                photoPrincipale: pageViewRecettesRecord.photoPrincipale!,
+                                                                                titre: pageViewRecettesRecord.titre!,
+                                                                                nbIngredients: pageViewRecettesRecord.nbIngredients!,
+                                                                                recetteRef: pageViewRecettesRecord.reference!,
+                                                                              ),
+                                                                            ),
+                                                                          );
+                                                                        },
+                                                                      ).then((value) =>
+                                                                          setState(
+                                                                              () {}));
+                                                                    },
+                                                                    child:
+                                                                        ClipRRect(
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              20),
+                                                                      child: Image.asset(
+                                                                          pageViewRecettesRecord
+                                                                              .photoPrincipale!,
+                                                                          width: double
+                                                                              .infinity,
+                                                                          height: double
+                                                                              .infinity,
+                                                                          fit: BoxFit
+                                                                              .cover),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Align(
+                                                          alignment:
+                                                              const AlignmentDirectional(
+                                                                  0.75, 0),
+                                                          child: Material(
+                                                            color: Colors
+                                                                .transparent,
+                                                            elevation: 10,
+                                                            shape:
+                                                                const CircleBorder(),
+                                                            child: Container(
+                                                              width: 40,
+                                                              height: 40,
+                                                              decoration:
+                                                                  const BoxDecoration(
+                                                                color: Colors
+                                                                    .white,
+                                                                shape: BoxShape
+                                                                    .circle,
+                                                              ),
+                                                              child: ToggleIcon(
+                                                                onPressed:
+                                                                    () async {
+                                                                  final favorisRecettesElement =
+                                                                      pageViewRecettesRecord
+                                                                          .reference;
+                                                                  final favorisRecettesUpdate = currentUserDocument!
+                                                                          .favorisRecettes!
+                                                                          .toList()
+                                                                          .contains(
+                                                                              favorisRecettesElement)
+                                                                      ? FieldValue
+                                                                          .arrayRemove([
+                                                                          favorisRecettesElement
+                                                                        ])
+                                                                      : FieldValue
+                                                                          .arrayUnion([
+                                                                          favorisRecettesElement
+                                                                        ]);
+                                                                  final usersUpdateData =
+                                                                      {
+                                                                    'favorisRecettes':
+                                                                        favorisRecettesUpdate,
+                                                                  };
+                                                                  await currentUserDocument!
+                                                                      .reference!
+                                                                      .update(
+                                                                          usersUpdateData);
+                                                                },
+                                                                value: currentUserDocument!
+                                                                    .favorisRecettes!
+                                                                    .toList()
+                                                                    .contains(
+                                                                        pageViewRecettesRecord
+                                                                            .reference),
+                                                                onIcon:
+                                                                    SvgPicture
+                                                                        .asset(
+                                                                  'assets/profil/saved_recipe_full_icon.svg',
+                                                                  width: 20,
+                                                                  height: 20,
+                                                                ),
+                                                                offIcon:
+                                                                    SvgPicture
+                                                                        .asset(
+                                                                  'assets/profil/saved_recipe_icon.svg',
+                                                                  width: 20,
+                                                                  height: 20,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    SizedBox(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width /
+                                                              2.5,
+                                                      child: Align(
+                                                        alignment:
+                                                            const AlignmentDirectional(
+                                                                -1, 0),
+                                                        child: Padding(
+                                                          padding:
+                                                              const EdgeInsetsDirectional
+                                                                  .fromSTEB(
+                                                                  15, 5, 0, 0),
+                                                          child: Text(
+                                                            pageViewRecettesRecord
+                                                                .titre!,
+                                                            style: MizzUpTheme
+                                                                .bodyText1
+                                                                .override(
+                                                              fontFamily: 'IBM',
+                                                              fontSize: 17,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .normal,
+                                                              useGoogleFonts:
+                                                                  false,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.01,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "Programmes",
+                                      style: TextStyle(
+                                        fontSize: 25.0,
+                                        fontFamily: 'IBM',
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    TextButton(
+                                      onPressed: () async {
+                                        await Navigator.push(
+                                          context,
+                                          PageTransition(
+                                            type: PageTransitionType.fade,
+                                            duration:
+                                                Duration(milliseconds: 500),
+                                            reverseDuration:
+                                                Duration(milliseconds: 500),
+                                            child: NavBarPage(index: 0),
+                                          ),
+                                        );
+                                      },
+                                      child: Text(
+                                        "Voir plus",
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+
+                              StreamBuilder<List<ProgrammesRecord?>>(
+                                stream: queryProgrammesRecord(
+                                  queryBuilder: (programmesRecord) =>
+                                      programmesRecord.orderBy('create_time',
+                                          descending: true),
+                                  limit: 4,
                                 ),
                                 builder: (context, snapshot) {
                                   // Customize what your widget looks like when it's loading.
@@ -340,553 +652,261 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
                                       ),
                                     );
                                   }
-                                  List<RecettesRecord?>
-                                      pageViewRecettesRecordList =
-                                      snapshot.data!;
-                                  return SizedBox(
-                                    width: double.infinity,
-                                    height: MediaQuery.of(context).size.height *
-                                        0.35,
-                                    child: Stack(
-                                      children: [
-                                        ListView.builder(
-                                          // controller: scrollController,
-                                          physics:
-                                              const BouncingScrollPhysics(),
-                                          scrollDirection: Axis.horizontal,
-                                          itemCount:
-                                              pageViewRecettesRecordList.length,
-                                          itemBuilder:
-                                              (context, pageViewIndex) {
-                                            final pageViewRecettesRecord =
-                                                pageViewRecettesRecordList[
-                                                    pageViewIndex]!;
-                                            return Visibility(
-                                              visible: (pageViewRecettesRecord
-                                                      .hided) ==
-                                                  false,
-                                              child: Column(
-                                                mainAxisSize: MainAxisSize.max,
-                                                children: [
-                                                  Stack(
-                                                    alignment:
-                                                        const AlignmentDirectional(
-                                                            1, -1),
-                                                    children: [
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsetsDirectional
-                                                                .fromSTEB(
-                                                                10, 0, 10, 0),
-                                                        child: Container(
-                                                          width: MediaQuery.of(
-                                                                      context)
-                                                                  .size
-                                                                  .width /
-                                                              2.5,
-                                                          height: MediaQuery.of(
-                                                                      context)
-                                                                  .size
-                                                                  .height *
-                                                              0.29,
-                                                          decoration:
-                                                              const BoxDecoration(),
-                                                          child: Stack(
-                                                            children: [
-                                                              Padding(
-                                                                padding:
-                                                                    const EdgeInsetsDirectional
-                                                                        .fromSTEB(
-                                                                        0,
-                                                                        20,
-                                                                        0,
-                                                                        0),
-                                                                child: InkWell(
-                                                                  onTap:
-                                                                      () async {
-                                                                    showModalBottomSheet(
-                                                                      isScrollControlled:
-                                                                          true,
-                                                                      backgroundColor:
-                                                                          Colors
-                                                                              .transparent,
-                                                                      context:
-                                                                          context,
-                                                                      builder:
-                                                                          (context) {
-                                                                        return Padding(
-                                                                          padding:
-                                                                              MediaQuery.of(context).viewInsets,
-                                                                          child:
-                                                                              Container(
-                                                                            height:
-                                                                                MediaQuery.of(context).size.height * 0.9,
-                                                                            child:
-                                                                                RecetteSuite2Widget(
-                                                                              description: pageViewRecettesRecord.description!,
-                                                                              dureePrepa: pageViewRecettesRecord.dureePrepa!,
-                                                                              etapes: pageViewRecettesRecord.etapes!,
-                                                                              listeIngredients: pageViewRecettesRecord.listeIngredients!,
-                                                                              niveauDifficulte: pageViewRecettesRecord.niveauDifficulte!,
-                                                                              photoPrincipale: pageViewRecettesRecord.photoPrincipale!,
-                                                                              titre: pageViewRecettesRecord.titre!,
-                                                                              nbIngredients: pageViewRecettesRecord.nbIngredients!,
-                                                                              recetteRef: pageViewRecettesRecord.reference!,
-                                                                            ),
-                                                                          ),
-                                                                        );
-                                                                      },
-                                                                    ).then((value) =>
-                                                                        setState(
-                                                                            () {}));
-                                                                  },
-                                                                  child:
-                                                                      ClipRRect(
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
+                                  List<ProgrammesRecord?>
+                                      wrapProgrammesRecordList = snapshot.data!;
+                                  return ConstrainedBox(
+                                    constraints: BoxConstraints(
+                                        maxHeight:
+                                            MediaQuery.of(context).size.height *
+                                                    0.45 +
+                                                20,
+                                        minHeight: 56.0),
+                                    child: ListView.builder(
+                                      scrollDirection: Axis.horizontal,
+                                      physics: const BouncingScrollPhysics(),
+                                      shrinkWrap: true,
+                                      itemCount:
+                                          wrapProgrammesRecordList.length,
+                                      itemBuilder: (context, wrapIndex) {
+                                        final wrapProgrammesRecord =
+                                            wrapProgrammesRecordList[
+                                                wrapIndex]!;
+                                        return StreamBuilder<ProgrammesRecord?>(
+                                          stream: ProgrammesRecord.getDocument(
+                                              wrapProgrammesRecord.reference!),
+                                          builder: (context, snapshot) {
+                                            if (!snapshot.hasData) {
+                                              return const Center(
+                                                child: SizedBox(
+                                                  width: 60,
+                                                  height: 60,
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                              );
+                                            }
+                                            final containerProgrammesRecord =
+                                                snapshot.data!;
+                                            return Container(
+                                              margin: EdgeInsets.symmetric(
+                                                  horizontal: 10),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(20),
+                                              ),
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.43,
+                                              child: InkWell(
+                                                onTap: () async {
+                                                  await Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          FicheProgrammeWidget(
+                                                        detailsProgramme:
+                                                            containerProgrammesRecord,
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Stack(
+                                                      children: [
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsetsDirectional
+                                                                  .fromSTEB(
+                                                                  0, 20, 0, 0),
+                                                          child: Container(
+                                                            height: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .height *
+                                                                0.3,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          20),
+                                                            ),
+                                                            child: ClipRRect(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .only(
+                                                                bottomLeft: Radius
+                                                                    .circular(
+                                                                        20),
+                                                                bottomRight:
+                                                                    Radius
+                                                                        .circular(
                                                                             20),
-                                                                    child: Image.asset(
-                                                                        pageViewRecettesRecord
-                                                                            .photoPrincipale!,
-                                                                        width: double
-                                                                            .infinity,
-                                                                        height: double
-                                                                            .infinity,
-                                                                        fit: BoxFit
-                                                                            .cover),
-                                                                  ),
-                                                                ),
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        20),
+                                                                topRight: Radius
+                                                                    .circular(
+                                                                        20),
                                                               ),
-                                                            ],
+                                                              child:
+                                                                  Image.asset(
+                                                                getProgImage(
+                                                                    containerProgrammesRecord
+                                                                        .titre!)!,
+                                                                cacheHeight: ((MediaQuery.of(context).size.width *
+                                                                            0.37) *
+                                                                        (MediaQuery.of(context)
+                                                                            .devicePixelRatio))
+                                                                    .round(),
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                              ),
+                                                            ),
                                                           ),
                                                         ),
-                                                      ),
-                                                      Align(
-                                                        alignment:
-                                                            const AlignmentDirectional(
-                                                                0.75, 0),
-                                                        child: Material(
-                                                          color: Colors
-                                                              .transparent,
-                                                          elevation: 10,
-                                                          shape:
-                                                              const CircleBorder(),
-                                                          child: Container(
-                                                            width: 40,
-                                                            height: 40,
-                                                            decoration:
-                                                                const BoxDecoration(
-                                                              color:
-                                                                  Colors.white,
-                                                              shape: BoxShape
-                                                                  .circle,
-                                                            ),
-                                                            child: ToggleIcon(
+                                                        Visibility(
+                                                          visible: isAdmin ==
+                                                                  false &&
+                                                              containerProgrammesRecord
+                                                                      .free ==
+                                                                  false,
+                                                          child: Align(
+                                                            alignment:
+                                                                const AlignmentDirectional(
+                                                                    0.6, -1),
+                                                            child:
+                                                                MizzUpIconButton(
+                                                              borderColor: Colors
+                                                                  .transparent,
+                                                              borderRadius: 30,
+                                                              borderWidth: 1,
+                                                              buttonSize: 40,
+                                                              fillColor: MizzUpTheme
+                                                                  .tertiaryColor,
+                                                              icon: const Icon(
+                                                                Icons
+                                                                    .lock_outlined,
+                                                                color: Colors
+                                                                    .white,
+                                                                size: 20,
+                                                              ),
                                                               onPressed:
                                                                   () async {
-                                                                final favorisRecettesElement =
-                                                                    pageViewRecettesRecord
-                                                                        .reference;
-                                                                final favorisRecettesUpdate = currentUserDocument!
-                                                                        .favorisRecettes!
-                                                                        .toList()
-                                                                        .contains(
-                                                                            favorisRecettesElement)
-                                                                    ? FieldValue
-                                                                        .arrayRemove([
-                                                                        favorisRecettesElement
-                                                                      ])
-                                                                    : FieldValue
-                                                                        .arrayUnion([
-                                                                        favorisRecettesElement
-                                                                      ]);
-                                                                final usersUpdateData =
-                                                                    {
-                                                                  'favorisRecettes':
-                                                                      favorisRecettesUpdate,
-                                                                };
-                                                                await currentUserDocument!
-                                                                    .reference!
-                                                                    .update(
-                                                                        usersUpdateData);
+                                                                await Navigator
+                                                                    .push(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                    builder:
+                                                                        (context) =>
+                                                                            const PreniumWidget(),
+                                                                  ),
+                                                                );
                                                               },
-                                                              value: currentUserDocument!
-                                                                  .favorisRecettes!
-                                                                  .toList()
-                                                                  .contains(
-                                                                      pageViewRecettesRecord
-                                                                          .reference),
-                                                              onIcon: SvgPicture
-                                                                  .asset(
-                                                                'assets/profil/saved_recipe_full_icon.svg',
-                                                                width: 20,
-                                                                height: 20,
-                                                              ),
-                                                              offIcon:
-                                                                  SvgPicture
-                                                                      .asset(
-                                                                'assets/profil/saved_recipe_icon.svg',
-                                                                width: 20,
-                                                                height: 20,
-                                                              ),
                                                             ),
                                                           ),
                                                         ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  SizedBox(
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width /
-                                                            2.5,
-                                                    child: Align(
-                                                      alignment:
-                                                          const AlignmentDirectional(
-                                                              -1, 0),
-                                                      child: Padding(
-                                                        padding:
-                                                            const EdgeInsetsDirectional
-                                                                .fromSTEB(
-                                                                15, 5, 0, 0),
-                                                        child: Text(
-                                                          pageViewRecettesRecord
-                                                              .titre!,
-                                                          style: MizzUpTheme
-                                                              .bodyText1
-                                                              .override(
-                                                            fontFamily: 'IBM',
-                                                            fontSize: 17,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .normal,
-                                                            useGoogleFonts:
-                                                                false,
-                                                          ),
+                                                      ],
+                                                    ),
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsetsDirectional
+                                                              .fromSTEB(
+                                                              5, 10, 0, 0),
+                                                      child: Text(
+                                                        containerProgrammesRecord
+                                                            .titre!,
+                                                        style: MizzUpTheme
+                                                            .bodyText1
+                                                            .override(
+                                                          fontFamily: 'IBM',
+                                                          color: MizzUpTheme
+                                                              .primaryColor,
+                                                          fontSize: 15,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          useGoogleFonts: false,
                                                         ),
                                                       ),
                                                     ),
-                                                  ),
-                                                ],
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsetsDirectional
+                                                              .fromSTEB(
+                                                              5, 5, 35, 0),
+                                                      child: Text(
+                                                        containerProgrammesRecord
+                                                            .sousTitre!,
+                                                        style: MizzUpTheme
+                                                            .bodyText1
+                                                            .override(
+                                                          fontFamily: 'IBM',
+                                                          color: Colors.black,
+                                                          fontSize: 11,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          useGoogleFonts: false,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
                                             );
                                           },
-                                        ),
-                                      ],
+                                        );
+                                      },
                                     ),
                                   );
                                 },
                               ),
-                            );
-                          },
-                        ),
-
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.01,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "Programmes",
-                                style: TextStyle(
-                                  fontSize: 25.0,
-                                  fontFamily: 'IBM',
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                              TextButton(
-                                onPressed: () async {
-                                  await Navigator.push(
-                                    context,
-                                    PageTransition(
-                                      type: PageTransitionType.fade,
-                                      duration: Duration(milliseconds: 500),
-                                      reverseDuration:
-                                          Duration(milliseconds: 500),
-                                      child: NavBarPage(index: 0),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 12),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "Articles",
+                                      style: TextStyle(
+                                        fontSize: 25.0,
+                                        fontFamily: 'IBM',
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w700,
+                                      ),
                                     ),
-                                  );
-                                },
-                                child: Text(
-                                  "Voir plus",
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-
-                        StreamBuilder<List<ProgrammesRecord?>>(
-                          stream: queryProgrammesRecord(
-                            queryBuilder: (programmesRecord) => programmesRecord
-                                .orderBy('create_time', descending: true),
-                            limit: 4,
-                          ),
-                          builder: (context, snapshot) {
-                            // Customize what your widget looks like when it's loading.
-                            if (!snapshot.hasData) {
-                              return const Center(
-                                child: SizedBox(
-                                  width: 60,
-                                  height: 60,
-                                  child: CircularProgressIndicator(
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              );
-                            }
-                            List<ProgrammesRecord?> wrapProgrammesRecordList =
-                                snapshot.data!;
-                            return ConstrainedBox(
-                              constraints: BoxConstraints(
-                                  maxHeight:
-                                      MediaQuery.of(context).size.height *
-                                              0.45 +
-                                          20,
-                                  minHeight: 56.0),
-                              child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                physics: const BouncingScrollPhysics(),
-                                shrinkWrap: true,
-                                itemCount: wrapProgrammesRecordList.length,
-                                itemBuilder: (context, wrapIndex) {
-                                  final wrapProgrammesRecord =
-                                      wrapProgrammesRecordList[wrapIndex]!;
-                                  return StreamBuilder<ProgrammesRecord?>(
-                                    stream: ProgrammesRecord.getDocument(
-                                        wrapProgrammesRecord.reference!),
-                                    builder: (context, snapshot) {
-                                      if (!snapshot.hasData) {
-                                        return const Center(
-                                          child: SizedBox(
-                                            width: 60,
-                                            height: 60,
-                                            child: CircularProgressIndicator(
-                                              color: Colors.black,
-                                            ),
+                                    TextButton(
+                                      onPressed: () async {
+                                        await Navigator.push(
+                                          context,
+                                          PageTransition(
+                                            type: PageTransitionType.fade,
+                                            duration:
+                                                Duration(milliseconds: 500),
+                                            reverseDuration:
+                                                Duration(milliseconds: 500),
+                                            child: NavBarPage(index: 3),
                                           ),
                                         );
-                                      }
-                                      final containerProgrammesRecord =
-                                          snapshot.data!;
-                                      return Container(
-                                        margin: EdgeInsets.symmetric(
-                                            horizontal: 10),
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                        ),
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.43,
-                                        child: InkWell(
-                                          onTap: () async {
-                                            await Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    FicheProgrammeWidget(
-                                                  detailsProgramme:
-                                                      containerProgrammesRecord,
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.max,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Stack(
-                                                children: [
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsetsDirectional
-                                                            .fromSTEB(
-                                                            0, 20, 0, 0),
-                                                    child: Container(
-                                                      height:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .height *
-                                                              0.3,
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(20),
-                                                      ),
-                                                      child: ClipRRect(
-                                                        borderRadius:
-                                                            BorderRadius.only(
-                                                          bottomLeft:
-                                                              Radius.circular(
-                                                                  20),
-                                                          bottomRight:
-                                                              Radius.circular(
-                                                                  20),
-                                                          topLeft:
-                                                              Radius.circular(
-                                                                  20),
-                                                          topRight:
-                                                              Radius.circular(
-                                                                  20),
-                                                        ),
-                                                        child: Image.asset(
-                                                          getProgImage(
-                                                              containerProgrammesRecord
-                                                                  .titre!)!,
-                                                          cacheHeight: ((MediaQuery.of(
-                                                                              context)
-                                                                          .size
-                                                                          .width *
-                                                                      0.37) *
-                                                                  (MediaQuery.of(
-                                                                          context)
-                                                                      .devicePixelRatio))
-                                                              .round(),
-                                                          fit: BoxFit.cover,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Visibility(
-                                                    visible:
-                                                        containerProgrammesRecord
-                                                                .free ==
-                                                            false,
-                                                    child: Align(
-                                                      alignment:
-                                                          const AlignmentDirectional(
-                                                              0.6, -1),
-                                                      child: MizzUpIconButton(
-                                                        borderColor:
-                                                            Colors.transparent,
-                                                        borderRadius: 30,
-                                                        borderWidth: 1,
-                                                        buttonSize: 40,
-                                                        fillColor: MizzUpTheme
-                                                            .tertiaryColor,
-                                                        icon: const Icon(
-                                                          Icons.lock_outlined,
-                                                          color: Colors.white,
-                                                          size: 20,
-                                                        ),
-                                                        onPressed: () async {
-                                                          await Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                              builder: (context) =>
-                                                                  const PreniumWidget(),
-                                                            ),
-                                                          );
-                                                        },
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsetsDirectional
-                                                        .fromSTEB(5, 10, 0, 0),
-                                                child: Text(
-                                                  containerProgrammesRecord
-                                                      .titre!,
-                                                  style: MizzUpTheme.bodyText1
-                                                      .override(
-                                                    fontFamily: 'IBM',
-                                                    color: MizzUpTheme
-                                                        .primaryColor,
-                                                    fontSize: 15,
-                                                    fontWeight: FontWeight.bold,
-                                                    useGoogleFonts: false,
-                                                  ),
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsetsDirectional
-                                                        .fromSTEB(5, 5, 35, 0),
-                                                child: Text(
-                                                  containerProgrammesRecord
-                                                      .sousTitre!,
-                                                  style: MizzUpTheme.bodyText1
-                                                      .override(
-                                                    fontFamily: 'IBM',
-                                                    color: Colors.black,
-                                                    fontSize: 11,
-                                                    fontWeight: FontWeight.w500,
-                                                    useGoogleFonts: false,
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  );
-                                },
-                              ),
-                            );
-                          },
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "Articles",
-                                style: TextStyle(
-                                  fontSize: 25.0,
-                                  fontFamily: 'IBM',
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w700,
+                                      },
+                                      child: Text(
+                                        "Voir plus",
+                                      ),
+                                    )
+                                  ],
                                 ),
                               ),
-                              TextButton(
-                                onPressed: () async {
-                                  await Navigator.push(
-                                    context,
-                                    PageTransition(
-                                      type: PageTransitionType.fade,
-                                      duration: Duration(milliseconds: 500),
-                                      reverseDuration:
-                                          Duration(milliseconds: 500),
-                                      child: NavBarPage(index: 3),
-                                    ),
-                                  );
-                                },
-                                child: Text(
-                                  "Voir plus",
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
 
-                        StreamBuilder<UsersRecord?>(
-                            stream:
-                                UsersRecord.getDocument(currentUserReference!),
-                            builder: (context, snapshot) {
-                              // Customize what your widget looks like when it's loading.
-                              if (!snapshot.hasData) {
-                                return const Center(
-                                  child: SizedBox(
-                                    width: 60,
-                                    height: 60,
-                                    child: CircularProgressIndicator(
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                );
-                              }
-                              return StreamBuilder<List<ArticlesRecord?>>(
+                              StreamBuilder<List<ArticlesRecord?>>(
                                 stream: queryArticlesRecord(
                                   queryBuilder: (articlesRecord) =>
                                       articlesRecord
@@ -1084,23 +1104,24 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
                                     ),
                                   );
                                 },
-                              );
-                            }),
-                        // addRoutine(),
+                              ),
 
-                        // routineUser(),
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height / 10,
-                        )
-                      ],
-                    ),
+                              // addRoutine(),
+
+                              // routineUser(),
+                              SizedBox(
+                                height: MediaQuery.of(context).size.height / 10,
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
+                ],
+              ),
+            );
+          }),
     );
   }
 

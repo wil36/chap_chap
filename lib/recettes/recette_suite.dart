@@ -398,6 +398,7 @@ class _RecetteSuiteWidgetState extends State<RecetteSuiteWidget> {
                     ),
                   ),
                 ),
+                getUserLikers(streamPremium),
               ],
             ),
           ),
@@ -410,7 +411,8 @@ class _RecetteSuiteWidgetState extends State<RecetteSuiteWidget> {
     return SingleChildScrollView(
       physics: NeverScrollableScrollPhysics(),
       child: ConstrainedBox(
-        constraints: BoxConstraints(),
+        constraints:
+            BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.9),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -529,14 +531,12 @@ class _RecetteSuiteWidgetState extends State<RecetteSuiteWidget> {
                           ),
                         ],
                       ),
-                      Container(
-                        width: MediaQuery.of(context).size.width * 0.4,
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                        ),
+                      SizedBox(
+                        // width: MediaQuery.of(context).size.width * 0.4,
                         child: Column(
                           mainAxisSize: MainAxisSize.max,
                           crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Padding(
                               padding: const EdgeInsetsDirectional.fromSTEB(
@@ -568,7 +568,7 @@ class _RecetteSuiteWidgetState extends State<RecetteSuiteWidget> {
 
   Widget getUserLikers(RecettesRecord streamFree) {
     return Container(
-      margin: const EdgeInsetsDirectional.fromSTEB(20, 20, 20, 0),
+      margin: const EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
       child: FutureBuilder(
         future: getUsersWithFavRecipe,
         builder: (context, snapshot) {
@@ -605,52 +605,59 @@ class _RecetteSuiteWidgetState extends State<RecetteSuiteWidget> {
             }
             return likesCounter == 0
                 ? SizedBox()
-                : Row(
-                    children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width * 0.15,
-                        height: 20,
-                        child: Stack(
-                          children: [
-                            for (String userInitial in usersInitials)
-                              Positioned(
-                                left: (usersInitials.indexOf(userInitial) * 15),
-                                child: Container(
-                                  width: 20,
-                                  height: 20,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
+                : SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    physics: NeverScrollableScrollPhysics(),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.15,
+                          height: 20,
+                          child: Stack(
+                            children: [
+                              for (String userInitial in usersInitials)
+                                Positioned(
+                                  left:
+                                      (usersInitials.indexOf(userInitial) * 15),
+                                  child: Container(
+                                    width: 20,
+                                    height: 20,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: MizzUpTheme.primaryColor,
+                                        width: 1,
+                                      ),
                                       color: MizzUpTheme.primaryColor,
-                                      width: 1,
+                                      shape: BoxShape.circle,
                                     ),
-                                    color: MizzUpTheme.primaryColor,
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      userInitial,
-                                      style: MizzUpTheme.bodyText1.override(
-                                        color: Colors.white,
-                                        fontFamily: 'IBM',
-                                        fontSize: 10,
-                                        useGoogleFonts: false,
+                                    child: Center(
+                                      child: Text(
+                                        userInitial,
+                                        style: MizzUpTheme.bodyText1.override(
+                                          color: Colors.white,
+                                          fontFamily: 'IBM',
+                                          fontSize: 10,
+                                          useGoogleFonts: false,
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                      Text(
-                        '$likesCounter personnes ont enregistré cette recette ',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontFamily: 'IBM',
-                          fontSize: 12,
+                        Text(
+                          '+ $likesCounter likes ',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontFamily: 'IBM',
+                            fontSize: 12,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   );
             // ID non trouvé dans aucun document
           } else if (snapshot.hasError) {
@@ -786,112 +793,114 @@ class _RecetteSuiteWidgetState extends State<RecetteSuiteWidget> {
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: 5,
-                ),
-                FutureBuilder(
-                  future: getUsersWithFavRecipe,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      print('hello' + streamPremium.reference.toString());
-                      int likesCounter = 0;
-                      List<String> usersInitials = [];
-                      QuerySnapshot<Map<String, dynamic>> docs = snapshot.data!;
-                      List<DocumentSnapshot<Map<String, dynamic>>> documents =
-                          docs.docs;
-                      for (DocumentSnapshot<Map<String, dynamic>> document
-                          in documents) {
-                        if (document
-                            .data()!['favorisRecettes']
-                            .contains(streamPremium.reference!)) {
-                          likesCounter++;
-                          var firstInitial;
-                          var secondInitial;
-                          if (document.data()!.containsKey('Prenom') &&
-                              document.data()!['Prenom'] != '') {
-                            firstInitial = document
-                                .data()!['Prenom'][0]
-                                .toString()
-                                .toUpperCase();
-                          } else {
-                            firstInitial = 'L';
-                          }
-                          if (document.data()!.containsKey('Nom') &&
-                              document.data()!['Nom'] != '') {
-                            secondInitial = document
-                                .data()!['Nom'][0]
-                                .toString()
-                                .toUpperCase();
-                          } else {
-                            secondInitial = 'L';
-                          }
-                          if (usersInitials.length < 3) {
-                            usersInitials.add(firstInitial + secondInitial);
-                          }
-                        }
-                      }
-                      return likesCounter != 0
-                          ? SizedBox()
-                          : Row(
-                              children: [
-                                Container(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.15,
-                                  height: 15,
-                                  child: Stack(
-                                    children: [
-                                      for (String userInitial in usersInitials)
-                                        Positioned(
-                                          left: (usersInitials
-                                                  .indexOf(userInitial) *
-                                              15),
-                                          child: Container(
-                                            width: 15,
-                                            height: 15,
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                color: MizzUpTheme.primaryColor,
-                                                width: 1,
-                                              ),
-                                              color: MizzUpTheme.primaryColor,
-                                              shape: BoxShape.circle,
-                                            ),
-                                            child: Center(
-                                              child: Text(
-                                                userInitial,
-                                                style: MizzUpTheme.bodyText1
-                                                    .override(
-                                                  color: Colors.white,
-                                                  fontFamily: 'IBM',
-                                                  fontSize: 8,
-                                                  useGoogleFonts: false,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                    ],
-                                  ),
-                                ),
-                                Text(
-                                  '+ $likesCounter enregistrements',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontFamily: 'IBM',
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ],
-                            );
-                      // ID non trouvé dans aucun document
-                    } else if (snapshot.hasError) {
-                      // Gestion de l'erreur
-                      return Text('Erreur: ${snapshot.error}');
-                    }
-                    // Chargement des données
-                    return CircularProgressIndicator();
-                  },
-                )
+                // SizedBox(
+                //   height: 5,
+                // ),
+                // FutureBuilder(
+                //   future: getUsersWithFavRecipe,
+                //   builder: (context, snapshot) {
+                //     if (snapshot.hasData) {
+                //       print('hello' + streamPremium.reference.toString());
+                //       int likesCounter = 0;
+                //       List<String> usersInitials = [];
+                //       QuerySnapshot<Map<String, dynamic>> docs = snapshot.data!;
+                //       List<DocumentSnapshot<Map<String, dynamic>>> documents =
+                //           docs.docs;
+                //       for (DocumentSnapshot<Map<String, dynamic>> document
+                //           in documents) {
+                //         if (document
+                //             .data()!['favorisRecettes']
+                //             .contains(streamPremium.reference!)) {
+                //           likesCounter++;
+                //           var firstInitial;
+                //           var secondInitial;
+                //           if (document.data()!.containsKey('Prenom') &&
+                //               document.data()!['Prenom'] != '') {
+                //             firstInitial = document
+                //                 .data()!['Prenom'][0]
+                //                 .toString()
+                //                 .toUpperCase();
+                //           } else {
+                //             firstInitial = 'L';
+                //           }
+                //           if (document.data()!.containsKey('Nom') &&
+                //               document.data()!['Nom'] != '') {
+                //             secondInitial = document
+                //                 .data()!['Nom'][0]
+                //                 .toString()
+                //                 .toUpperCase();
+                //           } else {
+                //             secondInitial = 'L';
+                //           }
+                //           if (usersInitials.length < 3) {
+                //             usersInitials.add(firstInitial + secondInitial);
+                //           }
+                //         }
+                //       }
+                //       return likesCounter != 0
+                //           ? SizedBox()
+                //           : Row(
+                //               children: [
+                //                 Container(
+                //                   width:
+                //                       MediaQuery.of(context).size.width * 0.15,
+                //                   height: 15,
+                //                   child: Stack(
+                //                     children: [
+                //                       for (String userInitial in usersInitials)
+                //                         Positioned(
+                //                           left: (usersInitials
+                //                                   .indexOf(userInitial) *
+                //                               15),
+                //                           child: Container(
+                //                             width: 15,
+                //                             height: 15,
+                //                             decoration: BoxDecoration(
+                //                               border: Border.all(
+                //                                 color: MizzUpTheme.primaryColor,
+                //                                 width: 1,
+                //                               ),
+                //                               color: MizzUpTheme.primaryColor,
+                //                               shape: BoxShape.circle,
+                //                             ),
+                //                             child: Center(
+                //                               child: Text(
+                //                                 userInitial,
+                //                                 style: MizzUpTheme.bodyText1
+                //                                     .override(
+                //                                   color: Colors.white,
+                //                                   fontFamily: 'IBM',
+                //                                   fontSize: 8,
+                //                                   useGoogleFonts: false,
+                //                                 ),
+                //                               ),
+                //                             ),
+                //                           ),
+                //                         ),
+                //                     ],
+                //                   ),
+                //                 ),
+                //                 Text(
+                //                   '+ $likesCounter enregistrements',
+                //                   style: TextStyle(
+                //                     color: Colors.black,
+                //                     fontFamily: 'IBM',
+                //                     fontSize: 12,
+                //                   ),
+                //                 ),
+                //               ],
+                //             );
+                //       // ID non trouvé dans aucun document
+                //     } else if (snapshot.hasError) {
+                //       // Gestion de l'erreur
+                //       return Text('Erreur: ${snapshot.error}');
+                //     }
+                //     // Chargement des données
+                //     return CircularProgressIndicator();
+                //   },
+                // )
+
+                getUserLikers(streamPremium),
               ],
             ),
           ),
@@ -946,7 +955,7 @@ class _RecetteSuiteWidgetState extends State<RecetteSuiteWidget> {
                     crossAxisCount: 2,
                     crossAxisSpacing: 0,
                     mainAxisSpacing: 0,
-                    childAspectRatio: 0.7,
+                    childAspectRatio: 0.6,
                   ),
                   scrollDirection: Axis.vertical,
                   itemCount: wrapRecettesRecordList.length,
@@ -955,7 +964,7 @@ class _RecetteSuiteWidgetState extends State<RecetteSuiteWidget> {
                         wrapRecettesRecordList[gridViewIndex];
 
                     return wrapRecettesRecord!.hided != true
-                        ? Container(
+                        ? SizedBox(
                             child: Padding(
                               padding: const EdgeInsetsDirectional.fromSTEB(
                                   0, 0, 10, 0),

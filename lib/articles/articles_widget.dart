@@ -7,7 +7,6 @@ import '../backend/backend.dart';
 import '../MizzUp_Code/MizzUp_icon_button.dart';
 import '../MizzUp_Code/MizzUp_theme.dart';
 import '../MizzUp_Code/MizzUp_toggle_icon.dart';
-import '../notification/notification_widget.dart';
 import 'page_de_article_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';

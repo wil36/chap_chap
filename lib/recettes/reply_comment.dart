@@ -19,6 +19,7 @@ class ReplyComment extends StatefulWidget {
 
 class _ReplyCommentState extends State<ReplyComment> {
   TextEditingController commentController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -64,7 +65,7 @@ class _ReplyCommentState extends State<ReplyComment> {
             height: 20,
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 40),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Container(
               padding: const EdgeInsets.all(10),
               margin: const EdgeInsets.only(top: 10, bottom: 10),
@@ -82,6 +83,11 @@ class _ReplyCommentState extends State<ReplyComment> {
               ),
               child: LayoutBuilder(
                 builder: (BuildContext context, BoxConstraints constraints) {
+                  String userPhoto = widget.user
+                          .data()!
+                          .containsKey('photo_url')
+                      ? widget.user['photo_url']
+                      : 'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/chap-chap-1137ns/assets/n3ejaipxw085/user-22.jpg';
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -94,7 +100,7 @@ class _ReplyCommentState extends State<ReplyComment> {
                                 borderRadius: BorderRadius.circular(
                                     50), // Adjust the radius to your liking
                                 child: Image.network(
-                                  widget.user['photo_url'],
+                                  userPhoto,
                                   width: 30,
                                   height: 30,
                                   fit: BoxFit.cover,
@@ -135,16 +141,14 @@ class _ReplyCommentState extends State<ReplyComment> {
                       SizedBox(height: 15),
                       Container(
                         width: MediaQuery.of(context).size.width * 0.6,
-                        child: Center(
-                          child: Text(
-                            textAlign: TextAlign.left,
-                            widget.comment['comment'].toString(),
-                            style: MizzUpTheme.bodyText1.override(
-                              color: Colors.black,
-                              fontFamily: 'IBM',
-                              fontSize: 12,
-                              useGoogleFonts: false,
-                            ),
+                        child: Text(
+                          textAlign: TextAlign.left,
+                          widget.comment['comment'].toString(),
+                          style: MizzUpTheme.bodyText1.override(
+                            color: Colors.black,
+                            fontFamily: 'IBM',
+                            fontSize: 12,
+                            useGoogleFonts: false,
                           ),
                         ),
                       ),
@@ -178,6 +182,7 @@ class _ReplyCommentState extends State<ReplyComment> {
                 ],
               ),
               child: TextFormField(
+                maxLines: 10,
                 controller: commentController,
                 decoration: InputDecoration(
                   border: InputBorder.none,
