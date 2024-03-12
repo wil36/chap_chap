@@ -71,7 +71,9 @@ class _RecetteSuite2WidgetState extends State<RecetteSuite2Widget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.transparent,
       body: Container(
+        height: MediaQuery.of(context).size.height * 0.9,
         decoration: const BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.all(
@@ -431,7 +433,7 @@ class _RecetteSuite2WidgetState extends State<RecetteSuite2Widget> {
                             ),
                           ),
                           Text(
-                            '$likesCounter personnes ont enregistré cette recette ',
+                            '$likesCounter personnes ont liké cette recette ',
                             style: TextStyle(
                               color: Colors.black,
                               fontFamily: 'IBM',
@@ -744,17 +746,18 @@ class _RecetteSuite2WidgetState extends State<RecetteSuite2Widget> {
                                                     .size
                                                     .width *
                                                 0.6,
-                                            child: Center(
-                                              child: Text(
-                                                textAlign: TextAlign.center,
-                                                comment['comment'].toString(),
-                                                style: MizzUpTheme.bodyText1
-                                                    .override(
-                                                  color: Colors.black,
-                                                  fontFamily: 'IBM',
-                                                  fontSize: 12,
-                                                  useGoogleFonts: false,
-                                                ),
+                                            margin: const EdgeInsets.only(
+                                              left: 30,
+                                            ),
+                                            child: Text(
+                                              textAlign: TextAlign.left,
+                                              comment['comment'].toString(),
+                                              style: MizzUpTheme.bodyText1
+                                                  .override(
+                                                color: Colors.black,
+                                                fontFamily: 'IBM',
+                                                fontSize: 12,
+                                                useGoogleFonts: false,
                                               ),
                                             ),
                                           ),

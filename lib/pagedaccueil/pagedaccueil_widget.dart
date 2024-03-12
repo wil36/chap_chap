@@ -1,6 +1,5 @@
 // ignore_for_file: avoid_print, unnecessary_statements
 import 'package:chap_chap/articles/page_de_article_widget.dart';
-import 'package:chap_chap/auth/firebase_user_provider.dart';
 import 'package:chap_chap/components/pas_de_prog_en_cours_widget.dart';
 import 'package:chap_chap/MizzUp_Code/MizzUp_Calendar.dart';
 import 'package:chap_chap/decouvrir_programme/fiche_programme_widget.dart';

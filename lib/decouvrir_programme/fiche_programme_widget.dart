@@ -423,6 +423,9 @@ class _FicheProgrammeWidgetState extends State<FicheProgrammeWidget> {
                                                       mainAxisAlignment:
                                                           MainAxisAlignment
                                                               .spaceBetween,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
                                                       children: [
                                                         Row(
                                                           mainAxisAlignment:
@@ -505,25 +508,24 @@ class _FicheProgrammeWidgetState extends State<FicheProgrammeWidget> {
                                                                   .size
                                                                   .width *
                                                               0.6,
-                                                          child: Center(
-                                                            child: Text(
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                              reviews[index]
-                                                                      ['review']
-                                                                  .toString(),
-                                                              style: MizzUpTheme
-                                                                  .bodyText1
-                                                                  .override(
-                                                                color: Colors
-                                                                    .black,
-                                                                fontFamily:
-                                                                    'IBM',
-                                                                fontSize: 12,
-                                                                useGoogleFonts:
-                                                                    false,
-                                                              ),
+                                                          margin:
+                                                              EdgeInsets.only(
+                                                                  left: 40),
+                                                          child: Text(
+                                                            textAlign:
+                                                                TextAlign.left,
+                                                            reviews[index]
+                                                                    ['review']
+                                                                .toString(),
+                                                            style: MizzUpTheme
+                                                                .bodyText1
+                                                                .override(
+                                                              color:
+                                                                  Colors.black,
+                                                              fontFamily: 'IBM',
+                                                              fontSize: 12,
+                                                              useGoogleFonts:
+                                                                  false,
                                                             ),
                                                           ),
                                                         ),
@@ -896,23 +898,22 @@ class _FicheProgrammeWidgetState extends State<FicheProgrammeWidget> {
                                                                 .size
                                                                 .width *
                                                             0.6,
-                                                        child: Center(
-                                                          child: Text(
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            reviews[index]
-                                                                    ['review']
-                                                                .toString(),
-                                                            style: MizzUpTheme
-                                                                .bodyText1
-                                                                .override(
-                                                              color:
-                                                                  Colors.black,
-                                                              fontFamily: 'IBM',
-                                                              fontSize: 12,
-                                                              useGoogleFonts:
-                                                                  false,
-                                                            ),
+                                                        margin: EdgeInsets.only(
+                                                            left: 30),
+                                                        child: Text(
+                                                          textAlign:
+                                                              TextAlign.left,
+                                                          reviews[index]
+                                                                  ['review']
+                                                              .toString(),
+                                                          style: MizzUpTheme
+                                                              .bodyText1
+                                                              .override(
+                                                            color: Colors.black,
+                                                            fontFamily: 'IBM',
+                                                            fontSize: 12,
+                                                            useGoogleFonts:
+                                                                false,
                                                           ),
                                                         ),
                                                       ),
