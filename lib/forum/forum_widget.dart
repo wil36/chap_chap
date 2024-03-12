@@ -332,36 +332,52 @@ class _ForumWidgetState extends State<ForumWidget> {
           ),
         );
       },
-      child: SizedBox(
+      child: Container(
         width: MediaQuery.of(context).size.width / 2.2,
         height: MediaQuery.of(context).size.width / 2.2,
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.all(
+            Radius.circular(12),
+          ),
+        ),
         child: Card(
           elevation: 2,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15.0),
+          ),
           child: SingleChildScrollView(
             physics: NeverScrollableScrollPhysics(),
             child: Column(
               children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.all(8),
-                  child: Image.network(
-                    item.photo,
-                    width: MediaQuery.of(context).size.width / 3.3,
-                    height: MediaQuery.of(context).size.width / 3.3,
+                Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(12),
+                    ),
+                  ),
+                  padding: EdgeInsets.only(bottom: 10),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12.0),
+                    child: Image.network(
+                      item.photo,
+                      width: double.infinity,
+                      height: MediaQuery.of(context).size.width / 3.3,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
                 Text(
                   item.titre,
                   overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
+                  maxLines: 2,
                   style: TextStyle(
                     fontFamily: 'IBM',
                     color: MizzUpTheme.primaryColor,
                     fontWeight: FontWeight.bold,
                     fontSize: 14,
                   ),
-                ),
-                SizedBox(
-                  height: 10,
                 ),
               ],
             ),

@@ -665,10 +665,7 @@ class _RecetteSuiteWidgetState extends State<RecetteSuiteWidget> {
             return Text('Erreur: ${snapshot.error}');
           }
           // Chargement des données
-          return Container(
-              width: 50,
-              height: 50,
-              child: Center(child: CircularProgressIndicator()));
+          return Container();
         },
       ),
     );

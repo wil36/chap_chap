@@ -27,15 +27,15 @@ class _DisplayAllCommentsState extends State<DisplayAllComments> {
   TextEditingController commentController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Container(
-        height: MediaQuery.of(context).size.height * 0.9,
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.all(
-            Radius.circular(20),
-          ),
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.9,
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.all(
+          Radius.circular(20),
         ),
+      ),
+      child: SingleChildScrollView(
         child: Column(
           children: [
             Row(
@@ -420,6 +420,7 @@ class _DisplayAllCommentsState extends State<DisplayAllComments> {
                                                                                           builder: (BuildContext context, BoxConstraints constraints) {
                                                                                             return Column(
                                                                                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                                              crossAxisAlignment: CrossAxisAlignment.start,
                                                                                               children: [
                                                                                                 Row(
                                                                                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -427,7 +428,7 @@ class _DisplayAllCommentsState extends State<DisplayAllComments> {
                                                                                                     Row(
                                                                                                       children: [
                                                                                                         ClipRRect(
-                                                                                                          borderRadius: BorderRadius.circular(50), // Adjust the radius to your liking
+                                                                                                          borderRadius: BorderRadius.circular(30), // Adjust the radius to your liking
                                                                                                           child: Image.network(
                                                                                                             userPhoto,
                                                                                                             width: 30,
@@ -477,14 +478,22 @@ class _DisplayAllCommentsState extends State<DisplayAllComments> {
                                                                                                         : SizedBox()
                                                                                                   ],
                                                                                                 ),
-                                                                                                Text(
-                                                                                                  reply['comment_reply'],
-                                                                                                  textAlign: TextAlign.left,
-                                                                                                  style: MizzUpTheme.bodyText1.override(
-                                                                                                    color: Colors.black,
-                                                                                                    fontFamily: 'IBM',
-                                                                                                    fontSize: 12,
-                                                                                                    useGoogleFonts: false,
+                                                                                                SizedBox(
+                                                                                                  height: 10,
+                                                                                                ),
+                                                                                                Padding(
+                                                                                                  padding: const EdgeInsets.only(
+                                                                                                    left: 30,
+                                                                                                  ),
+                                                                                                  child: Text(
+                                                                                                    reply['comment_reply'],
+                                                                                                    textAlign: TextAlign.left,
+                                                                                                    style: MizzUpTheme.bodyText1.override(
+                                                                                                      color: Colors.black,
+                                                                                                      fontFamily: 'IBM',
+                                                                                                      fontSize: 12,
+                                                                                                      useGoogleFonts: false,
+                                                                                                    ),
                                                                                                   ),
                                                                                                 ),
                                                                                               ],

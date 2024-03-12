@@ -25,15 +25,15 @@ class _DisplayAllReviewsState extends State<DisplayAllReviews> {
   TextEditingController commentController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Container(
-        height: MediaQuery.of(context).size.height * 0.9,
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.all(
-            Radius.circular(20),
-          ),
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.9,
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.all(
+          Radius.circular(20),
         ),
+      ),
+      child: SingleChildScrollView(
         child: Column(
           children: [
             Row(
@@ -206,20 +206,17 @@ class _DisplayAllReviewsState extends State<DisplayAllReviews> {
                                                           .size
                                                           .width *
                                                       0.6,
-                                                  child: Center(
-                                                    child: Text(
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      review['review']
-                                                          .toString(),
-                                                      style: MizzUpTheme
-                                                          .bodyText1
-                                                          .override(
-                                                        color: Colors.black,
-                                                        fontFamily: 'IBM',
-                                                        fontSize: 12,
-                                                        useGoogleFonts: false,
-                                                      ),
+                                                  margin:
+                                                      EdgeInsets.only(left: 31),
+                                                  child: Text(
+                                                    textAlign: TextAlign.left,
+                                                    review['review'].toString(),
+                                                    style: MizzUpTheme.bodyText1
+                                                        .override(
+                                                      color: Colors.black,
+                                                      fontFamily: 'IBM',
+                                                      fontSize: 12,
+                                                      useGoogleFonts: false,
                                                     ),
                                                   ),
                                                 ),
