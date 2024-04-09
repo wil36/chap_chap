@@ -73,7 +73,7 @@ class _RecetteSuite2WidgetState extends State<RecetteSuite2Widget> {
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Container(
-        height: MediaQuery.of(context).size.height * 0.9,
+        height: MediaQuery.of(context).size.height,
         decoration: const BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.all(

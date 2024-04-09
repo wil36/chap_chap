@@ -242,9 +242,8 @@ class _DetailForumWidgetState extends State<DetailForumWidget> {
                   ),
                 );
               }
-              var user = snapshot.data;
-              String userPhoto = user!.photoUrl!.isNotEmpty
-                  ? user.photoUrl!
+              String userPhoto = forumCommentModel.userProfilePhoto.isNotEmpty
+                  ? forumCommentModel.userProfilePhoto
                   : 'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/chap-chap-1137ns/assets/n3ejaipxw085/user-22.jpg';
               return SizedBox(
                 child: Column(
@@ -392,7 +391,7 @@ class _DetailForumWidgetState extends State<DetailForumWidget> {
                               ),
                               Text(
                                   forumCommentModel.likeCount.toString() +
-                                      " Vote(s)",
+                                      " Like(s)",
                                   style: MizzUpTheme.bodyText3),
                             ],
                           ),
@@ -427,7 +426,7 @@ class _DetailForumWidgetState extends State<DetailForumWidget> {
                               ),
                               Text(
                                   forumCommentModel.commentCount.toString() +
-                                      " Replies",
+                                      " Réponse(s)",
                                   style: MizzUpTheme.bodyText3),
                             ],
                           ),
@@ -496,5 +495,15 @@ class _DetailForumWidgetState extends State<DetailForumWidget> {
 
   Future<DocumentSnapshot<Map<String, dynamic>>> getUserById(String userId) {
     return FirebaseFirestore.instance.collection('users').doc(userId).get();
+  }
+
+  Future<DocumentReference> getUserDocumentReferenceById(String userId) async {
+    final documentReference =
+        FirebaseFirestore.instance.collection('users').doc(userId);
+    final documentSnapshot = await documentReference.get();
+    if (!documentSnapshot.exists) {
+      throw Exception('Utilisateur introuvable');
+    }
+    return documentReference;
   }
 }

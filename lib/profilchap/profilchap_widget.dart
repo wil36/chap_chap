@@ -11,8 +11,8 @@ FirebaseMessaging messaging = FirebaseMessaging.instance;
 
 _subscribeToTopic() async {
   await messaging.subscribeToTopic('ProgrammesNotification');
-   await messaging.subscribeToTopic('RoutinesNotification');
-    await messaging.subscribeToTopic('ArticlesNotification');
+  await messaging.subscribeToTopic('RoutinesNotification');
+  await messaging.subscribeToTopic('ArticlesNotification');
 }
 
 class ProfilchapWidget extends StatefulWidget {

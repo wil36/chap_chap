@@ -1,3 +1,4 @@
+import 'package:chap_chap/MizzUp_Code/MizzUp_icon_button.dart';
 import 'package:chap_chap/components/delete_account.dart';
 import 'package:chap_chap/profil/mes_favoris_widget.dart';
 import 'package:chap_chap/profil/mon_program_widget.dart';
@@ -40,6 +41,24 @@ class _ProfilWidgetState extends State<ProfilWidget> {
         child: SingleChildScrollView(
           child: Stack(
             children: [
+              Padding(
+                padding: EdgeInsets.only(left: 20, top: 20),
+                child: MizzUpIconButton(
+                  borderColor: Colors.transparent,
+                  borderRadius: 30,
+                  borderWidth: 1,
+                  buttonSize: 40,
+                  fillColor: MizzUpTheme.secondaryColor,
+                  icon: const Icon(
+                    Icons.arrow_back,
+                    color: MizzUpTheme.tertiaryColor,
+                    size: 20,
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ),
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(
                     0, MediaQuery.of(context).size.height * 0.15, 0, 0),

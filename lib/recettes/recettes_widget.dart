@@ -101,7 +101,7 @@ class _RecettesWidgetState extends State<RecettesWidget> {
                                 alignment: const AlignmentDirectional(-1, 0),
                                 child: Padding(
                                   padding: const EdgeInsetsDirectional.fromSTEB(
-                                      40, 5, 0, 10),
+                                      20, 5, 20, 10),
                                   child: GestureDetector(
                                     onTap: () async {
                                       // Récupère la référence de la collection "users"
@@ -117,7 +117,7 @@ class _RecettesWidgetState extends State<RecettesWidget> {
                                       print(likesCollection);
                                     },
                                     child: Text(
-                                      'Bonjour $currentUserDisplayName!',
+                                      'Bonjour $currentUserDisplayName',
                                       textAlign: TextAlign.start,
                                       style: MizzUpTheme.title1.override(
                                         fontFamily: 'IBM',
@@ -132,9 +132,9 @@ class _RecettesWidgetState extends State<RecettesWidget> {
                                 alignment: const AlignmentDirectional(-1, 0),
                                 child: Padding(
                                   padding: const EdgeInsetsDirectional.fromSTEB(
-                                      40, 0, 0, 10),
+                                      20, 0, 20, 10),
                                   child: Text(
-                                    'Bienvenue dans ton appli Chap Chap',
+                                    'Bienvenue dans ton appli Chap Chap, l\'application pour prendre soin de tes cheveux sans te prendre la tête',
                                     style: MizzUpTheme.bodyText1.override(
                                       fontFamily: 'IBM',
                                       color: Colors.white,

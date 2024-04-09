@@ -106,7 +106,7 @@ class _DecouvrirProgrammeWidgetState extends State<DecouvrirProgrammeWidget> {
                     alignment: const AlignmentDirectional(-1, 0),
                     child: Padding(
                       padding:
-                          const EdgeInsetsDirectional.fromSTEB(40, 5, 0, 10),
+                          const EdgeInsetsDirectional.fromSTEB(20, 5, 20, 10),
                       child: GestureDetector(
                         onTap: () async {
                           // Récupère la référence de la collection "users"
@@ -123,7 +123,7 @@ class _DecouvrirProgrammeWidgetState extends State<DecouvrirProgrammeWidget> {
 //                             usersCollection, likesCollection);
                         },
                         child: Text(
-                          'Bonjour $currentUserDisplayName!',
+                          'Bonjour $currentUserDisplayName',
                           textAlign: TextAlign.start,
                           style: MizzUpTheme.title1.override(
                             fontFamily: 'IBM',
@@ -138,9 +138,9 @@ class _DecouvrirProgrammeWidgetState extends State<DecouvrirProgrammeWidget> {
                     alignment: const AlignmentDirectional(-1, 0),
                     child: Padding(
                       padding:
-                          const EdgeInsetsDirectional.fromSTEB(40, 0, 0, 10),
+                          const EdgeInsetsDirectional.fromSTEB(20, 0, 20, 10),
                       child: Text(
-                        'Bienvenue dans ton appli Chap Chap',
+                        'Bienvenue dans ton appli Chap Chap, l\'application pour prendre soin de tes cheveux sans te prendre la tête',
                         style: MizzUpTheme.bodyText1.override(
                           fontFamily: 'IBM',
                           color: Colors.white,
@@ -248,6 +248,9 @@ class _DecouvrirProgrammeWidgetState extends State<DecouvrirProgrammeWidget> {
                                                   final containerProgrammesRecord =
                                                       snapshot.data!;
                                                   return Container(
+                                                    margin: EdgeInsets.only(
+                                                      top: 10,
+                                                    ),
                                                     decoration: BoxDecoration(
                                                         borderRadius:
                                                             BorderRadius
@@ -461,7 +464,7 @@ class _DecouvrirProgrammeWidgetState extends State<DecouvrirProgrammeWidget> {
                                               snapshot.data!;
                                           return Wrap(
                                             spacing: 0,
-                                            runSpacing: 0,
+                                            runSpacing: 25,
                                             alignment:
                                                 WrapAlignment.spaceBetween,
                                             crossAxisAlignment:
@@ -737,19 +740,19 @@ class _DecouvrirProgrammeWidgetState extends State<DecouvrirProgrammeWidget> {
                                       ),
                                     ),
                                     child: Container(
-                                      width: 250,
+                                      width: MediaQuery.of(context).size.width /
+                                          1.4,
                                       decoration: BoxDecoration(
                                         color: MizzUpTheme.secondaryColor,
                                         borderRadius: BorderRadius.only(
-                                          bottomLeft: Radius.circular(0),
-                                          bottomRight: Radius.circular(0),
+                                          bottomLeft: Radius.circular(20),
+                                          bottomRight: Radius.circular(20),
                                           topLeft: Radius.circular(20),
                                           topRight: Radius.circular(20),
                                         ),
                                       ),
                                       child: Padding(
-                                        padding: const EdgeInsetsDirectional
-                                            .fromSTEB(10, 7, 10, 7),
+                                        padding: const EdgeInsets.all(10),
                                         child: Text(
                                           'Passer à la version Premium pour accéder aux programmes',
                                           textAlign: TextAlign.center,
@@ -766,7 +769,7 @@ class _DecouvrirProgrammeWidgetState extends State<DecouvrirProgrammeWidget> {
                 ],
               ),
               SizedBox(
-                height: MediaQuery.of(context).size.height * 0.05,
+                height: MediaQuery.of(context).size.height * 0.1,
               ),
             ]),
           ),
