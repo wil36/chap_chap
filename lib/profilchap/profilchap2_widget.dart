@@ -14,7 +14,7 @@ class Profilchap2Widget extends StatefulWidget {
 }
 
 class _Profilchap2WidgetState extends State<Profilchap2Widget> {
-  int? defaultChoiceIndex;
+  List<int> defaultChoiceIndex = [];
   final List<String> _choicesList = [
     'Lisses',
     'Ondulés',
@@ -35,7 +35,7 @@ class _Profilchap2WidgetState extends State<Profilchap2Widget> {
           stream: queryCheveuxUserRecord(
             queryBuilder: (cheveuxUserRecord) => cheveuxUserRecord
                 .where('userRef', isEqualTo: currentUserReference),
-            singleRecord: true,
+            singleRecord: false,
           ),
           builder: (context, snapshot) {
             // Customize what your widget looks like when it's loading.
@@ -56,6 +56,10 @@ class _Profilchap2WidgetState extends State<Profilchap2Widget> {
                 columnCheveuxUserRecordList.isNotEmpty
                     ? columnCheveuxUserRecordList.first
                     : null;
+            for (var i = 0; i < columnCheveuxUserRecordList.length; i++) {
+              defaultChoiceIndex
+                  .add(columnCheveuxUserRecordList[i]!.styleCheveux!);
+            }
             return Column(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -193,7 +197,7 @@ class _Profilchap2WidgetState extends State<Profilchap2Widget> {
                             style: MizzUpTheme.bodyText1.override(
                               fontFamily: 'IBM',
                               fontSize: 14,
-                              color: defaultChoiceIndex == index
+                              color: defaultChoiceIndex.contains(index)
                                   ? Colors.white
                                   : Colors.black,
                               fontWeight: FontWeight.w400,
@@ -201,13 +205,16 @@ class _Profilchap2WidgetState extends State<Profilchap2Widget> {
                             ),
                           ),
 
-                          selected: defaultChoiceIndex == index,
+                          selected: defaultChoiceIndex.contains(index),
                           selectedColor: MizzUpTheme.primaryColor,
                           backgroundColor: Colors.white,
                           onSelected: (value) {
                             setState(() {
-                              defaultChoiceIndex =
-                                  value ? index : defaultChoiceIndex;
+                              if (value) {
+                                defaultChoiceIndex.add(index);
+                              } else {
+                                defaultChoiceIndex.remove(index);
+                              }
                             });
                           },
                           // backgroundColor: color,
@@ -225,11 +232,15 @@ class _Profilchap2WidgetState extends State<Profilchap2Widget> {
                   alignment: const AlignmentDirectional(0, -1),
                   child: FFButtonWidget(
                     onPressed: () async {
-                      final cheveuxUserUpdateData = createCheveuxUserRecordData(
-                        styleCheveux: defaultChoiceIndex,
-                      );
-                      await columnCheveuxUserRecord!.reference!
-                          .update(cheveuxUserUpdateData);
+                      for (var i = 0; i < defaultChoiceIndex.length; i++) {
+                        final cheveuxUserUpdateData =
+                            createCheveuxUserRecordData(
+                          styleCheveux: defaultChoiceIndex[i],
+                        );
+                        await columnCheveuxUserRecord!.reference!
+                            .update(cheveuxUserUpdateData);
+                      }
+
                       await Navigator.push(
                         context,
                         MaterialPageRoute(

@@ -21,6 +21,7 @@ import '../MizzUp_Code/MizzUp_toggle_icon.dart';
 import '../MizzUp_Code/MizzUp_icon_button.dart';
 import '../MizzUp_Code/MizzUp_theme.dart';
 import '../MizzUp_Code/MizzUp_util.dart';
+import '../notification/notification_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -119,11 +120,32 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
-                    padding: const EdgeInsetsDirectional.fromSTEB(0, 40, 20, 0),
+                    padding:
+                        const EdgeInsetsDirectional.fromSTEB(20, 40, 20, 0),
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
+                        MizzUpIconButton(
+                          borderColor: MizzUpTheme.secondaryColor,
+                          borderRadius: 20,
+                          buttonSize: 40,
+                          fillColor: MizzUpTheme.secondaryColor,
+                          icon: const FaIcon(
+                            FontAwesomeIcons.bell,
+                            color: MizzUpTheme.primaryColor,
+                            size: 20,
+                          ),
+                          onPressed: () async {
+                            await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const NotificationWidget(),
+                              ),
+                            );
+                          },
+                        ),
                         MizzUpIconButton(
                           borderColor: Colors.transparent,
                           borderRadius: 30,
