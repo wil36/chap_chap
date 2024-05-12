@@ -65,7 +65,7 @@ class _MonProfilChapWidgetState extends State<MonProfilChapWidget> {
               stream: queryCheveuxUserRecord(
                 queryBuilder: (cheveuxUserRecord) => cheveuxUserRecord
                     .where('userRef', isEqualTo: currentUserReference),
-                singleRecord: true,
+                singleRecord: false,
               ),
               builder: (context, snapshot) {
                 // Customize what your widget looks like when it's loading.
@@ -86,6 +86,12 @@ class _MonProfilChapWidgetState extends State<MonProfilChapWidget> {
                     columnCheveuxUserRecordList!.isNotEmpty
                         ? columnCheveuxUserRecordList.first
                         : null;
+
+                String typeCheveux = "";
+                columnCheveuxUserRecordList.forEach((element) {
+                  typeCheveux =
+                      typeCheveux + hairTypes[element!.styleCheveux!] + ", ";
+                });
                 return Column(
                   mainAxisSize: MainAxisSize.max,
                   children: [
@@ -328,6 +334,7 @@ class _MonProfilChapWidgetState extends State<MonProfilChapWidget> {
                                         onTap: () async {
                                           await showModalBottomSheet(
                                             isScrollControlled: true,
+                                            isDismissible: false,
                                             context: context,
                                             builder: (context) {
                                               return Padding(
@@ -337,7 +344,7 @@ class _MonProfilChapWidgetState extends State<MonProfilChapWidget> {
                                                   height: MediaQuery.of(context)
                                                           .size
                                                           .height *
-                                                      0.45,
+                                                      0.65,
                                                   child:
                                                       const StyleCheveuxWidget(),
                                                 ),
@@ -352,8 +359,7 @@ class _MonProfilChapWidgetState extends State<MonProfilChapWidget> {
                                         ),
                                       )
                                     : null,
-                                hintText: hairTypes[
-                                    columnCheveuxUserRecord!.styleCheveux!],
+                                hintText: typeCheveux,
                                 hintStyle: const TextStyle(
                                   color: MizzUpTheme.primaryColor,
                                   fontSize: 16,
@@ -420,7 +426,10 @@ class _MonProfilChapWidgetState extends State<MonProfilChapWidget> {
                                     )
                                   : null,
                               hintText: hairObjectives[
-                                  columnCheveuxUserRecord.routineCapillaire!],
+                                  columnCheveuxUserRecordList.isNotEmpty
+                                      ? columnCheveuxUserRecord!
+                                          .routineCapillaire!
+                                      : 0],
                               hintStyle: const TextStyle(
                                 color: MizzUpTheme.primaryColor,
                                 fontSize: 16,
