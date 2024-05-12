@@ -1,3 +1,4 @@
+import 'package:chap_chap/auth/auth_util.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../backend/backend.dart';
 import '../MizzUp_Code/MizzUp_theme.dart';
@@ -44,7 +45,7 @@ class _Profilchap4WidgetState extends State<Profilchap4Widget> {
                 ),
               );
             }
-            final columnCheveuxUserRecord = snapshot.data!;
+            // final columnCheveuxUserRecord = snapshot.data!;
             return Column(
               mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.end,
@@ -212,11 +213,19 @@ class _Profilchap4WidgetState extends State<Profilchap4Widget> {
                   alignment: const AlignmentDirectional(0, -1),
                   child: FFButtonWidget(
                     onPressed: () async {
-                      final cheveuxUserUpdateData = createCheveuxUserRecordData(
-                        perteCheveux: defaultChoiceIndex,
-                      );
-                      await columnCheveuxUserRecord.reference!
-                          .update(cheveuxUserUpdateData);
+                      final db = FirebaseFirestore.instance;
+                      final cheveuxUserCollection =
+                          db.collection('cheveuxUser');
+                      final QuerySnapshot<Map<String, dynamic>> querySnapshot =
+                          await cheveuxUserCollection
+                              .where('userRef',
+                                  isEqualTo: currentUserDocument!.reference)
+                              .get();
+                      for (final doc in querySnapshot.docs) {
+                        await cheveuxUserCollection.doc(doc.id).update({
+                          "perteCheveux": defaultChoiceIndex,
+                        });
+                      }
                       await Navigator.push(
                         context,
                         MaterialPageRoute(

@@ -48,12 +48,12 @@ class _Profilchap6WidgetState extends State<Profilchap6Widget> {
                 ),
               );
             }
-            List<CheveuxUserRecord?> columnCheveuxUserRecordList =
-                snapshot.data!;
-            final columnCheveuxUserRecord =
-                columnCheveuxUserRecordList.isNotEmpty
-                    ? columnCheveuxUserRecordList.first!
-                    : null;
+            // List<CheveuxUserRecord?> columnCheveuxUserRecordList =
+            //     snapshot.data!;
+            // final columnCheveuxUserRecord =
+            //     columnCheveuxUserRecordList.isNotEmpty
+            //         ? columnCheveuxUserRecordList.first!
+            //         : null;
             return Column(
               mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.end,
@@ -223,12 +223,19 @@ class _Profilchap6WidgetState extends State<Profilchap6Widget> {
                     padding: const EdgeInsetsDirectional.fromSTEB(0, 40, 0, 0),
                     child: FFButtonWidget(
                       onPressed: () async {
-                        final cheveuxUserUpdateData =
-                            createCheveuxUserRecordData(
-                          routineCapillaire: defaultChoiceIndex,
-                        );
-                        await columnCheveuxUserRecord!.reference!
-                            .update(cheveuxUserUpdateData);
+                        final db = FirebaseFirestore.instance;
+                        final cheveuxUserCollection =
+                            db.collection('cheveuxUser');
+                        final QuerySnapshot<Map<String, dynamic>>
+                            querySnapshot = await cheveuxUserCollection
+                                .where('userRef',
+                                    isEqualTo: currentUserDocument!.reference)
+                                .get();
+                        for (final doc in querySnapshot.docs) {
+                          await cheveuxUserCollection.doc(doc.id).update({
+                            "routineCapillaire": defaultChoiceIndex,
+                          });
+                        }
                         await Navigator.push(
                           context,
                           MaterialPageRoute(

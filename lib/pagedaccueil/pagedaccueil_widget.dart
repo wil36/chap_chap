@@ -338,6 +338,14 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
                                             child: NavBarPage(index: 1),
                                           ),
                                         );
+                                        // await Navigator.pushAndRemoveUntil(
+                                        //   context,
+                                        //   MaterialPageRoute(
+                                        //     builder: (context) =>
+                                        //         const ProfilchapWidget(),
+                                        //   ),
+                                        //   (r) => false,
+                                        // );
                                       },
                                       child: Text(
                                         "Voir plus",
@@ -377,7 +385,7 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
                                       width: double.infinity,
                                       height:
                                           MediaQuery.of(context).size.height *
-                                              0.35,
+                                              0.4,
                                       child: Stack(
                                         children: [
                                           ListView.builder(

@@ -57,7 +57,7 @@ class _NotificationWidgetState extends State<NotificationWidget> {
         stream: queryNotificationsRecord(
           queryBuilder: (notificationsRecord) => notificationsRecord
               .where('userRef', isEqualTo: currentUserReference),
-          singleRecord: true,
+          singleRecord: false,
         ),
         builder: (context, snapshot) {
           // Customize what your widget looks like when it's loading.
@@ -107,6 +107,7 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                                 size: 30,
                               ),
                               onPressed: () async {
+                                Navigator.pop(context);
                                 var collection = FirebaseFirestore.instance
                                     .collection('users')
                                     .where('uid', isEqualTo: currentUserUid);
@@ -116,7 +117,6 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                                     'userNotifications': 0,
                                   });
                                 }
-                                Navigator.pop(context);
                               },
                             ),
                             Text(
