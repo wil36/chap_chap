@@ -1,5 +1,8 @@
 // ignore_for_file: avoid_print
 
+import 'dart:async';
+
+import 'package:chap_chap/auth/auth_util.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../MizzUp_Code/MizzUp_util.dart';
 import 'schema/users_record.dart';
@@ -53,6 +56,14 @@ Stream<List<CheveuxUserRecord?>> queryCheveuxUserRecord(
         int limit = -1,
         bool singleRecord = false}) =>
     queryCollection(CheveuxUserRecord.collection, CheveuxUserRecord.serializer,
+        queryBuilder: queryBuilder, limit: limit, singleRecord: singleRecord);
+
+Future<List<CheveuxUserRecord?>> queryCheveuxUserRecords(
+        {Query Function(Query)? queryBuilder,
+        int limit = -1,
+        bool singleRecord = false}) =>
+    queryCollectionList(
+        CheveuxUserRecord.collection, CheveuxUserRecord.serializer,
         queryBuilder: queryBuilder, limit: limit, singleRecord: singleRecord);
 
 Future<List<CheveuxUserRecord?>> queryCheveuxUserRecordOnce(
@@ -190,7 +201,6 @@ Future<List<NotificationsRecord?>> queryNotificationsRecordOnce(
         NotificationsRecord.collection, NotificationsRecord.serializer,
         queryBuilder: queryBuilder, limit: limit, singleRecord: singleRecord);
 
-
 /// Functions to query InstagramRecords (as a Stream and as a Future).
 Stream<List<InstagramRecord?>> queryInstagramRecord(
         {Query Function(Query)? queryBuilder,
@@ -206,7 +216,7 @@ Future<List<InstagramRecord?>> queryInstagramRecordOnce(
     queryCollectionOnce(InstagramRecord.collection, InstagramRecord.serializer,
         queryBuilder: queryBuilder, limit: limit, singleRecord: singleRecord);
 
-        Stream<List<ListIngredientsRecord?>> queryListIngredientsRecord(
+Stream<List<ListIngredientsRecord?>> queryListIngredientsRecord(
         {Query Function(Query)? queryBuilder,
         int limit = -1,
         bool singleRecord = false}) =>
@@ -214,7 +224,7 @@ Future<List<InstagramRecord?>> queryInstagramRecordOnce(
         ListIngredientsRecord.collection, ListIngredientsRecord.serializer,
         queryBuilder: queryBuilder, limit: limit, singleRecord: singleRecord);
 
-        Future<List<ListIngredientsRecord?>> queryListIngredientsRecordOnce(
+Future<List<ListIngredientsRecord?>> queryListIngredientsRecordOnce(
         {Query Function(Query)? queryBuilder,
         int limit = -1,
         bool singleRecord = false}) =>
@@ -233,6 +243,28 @@ Stream<List<T?>> queryCollection<T>(
     query = query.limit(singleRecord ? 1 : limit);
   }
   return query.snapshots().map((s) => s.docs
+      .map(
+        (d) => safeGet(
+          () => serializers.deserializeWith(serializer, serializedData(d)),
+          (e) => print('Error serializing doc ${d.reference.path}:\n$e'),
+        ),
+      )
+      .where((d) => d != null)
+      .toList());
+}
+
+Future<List<T?>> queryCollectionList<T>(
+    CollectionReference collection, Serializer<T> serializer,
+    {Query Function(Query)? queryBuilder,
+    int limit = -1,
+    bool singleRecord = false}) {
+  final builder = queryBuilder ?? (q) => q;
+  var query = builder(collection);
+  query = query.where("userRef", isEqualTo: currentUserReference);
+  if (limit > 0 || singleRecord) {
+    query = query.limit(singleRecord ? 1 : limit);
+  }
+  return query.get().then((s) => s.docs
       .map(
         (d) => safeGet(
           () => serializers.deserializeWith(serializer, serializedData(d)),

@@ -21,6 +21,7 @@ import '../MizzUp_Code/MizzUp_toggle_icon.dart';
 import '../MizzUp_Code/MizzUp_icon_button.dart';
 import '../MizzUp_Code/MizzUp_theme.dart';
 import '../MizzUp_Code/MizzUp_util.dart';
+import '../notification/notification_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -119,11 +120,32 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
-                    padding: const EdgeInsetsDirectional.fromSTEB(0, 40, 20, 0),
+                    padding:
+                        const EdgeInsetsDirectional.fromSTEB(20, 40, 20, 0),
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
+                        MizzUpIconButton(
+                          borderColor: MizzUpTheme.secondaryColor,
+                          borderRadius: 20,
+                          buttonSize: 40,
+                          fillColor: MizzUpTheme.secondaryColor,
+                          icon: const FaIcon(
+                            FontAwesomeIcons.bell,
+                            color: MizzUpTheme.primaryColor,
+                            size: 20,
+                          ),
+                          onPressed: () async {
+                            await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const NotificationWidget(),
+                              ),
+                            );
+                          },
+                        ),
                         MizzUpIconButton(
                           borderColor: Colors.transparent,
                           borderRadius: 30,
@@ -159,7 +181,7 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
                         alignment: const AlignmentDirectional(-1, 0),
                         child: Padding(
                           padding: const EdgeInsetsDirectional.fromSTEB(
-                              40, 5, 0, 10),
+                              20, 5, 20, 10),
                           child: GestureDetector(
                             onTap: () async {
                               // Récupère la référence de la collection "users"
@@ -176,7 +198,7 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
                                   usersCollection, likesCollection);
                             },
                             child: Text(
-                              'Bonjour $currentUserDisplayName!',
+                              'Bonjour $currentUserDisplayName',
                               textAlign: TextAlign.start,
                               style: MizzUpTheme.title1.override(
                                 fontFamily: 'IBM',
@@ -191,9 +213,9 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
                         alignment: const AlignmentDirectional(-1, 0),
                         child: Padding(
                           padding: const EdgeInsetsDirectional.fromSTEB(
-                              40, 0, 0, 10),
+                              20, 0, 20, 10),
                           child: Text(
-                            'Bienvenue dans ton appli Chap Chap',
+                            'Bienvenue dans ton appli Chap Chap, l\'application pour prendre soin de tes cheveux sans te prendre la tête',
                             style: MizzUpTheme.bodyText1.override(
                               fontFamily: 'IBM',
                               color: Colors.white,
@@ -316,6 +338,14 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
                                             child: NavBarPage(index: 1),
                                           ),
                                         );
+                                        // await Navigator.pushAndRemoveUntil(
+                                        //   context,
+                                        //   MaterialPageRoute(
+                                        //     builder: (context) =>
+                                        //         const ProfilchapWidget(),
+                                        //   ),
+                                        //   (r) => false,
+                                        // );
                                       },
                                       child: Text(
                                         "Voir plus",
@@ -355,7 +385,7 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
                                       width: double.infinity,
                                       height:
                                           MediaQuery.of(context).size.height *
-                                              0.35,
+                                              0.4,
                                       child: Stack(
                                         children: [
                                           ListView.builder(

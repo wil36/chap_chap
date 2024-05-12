@@ -34,7 +34,7 @@ abstract class NotificationsRecord
     ..image = '';
 
   static CollectionReference get collection =>
-      FirebaseFirestore.instance.collection('notifications');
+      FirebaseFirestore.instance.collection('Notification');
 
   static Stream<NotificationsRecord?> getDocument(DocumentReference ref) => ref
       .snapshots()

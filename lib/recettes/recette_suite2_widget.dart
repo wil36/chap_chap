@@ -16,6 +16,8 @@ import '../auth/auth_util.dart';
 import '../backend/backend.dart';
 import '../profil/other_profile_page.dart';
 import 'display_all_comments.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 import 'edit_reply.dart';
 
 class RecetteSuite2Widget extends StatefulWidget {
@@ -73,7 +75,7 @@ class _RecetteSuite2WidgetState extends State<RecetteSuite2Widget> {
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Container(
-        height: MediaQuery.of(context).size.height * 0.9,
+        height: MediaQuery.of(context).size.height,
         decoration: const BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.all(
@@ -534,6 +536,13 @@ class _RecetteSuite2WidgetState extends State<RecetteSuite2Widget> {
                 ),
               },
             ),
+          ),
+        ),
+        Align(
+          alignment: const AlignmentDirectional(-1, 0),
+          child: MyClickableCard(
+            imageUrl: 'https://example.com/image.jpg',
+            externalLink: 'https://www.example.com',
           ),
         ),
         StreamBuilder(
@@ -1019,4 +1028,36 @@ Future<void> deleteComment(String commentId) async {
       .collection('comments')
       .doc(commentId)
       .delete();
+}
+
+class MyClickableCard extends StatelessWidget {
+  final String imageUrl;
+  final String externalLink;
+
+  MyClickableCard({required this.imageUrl, required this.externalLink});
+
+  void _launchURL() async {
+    if (await canLaunch(externalLink)) {
+      await launch(externalLink);
+    } else {
+      throw 'Could not launch $externalLink';
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: _launchURL,
+      child: Card(
+        child: Column(
+          children: <Widget>[
+            Image.network(imageUrl),
+            ListTile(
+              title: Text(externalLink),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }

@@ -1,3 +1,4 @@
+import 'package:chap_chap/auth/auth_util.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../backend/backend.dart';
 import '../MizzUp_Code/MizzUp_theme.dart';
@@ -11,7 +12,7 @@ class Profilchap3Widget extends StatefulWidget {
     this.detailUser,
   }) : super(key: key);
 
-  final CheveuxUserRecord? detailUser;
+  final List<CheveuxUserRecord>? detailUser;
 
   @override
   _Profilchap3WidgetState createState() => _Profilchap3WidgetState();
@@ -30,7 +31,8 @@ class _Profilchap3WidgetState extends State<Profilchap3Widget> {
       body: Align(
         alignment: const AlignmentDirectional(-0.05, 0),
         child: StreamBuilder<CheveuxUserRecord?>(
-          stream: CheveuxUserRecord.getDocument(widget.detailUser!.reference!),
+          stream:
+              CheveuxUserRecord.getDocument(currentUserDocument!.reference!),
           builder: (context, snapshot) {
             // Customize what your widget looks like when it's loading.
             if (!snapshot.hasData) {
@@ -213,11 +215,19 @@ class _Profilchap3WidgetState extends State<Profilchap3Widget> {
                   alignment: const AlignmentDirectional(0, -1),
                   child: FFButtonWidget(
                     onPressed: () async {
-                      final cheveuxUserUpdateData = createCheveuxUserRecordData(
-                        cuirCheveulu: defaultChoiceIndex,
-                      );
-                      await columnCheveuxUserRecord.reference!
-                          .update(cheveuxUserUpdateData);
+                      final db = FirebaseFirestore.instance;
+                      final cheveuxUserCollection =
+                          db.collection('cheveuxUser');
+                      final QuerySnapshot<Map<String, dynamic>> querySnapshot =
+                          await cheveuxUserCollection
+                              .where('userRef',
+                                  isEqualTo: currentUserDocument!.reference)
+                              .get();
+                      for (final doc in querySnapshot.docs) {
+                        await cheveuxUserCollection.doc(doc.id).update({
+                          "cuirCheveulu": defaultChoiceIndex,
+                        });
+                      }
                       await Navigator.push(
                         context,
                         MaterialPageRoute(
