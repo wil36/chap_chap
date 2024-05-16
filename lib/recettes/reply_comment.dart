@@ -1,3 +1,4 @@
+import 'package:chap_chap/notification/notifcontroller.dart';
 import 'package:flutter/material.dart';
 // ignore_for_file: avoid_print, deprecated_member_use
 import '../MizzUp_Code/MizzUp_icon_button.dart';
@@ -221,5 +222,39 @@ class _ReplyCommentState extends State<ReplyComment> {
       'user': currentUserUid,
       'comment_id': widget.comment.id,
     });
+    var userRef =
+        FirebaseFirestore.instance.collection('users').doc(widget.user['uid']);
+    await NotifController().addDocToNotificationSpecificUser(
+        'Nouvelle réponse',
+        "Vous avez une nouvelle réponse pour votre commentaire sur la recette",
+        userRef,
+        widget.comment['recipe_id']);
+    await userRef.get().then((value) {
+      if (value.data() != null && value.data()!.isNotEmpty) {
+        String? token = value.data()!['token'];
+
+        if (token!.isNotEmpty) {
+          sendNotification(token);
+        }
+      }
+    });
+  }
+
+  Future<void> sendNotification(String token) async {
+    // final firebaseMessaging = FirebaseMessaging.instance;
+    // final message = {
+    //   'notification': {
+    //     'title': 'Nouvelle réponse',
+    //     'body':
+    //         'Vous avez une nouvelle réponse pour votre commentaire sur la recette ',
+    //   },
+    //   'data': {
+    //     'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+    //     'id': '1',
+    //     'status': 'done'
+    //   },
+    //   'token': user.data()!['token']
+    // };
+    // await firebaseMessaging.sendMessage(message);
   }
 }

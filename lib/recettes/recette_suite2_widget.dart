@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print, deprecated_member_use
 
 import 'package:chap_chap/MizzUp_Code/MizzUp_util.dart';
+import 'package:chap_chap/backend/schema/alternatives.dart';
 import 'package:chap_chap/recettes/leave_comment.dart';
 import 'package:chap_chap/recettes/reply_comment.dart';
 import 'package:flutter_svg/svg.dart';
@@ -53,6 +54,7 @@ class _RecetteSuite2WidgetState extends State<RecetteSuite2Widget> {
   String etape = 'Étape';
   final scaffoldKey = GlobalKey<ScaffoldState>();
   String message = '';
+  List<Alternative> alternatives = [];
 
   int index = 0;
   Future<QuerySnapshot<Map<String, dynamic>>> getUsersWithFavRecipe =
@@ -68,6 +70,24 @@ class _RecetteSuite2WidgetState extends State<RecetteSuite2Widget> {
   void initState() {
     super.initState();
     getMessage();
+    getAlternativesForRecipe(widget.recetteRef.id).then((value) {
+      setState(() {
+        alternatives = value;
+      });
+    });
+  }
+
+  Future<List<Alternative>> getAlternativesForRecipe(String recipeId) async {
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('recettes')
+        .doc(recipeId)
+        .get();
+
+    List<Alternative> alternatives = List<Alternative>.from(
+        (querySnapshot.data()!['alternatives'] as List<dynamic>)
+            .map((e) => Alternative.fromJson(e)));
+
+    return alternatives;
   }
 
   @override
@@ -538,12 +558,34 @@ class _RecetteSuite2WidgetState extends State<RecetteSuite2Widget> {
             ),
           ),
         ),
-        Align(
-          alignment: const AlignmentDirectional(-1, 0),
-          child: MyClickableCard(
-            imageUrl: 'https://example.com/image.jpg',
-            externalLink: 'https://www.example.com',
+        Container(
+            margin: const EdgeInsets.only(left: 10, bottom: 20),
+            child: Text('Alternatives',
+                style: MizzUpTheme.bodyText1.override(
+                    fontFamily: 'IBM',
+                    color: Colors.black,
+                    useGoogleFonts: false,
+                    fontWeight: FontWeight.w800,
+                    fontSize: 15))),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: alternatives.map((alternative) {
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 10, left: 10),
+                child: MyClickableCard(
+                  imageUrl: alternative.image!,
+                  externalLink: alternative.link!,
+                  title: alternative.name!,
+                ),
+              );
+            }).toList(),
           ),
+        ),
+        SizedBox(
+          height: 30,
         ),
         StreamBuilder(
             stream: getAllRecipeComments(widget.recetteRef),
@@ -1033,8 +1075,12 @@ Future<void> deleteComment(String commentId) async {
 class MyClickableCard extends StatelessWidget {
   final String imageUrl;
   final String externalLink;
+  final String title;
 
-  MyClickableCard({required this.imageUrl, required this.externalLink});
+  MyClickableCard(
+      {required this.imageUrl,
+      required this.externalLink,
+      required this.title});
 
   void _launchURL() async {
     if (await canLaunch(externalLink)) {
@@ -1048,15 +1094,46 @@ class MyClickableCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: _launchURL,
-      child: Card(
-        child: Column(
-          children: <Widget>[
-            Image.network(imageUrl),
-            ListTile(
-              title: Text(externalLink),
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Padding(
+            padding: const EdgeInsetsDirectional.fromSTEB(10, 0, 10, 10),
+            child: Container(
+              width: MediaQuery.of(context).size.width / 2.5,
+              height: MediaQuery.of(context).size.height * 0.29,
+              decoration: const BoxDecoration(),
+              child: Padding(
+                padding: const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Image.network(imageUrl,
+                      width: double.infinity,
+                      height: double.infinity,
+                      fit: BoxFit.cover),
+                ),
+              ),
             ),
-          ],
-        ),
+          ),
+          SizedBox(
+            width: MediaQuery.of(context).size.width / 2.5,
+            child: Align(
+              alignment: const AlignmentDirectional(-1, 0),
+              child: Padding(
+                padding: const EdgeInsetsDirectional.fromSTEB(15, 5, 0, 0),
+                child: Text(
+                  title,
+                  style: MizzUpTheme.bodyText1.override(
+                    fontFamily: 'IBM',
+                    fontSize: 17,
+                    fontWeight: FontWeight.normal,
+                    useGoogleFonts: false,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

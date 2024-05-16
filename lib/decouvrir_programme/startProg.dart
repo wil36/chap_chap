@@ -1,9 +1,11 @@
 // ignore_for_file: file_names
 
+import 'package:chap_chap/backend/schema/alternatives.dart';
 import 'package:chap_chap/components/nouveau_programme_widget.dart';
 import 'package:chap_chap/decouvrir_programme/list_ingredients_widget.dart';
 import 'package:chap_chap/recettes/recetteRef.dart';
 import 'package:chap_chap/recettes/recette_suite.dart';
+import 'package:chap_chap/recettes/recette_suite2_widget.dart';
 import 'package:styled_text/styled_text.dart';
 import '../backend/backend.dart';
 import '../MizzUp_Code/MizzUp_icon_button.dart';
@@ -26,6 +28,7 @@ class StartProgWidget extends StatefulWidget {
 
 class _StartProgWidgetState extends State<StartProgWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  List<Alternative> alternatives = [];
   void _openLink(BuildContext context, Map<String?, String?> attrs) async {
     final String? link = attrs['href'];
 
@@ -38,13 +41,35 @@ class _StartProgWidgetState extends State<StartProgWidget> {
         MaterialPageRoute(
           builder: (context) => RecetteSuiteWidget(
             recetteRef: RecetteRef.gommage,
-            recetteVisibleRef: RecetteRef.gommageVisibleName, recetteListImages: RecetteRef.gommageListImages,
+            recetteVisibleRef: RecetteRef.gommageVisibleName,
+            recetteListImages: RecetteRef.gommageListImages,
           ),
         ));
   }
 
+  Future<List<Alternative>> getAlternativesForRecipe(String recipeId) async {
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('programmes')
+        .doc(recipeId)
+        .get();
 
- 
+    List<Alternative> alternatives = List<Alternative>.from(
+        (querySnapshot.data()!['alternatives'] as List<dynamic>)
+            .map((e) => Alternative.fromJson(e)));
+
+    return alternatives;
+  }
+
+  @override
+  void initState() {
+    getAlternativesForRecipe(widget.detailsProgramme!.reference!.id)
+        .then((value) {
+      setState(() {
+        alternatives = value;
+      });
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +119,7 @@ class _StartProgWidgetState extends State<StartProgWidget> {
                 child: SingleChildScrollView(
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
                         mainAxisSize: MainAxisSize.max,
@@ -160,7 +185,8 @@ class _StartProgWidgetState extends State<StartProgWidget> {
                                 topLeft: Radius.circular(20),
                                 topRight: Radius.circular(20),
                               ),
-                              child:  Image.network( valueOrDefault<String?>(
+                              child: Image.network(
+                                valueOrDefault<String?>(
                                   columnProgrammesRecord.imagePrincipale,
                                   'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/chap-chap-1137ns/assets/5e2nvdue9k2r/Capture%20d%E2%80%99e%CC%81cran%202021-12-18%20a%CC%80%2015.53.37.png',
                                 )!,
@@ -257,21 +283,20 @@ class _StartProgWidgetState extends State<StartProgWidget> {
                                   fontFamily: 'IBM',
                                   useGoogleFonts: false,
                                 ),
-                                
                               ),
                               'link': StyledTextActionTag(
-                                  (_, attrs) => _openLink2(context, attrs),
-                                  style: const TextStyle(
-                                      decoration: TextDecoration.underline,
-                                      color: MizzUpTheme.primaryColor,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                'gras': StyledTextTag(
-                                  style: const TextStyle(
-                                      decoration: TextDecoration.underline,
-                                      color: MizzUpTheme.primaryColor,
-                                      fontWeight: FontWeight.bold),
-                                ),
+                                (_, attrs) => _openLink2(context, attrs),
+                                style: const TextStyle(
+                                    decoration: TextDecoration.underline,
+                                    color: MizzUpTheme.primaryColor,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              'gras': StyledTextTag(
+                                style: const TextStyle(
+                                    decoration: TextDecoration.underline,
+                                    color: MizzUpTheme.primaryColor,
+                                    fontWeight: FontWeight.bold),
+                              ),
                             },
                           ),
                         ),
@@ -444,8 +469,8 @@ class _StartProgWidgetState extends State<StartProgWidget> {
                                   await launchURL(
                                       'https://madamelapresidente.fr/e-shop/?gclid=EAIaIQobChMIvIuU0aag9gIVkgwGAB38IwvdEAAYASAAEgJOXvD_BwE');
                                 },
-                                 child: Image.asset(
-                            'assets/images/madamePresidenteLogo.png',
+                                child: Image.asset(
+                                  'assets/images/madamePresidenteLogo.png',
                                   fit: BoxFit.cover,
                                   width: 50,
                                   height: 50,
@@ -496,329 +521,364 @@ class _StartProgWidgetState extends State<StartProgWidget> {
                           ),
                         ),
                       ),
+                      // Padding(
+                      //   padding:
+                      //       const EdgeInsetsDirectional.fromSTEB(35, 0, 0, 50),
+                      //   child: SingleChildScrollView(
+                      //     scrollDirection: Axis.horizontal,
+                      //     child: Row(
+                      //       mainAxisSize: MainAxisSize.max,
+                      //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      //       children: [
+                      //         Padding(
+                      //           padding: const EdgeInsetsDirectional.fromSTEB(
+                      //               0, 0, 20, 0),
+                      //           child: Column(
+                      //             mainAxisSize: MainAxisSize.max,
+                      //             mainAxisAlignment: MainAxisAlignment.center,
+                      //             crossAxisAlignment: CrossAxisAlignment.center,
+                      //             children: [
+                      //               if (columnProgrammesRecord
+                      //                   .photoRecette1!.isNotEmpty)
+                      //                 InkWell(
+                      //                   onTap: () async {
+                      //                     await launchURL(columnProgrammesRecord
+                      //                         .lienPhoto1!);
+                      //                   },
+                      //                   child: Image.network(
+                      //                     columnProgrammesRecord.photoRecette1!,
+                      //                     fit: BoxFit.cover,
+                      //                     width: 100,
+                      //                     height: 100,
+                      //                   ),
+                      //                 ),
+                      //               if (columnProgrammesRecord
+                      //                   .lienRecette1!.isNotEmpty)
+                      //                 Padding(
+                      //                   padding: const EdgeInsetsDirectional
+                      //                       .fromSTEB(0, 10, 0, 20),
+                      //                   child: StyledText(
+                      //                     newLineAsBreaks: true,
+                      //                     text: columnProgrammesRecord
+                      //                         .lienRecette1!,
+                      //                     style: MizzUpTheme.bodyText1.override(
+                      //                       fontSize: 14,
+                      //                       fontWeight: FontWeight.w400,
+                      //                       fontFamily: 'IBM',
+                      //                       useGoogleFonts: false,
+                      //                     ),
+                      //                     tags: {
+                      //                       's': StyledTextTag(
+                      //                         style: MizzUpTheme.bodyText1
+                      //                             .override(
+                      //                           fontSize: 14,
+                      //                           fontWeight: FontWeight.w400,
+                      //                           fontFamily: 'IBM',
+                      //                           useGoogleFonts: false,
+                      //                         ),
+                      //                       ),
+                      //                       'link': StyledTextActionTag(
+                      //                         (_, attrs) =>
+                      //                             _openLink(context, attrs),
+                      //                         style: const TextStyle(
+                      //                             decoration:
+                      //                                 TextDecoration.underline,
+                      //                             color:
+                      //                                 MizzUpTheme.primaryColor,
+                      //                             fontWeight: FontWeight.bold),
+                      //                       ),
+                      //                     },
+                      //                   ),
+                      //                 ),
+                      //             ],
+                      //           ),
+                      //         ),
+                      //         Padding(
+                      //           padding: const EdgeInsetsDirectional.fromSTEB(
+                      //               0, 0, 20, 0),
+                      //           child: Column(
+                      //             mainAxisSize: MainAxisSize.max,
+                      //             mainAxisAlignment: MainAxisAlignment.center,
+                      //             crossAxisAlignment: CrossAxisAlignment.center,
+                      //             children: [
+                      //               if (columnProgrammesRecord
+                      //                   .photoRecette2!.isNotEmpty)
+                      //                 InkWell(
+                      //                   onTap: () async {
+                      //                     await launchURL(columnProgrammesRecord
+                      //                         .lienPhoto2!);
+                      //                   },
+                      //                   child: Image.network(
+                      //                     columnProgrammesRecord.photoRecette2!,
+                      //                     fit: BoxFit.cover,
+                      //                     width: 100,
+                      //                     height: 100,
+                      //                   ),
+                      //                 ),
+                      //               if (columnProgrammesRecord
+                      //                   .lienRecette2!.isNotEmpty)
+                      //                 Padding(
+                      //                   padding: const EdgeInsetsDirectional
+                      //                       .fromSTEB(0, 10, 0, 20),
+                      //                   child: StyledText(
+                      //                     newLineAsBreaks: true,
+                      //                     text: columnProgrammesRecord
+                      //                         .lienRecette2!,
+                      //                     style: MizzUpTheme.bodyText1.override(
+                      //                       fontSize: 14,
+                      //                       fontWeight: FontWeight.w400,
+                      //                       fontFamily: 'IBM',
+                      //                       useGoogleFonts: false,
+                      //                     ),
+                      //                     tags: {
+                      //                       's': StyledTextTag(
+                      //                         style: MizzUpTheme.bodyText1
+                      //                             .override(
+                      //                           fontSize: 14,
+                      //                           fontWeight: FontWeight.w400,
+                      //                           fontFamily: 'IBM',
+                      //                           useGoogleFonts: false,
+                      //                         ),
+                      //                       ),
+                      //                       'link': StyledTextActionTag(
+                      //                         (_, attrs) =>
+                      //                             _openLink(context, attrs),
+                      //                         style: const TextStyle(
+                      //                             decoration:
+                      //                                 TextDecoration.underline,
+                      //                             color:
+                      //                                 MizzUpTheme.primaryColor,
+                      //                             fontWeight: FontWeight.bold),
+                      //                       ),
+                      //                     },
+                      //                   ),
+                      //                 ),
+                      //             ],
+                      //           ),
+                      //         ),
+                      //         Padding(
+                      //           padding: const EdgeInsetsDirectional.fromSTEB(
+                      //               0, 0, 20, 0),
+                      //           child: Column(
+                      //             mainAxisSize: MainAxisSize.max,
+                      //             mainAxisAlignment: MainAxisAlignment.center,
+                      //             crossAxisAlignment: CrossAxisAlignment.center,
+                      //             children: [
+                      //               if (columnProgrammesRecord
+                      //                   .photoRecette3!.isNotEmpty)
+                      //                 InkWell(
+                      //                   onTap: () async {
+                      //                     await launchURL(columnProgrammesRecord
+                      //                         .lienPhoto3!);
+                      //                   },
+                      //                   child: Image.network(
+                      //                     columnProgrammesRecord.photoRecette3!,
+                      //                     fit: BoxFit.cover,
+                      //                     width: 100,
+                      //                     height: 100,
+                      //                   ),
+                      //                 ),
+                      //               if (columnProgrammesRecord
+                      //                   .lienRecette3!.isNotEmpty)
+                      //                 Padding(
+                      //                   padding: const EdgeInsetsDirectional
+                      //                       .fromSTEB(0, 10, 0, 20),
+                      //                   child: StyledText(
+                      //                     newLineAsBreaks: true,
+                      //                     text: columnProgrammesRecord
+                      //                         .lienRecette3!,
+                      //                     style: MizzUpTheme.bodyText1.override(
+                      //                       fontSize: 14,
+                      //                       fontWeight: FontWeight.w400,
+                      //                       fontFamily: 'IBM',
+                      //                       useGoogleFonts: false,
+                      //                     ),
+                      //                     tags: {
+                      //                       's': StyledTextTag(
+                      //                         style: MizzUpTheme.bodyText1
+                      //                             .override(
+                      //                           fontSize: 14,
+                      //                           fontWeight: FontWeight.w400,
+                      //                           fontFamily: 'IBM',
+                      //                           useGoogleFonts: false,
+                      //                         ),
+                      //                       ),
+                      //                       'link': StyledTextActionTag(
+                      //                         (_, attrs) =>
+                      //                             _openLink(context, attrs),
+                      //                         style: const TextStyle(
+                      //                             decoration:
+                      //                                 TextDecoration.underline,
+                      //                             color:
+                      //                                 MizzUpTheme.primaryColor,
+                      //                             fontWeight: FontWeight.bold),
+                      //                       ),
+                      //                     },
+                      //                   ),
+                      //                 ),
+                      //             ],
+                      //           ),
+                      //         ),
+                      //         Padding(
+                      //           padding: const EdgeInsetsDirectional.fromSTEB(
+                      //               0, 0, 20, 0),
+                      //           child: Column(
+                      //             mainAxisSize: MainAxisSize.max,
+                      //             mainAxisAlignment: MainAxisAlignment.center,
+                      //             crossAxisAlignment: CrossAxisAlignment.center,
+                      //             children: [
+                      //               if (columnProgrammesRecord
+                      //                   .photoRecette4!.isNotEmpty)
+                      //                 InkWell(
+                      //                   onTap: () async {
+                      //                     await launchURL(columnProgrammesRecord
+                      //                         .lienPhoto4!);
+                      //                   },
+                      //                   child: Image.network(
+                      //                     columnProgrammesRecord.photoRecette4!,
+                      //                     fit: BoxFit.cover,
+                      //                     width: 100,
+                      //                     height: 100,
+                      //                   ),
+                      //                 ),
+                      //               if (columnProgrammesRecord
+                      //                   .lienRecette4!.isNotEmpty)
+                      //                 Padding(
+                      //                   padding: const EdgeInsetsDirectional
+                      //                       .fromSTEB(0, 10, 0, 20),
+                      //                   child: StyledText(
+                      //                     newLineAsBreaks: true,
+                      //                     text: columnProgrammesRecord
+                      //                         .lienRecette4!,
+                      //                     style: MizzUpTheme.bodyText1.override(
+                      //                       fontSize: 14,
+                      //                       fontWeight: FontWeight.w400,
+                      //                       fontFamily: 'IBM',
+                      //                       useGoogleFonts: false,
+                      //                     ),
+                      //                     tags: {
+                      //                       's': StyledTextTag(
+                      //                         style: MizzUpTheme.bodyText1
+                      //                             .override(
+                      //                           fontSize: 14,
+                      //                           fontWeight: FontWeight.w400,
+                      //                           fontFamily: 'IBM',
+                      //                           useGoogleFonts: false,
+                      //                         ),
+                      //                       ),
+                      //                       'link': StyledTextActionTag(
+                      //                         (_, attrs) =>
+                      //                             _openLink(context, attrs),
+                      //                         style: const TextStyle(
+                      //                             decoration:
+                      //                                 TextDecoration.underline,
+                      //                             color:
+                      //                                 MizzUpTheme.primaryColor,
+                      //                             fontWeight: FontWeight.bold),
+                      //                       ),
+                      //                     },
+                      //                   ),
+                      //                 ),
+                      //             ],
+                      //           ),
+                      //         ),
+                      //         Column(
+                      //           mainAxisSize: MainAxisSize.max,
+                      //           mainAxisAlignment: MainAxisAlignment.center,
+                      //           crossAxisAlignment: CrossAxisAlignment.center,
+                      //           children: [
+                      //             if (columnProgrammesRecord
+                      //                 .photoRecette5!.isNotEmpty)
+                      //               InkWell(
+                      //                 onTap: () async {
+                      //                   await launchURL(
+                      //                       columnProgrammesRecord.lienPhoto5!);
+                      //                 },
+                      //                 child: Image.network(
+                      //                   columnProgrammesRecord.photoRecette5!,
+                      //                   fit: BoxFit.cover,
+                      //                   width: 100,
+                      //                   height: 100,
+                      //                 ),
+                      //               ),
+                      //             if (columnProgrammesRecord
+                      //                 .lienRecette5!.isNotEmpty)
+                      //               Padding(
+                      //                 padding:
+                      //                     const EdgeInsetsDirectional.fromSTEB(
+                      //                         0, 10, 0, 20),
+                      //                 child: StyledText(
+                      //                   newLineAsBreaks: true,
+                      //                   text: columnProgrammesRecord
+                      //                       .lienRecette5!,
+                      //                   style: MizzUpTheme.bodyText1.override(
+                      //                     fontSize: 14,
+                      //                     fontWeight: FontWeight.w400,
+                      //                     fontFamily: 'IBM',
+                      //                     useGoogleFonts: false,
+                      //                   ),
+                      //                   tags: {
+                      //                     's': StyledTextTag(
+                      //                       style:
+                      //                           MizzUpTheme.bodyText1.override(
+                      //                         fontSize: 14,
+                      //                         fontWeight: FontWeight.w400,
+                      //                         fontFamily: 'IBM',
+                      //                         useGoogleFonts: false,
+                      //                       ),
+                      //                     ),
+                      //                     'link': StyledTextActionTag(
+                      //                       (_, attrs) =>
+                      //                           _openLink(context, attrs),
+                      //                       style: const TextStyle(
+                      //                           decoration:
+                      //                               TextDecoration.underline,
+                      //                           color: MizzUpTheme.primaryColor,
+                      //                           fontWeight: FontWeight.bold),
+                      //                     ),
+                      //                   },
+                      //                 ),
+                      //               ),
+                      //           ],
+                      //         ),
+                      //       ],
+                      //     ),
+                      //   ),
+                      // ),
+
+                      Container(
+                          margin: const EdgeInsets.only(
+                              left: 30, bottom: 20, top: 20),
+                          child: Text('Alternatives',
+                              textAlign: TextAlign.start,
+                              style: MizzUpTheme.bodyText1.override(
+                                  fontFamily: 'IBM',
+                                  color: Colors.black,
+                                  useGoogleFonts: false,
+                                  fontWeight: FontWeight.w800,
+                                  fontSize: 18))),
                       Padding(
-                        padding:
-                            const EdgeInsetsDirectional.fromSTEB(35, 0, 0, 50),
+                        padding: const EdgeInsets.only(left: 20),
                         child: SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsetsDirectional.fromSTEB(
-                                    0, 0, 20, 0),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    if (columnProgrammesRecord
-                                        .photoRecette1!.isNotEmpty)
-                                      InkWell(
-                                        onTap: () async {
-                                          await launchURL(columnProgrammesRecord
-                                              .lienPhoto1!);
-                                        },
-                                        child: Image.network(
-                                          columnProgrammesRecord.photoRecette1!,
-                                          fit: BoxFit.cover,
-                                          width: 100,
-                                          height: 100,
-                                        ),
-                                      ),
-                                    if (columnProgrammesRecord
-                                        .lienRecette1!.isNotEmpty)
-                                      Padding(
-                                        padding: const EdgeInsetsDirectional
-                                            .fromSTEB(0, 10, 0, 20),
-                                        child: StyledText(
-                                          newLineAsBreaks: true,
-                                          text: columnProgrammesRecord
-                                              .lienRecette1!,
-                                          style: MizzUpTheme.bodyText1.override(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w400,
-                                            fontFamily: 'IBM',
-                                            useGoogleFonts: false,
-                                          ),
-                                          tags: {
-                                            's': StyledTextTag(
-                                              style: MizzUpTheme.bodyText1
-                                                  .override(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w400,
-                                                fontFamily: 'IBM',
-                                                useGoogleFonts: false,
-                                              ),
-                                            ),
-                                            'link': StyledTextActionTag(
-                                              (_, attrs) =>
-                                                  _openLink(context, attrs),
-                                              style: const TextStyle(
-                                                  decoration:
-                                                      TextDecoration.underline,
-                                                  color:
-                                                      MizzUpTheme.primaryColor,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          },
-                                        ),
-                                      ),
-                                  ],
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: alternatives.map((alternative) {
+                              return Padding(
+                                padding: const EdgeInsets.only(bottom: 10),
+                                child: MyClickableCard(
+                                  imageUrl: alternative.image!,
+                                  externalLink: alternative.link!,
+                                  title: alternative.name!,
                                 ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsetsDirectional.fromSTEB(
-                                    0, 0, 20, 0),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    if (columnProgrammesRecord
-                                        .photoRecette2!.isNotEmpty)
-                                      InkWell(
-                                        onTap: () async {
-                                          await launchURL(columnProgrammesRecord
-                                              .lienPhoto2!);
-                                        },
-                                        child: Image.network(
-                                          columnProgrammesRecord.photoRecette2!,
-                                          fit: BoxFit.cover,
-                                          width: 100,
-                                          height: 100,
-                                        ),
-                                      ),
-                                    if (columnProgrammesRecord
-                                        .lienRecette2!.isNotEmpty)
-                                      Padding(
-                                        padding: const EdgeInsetsDirectional
-                                            .fromSTEB(0, 10, 0, 20),
-                                        child: StyledText(
-                                          newLineAsBreaks: true,
-                                          text: columnProgrammesRecord
-                                              .lienRecette2!,
-                                          style: MizzUpTheme.bodyText1.override(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w400,
-                                            fontFamily: 'IBM',
-                                            useGoogleFonts: false,
-                                          ),
-                                          tags: {
-                                            's': StyledTextTag(
-                                              style: MizzUpTheme.bodyText1
-                                                  .override(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w400,
-                                                fontFamily: 'IBM',
-                                                useGoogleFonts: false,
-                                              ),
-                                            ),
-                                            'link': StyledTextActionTag(
-                                              (_, attrs) =>
-                                                  _openLink(context, attrs),
-                                              style: const TextStyle(
-                                                  decoration:
-                                                      TextDecoration.underline,
-                                                  color:
-                                                      MizzUpTheme.primaryColor,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          },
-                                        ),
-                                      ),
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsetsDirectional.fromSTEB(
-                                    0, 0, 20, 0),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    if (columnProgrammesRecord
-                                        .photoRecette3!.isNotEmpty)
-                                      InkWell(
-                                        onTap: () async {
-                                          await launchURL(columnProgrammesRecord
-                                              .lienPhoto3!);
-                                        },
-                                        child: Image.network(
-                                          columnProgrammesRecord.photoRecette3!,
-                                          fit: BoxFit.cover,
-                                          width: 100,
-                                          height: 100,
-                                        ),
-                                      ),
-                                    if (columnProgrammesRecord
-                                        .lienRecette3!.isNotEmpty)
-                                      Padding(
-                                        padding: const EdgeInsetsDirectional
-                                            .fromSTEB(0, 10, 0, 20),
-                                        child: StyledText(
-                                          newLineAsBreaks: true,
-                                          text: columnProgrammesRecord
-                                              .lienRecette3!,
-                                          style: MizzUpTheme.bodyText1.override(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w400,
-                                            fontFamily: 'IBM',
-                                            useGoogleFonts: false,
-                                          ),
-                                          tags: {
-                                            's': StyledTextTag(
-                                              style: MizzUpTheme.bodyText1
-                                                  .override(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w400,
-                                                fontFamily: 'IBM',
-                                                useGoogleFonts: false,
-                                              ),
-                                            ),
-                                            'link': StyledTextActionTag(
-                                              (_, attrs) =>
-                                                  _openLink(context, attrs),
-                                              style: const TextStyle(
-                                                  decoration:
-                                                      TextDecoration.underline,
-                                                  color:
-                                                      MizzUpTheme.primaryColor,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          },
-                                        ),
-                                      ),
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsetsDirectional.fromSTEB(
-                                    0, 0, 20, 0),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    if (columnProgrammesRecord
-                                        .photoRecette4!.isNotEmpty)
-                                      InkWell(
-                                        onTap: () async {
-                                          await launchURL(columnProgrammesRecord
-                                              .lienPhoto4!);
-                                        },
-                                        child: Image.network(
-                                          columnProgrammesRecord.photoRecette4!,
-                                          fit: BoxFit.cover,
-                                          width: 100,
-                                          height: 100,
-                                        ),
-                                      ),
-                                    if (columnProgrammesRecord
-                                        .lienRecette4!.isNotEmpty)
-                                      Padding(
-                                        padding: const EdgeInsetsDirectional
-                                            .fromSTEB(0, 10, 0, 20),
-                                        child: StyledText(
-                                          newLineAsBreaks: true,
-                                          text: columnProgrammesRecord
-                                              .lienRecette4!,
-                                          style: MizzUpTheme.bodyText1.override(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w400,
-                                            fontFamily: 'IBM',
-                                            useGoogleFonts: false,
-                                          ),
-                                          tags: {
-                                            's': StyledTextTag(
-                                              style: MizzUpTheme.bodyText1
-                                                  .override(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w400,
-                                                fontFamily: 'IBM',
-                                                useGoogleFonts: false,
-                                              ),
-                                            ),
-                                            'link': StyledTextActionTag(
-                                              (_, attrs) =>
-                                                  _openLink(context, attrs),
-                                              style: const TextStyle(
-                                                  decoration:
-                                                      TextDecoration.underline,
-                                                  color:
-                                                      MizzUpTheme.primaryColor,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          },
-                                        ),
-                                      ),
-                                  ],
-                                ),
-                              ),
-                              Column(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  if (columnProgrammesRecord
-                                      .photoRecette5!.isNotEmpty)
-                                    InkWell(
-                                      onTap: () async {
-                                        await launchURL(
-                                            columnProgrammesRecord.lienPhoto5!);
-                                      },
-                                      child: Image.network(
-                                        columnProgrammesRecord.photoRecette5!,
-                                        fit: BoxFit.cover,
-                                        width: 100,
-                                        height: 100,
-                                      ),
-                                    ),
-                                  if (columnProgrammesRecord
-                                      .lienRecette5!.isNotEmpty)
-                                    Padding(
-                                      padding:
-                                          const EdgeInsetsDirectional.fromSTEB(
-                                              0, 10, 0, 20),
-                                      child: StyledText(
-                                        newLineAsBreaks: true,
-                                        text: columnProgrammesRecord
-                                            .lienRecette5!,
-                                        style: MizzUpTheme.bodyText1.override(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w400,
-                                          fontFamily: 'IBM',
-                                          useGoogleFonts: false,
-                                        ),
-                                        tags: {
-                                          's': StyledTextTag(
-                                            style:
-                                                MizzUpTheme.bodyText1.override(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w400,
-                                              fontFamily: 'IBM',
-                                              useGoogleFonts: false,
-                                            ),
-                                          ),
-                                          'link': StyledTextActionTag(
-                                            (_, attrs) =>
-                                                _openLink(context, attrs),
-                                            style: const TextStyle(
-                                                decoration:
-                                                    TextDecoration.underline,
-                                                color: MizzUpTheme.primaryColor,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        },
-                                      ),
-                                    ),
-                                ],
-                              ),
-                            ],
+                              );
+                            }).toList(),
                           ),
                         ),
+                      ),
+                      SizedBox(
+                        height: 30,
                       ),
                     ],
                   ),

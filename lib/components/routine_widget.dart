@@ -73,12 +73,12 @@ class _RoutineWidgetState extends State<RoutineWidget> {
                   ),
                 );
               }
-              List<CheveuxUserRecord?> columnCheveuxUserRecordList =
-                  snapshot.data!;
-              final columnCheveuxUserRecord =
-                  columnCheveuxUserRecordList.isNotEmpty
-                      ? columnCheveuxUserRecordList.first!
-                      : null;
+              // List<CheveuxUserRecord?> columnCheveuxUserRecordList =
+              //     snapshot.data!;
+              // final columnCheveuxUserRecord =
+              //     columnCheveuxUserRecordList.isNotEmpty
+              //         ? columnCheveuxUserRecordList.first!
+              //         : null;
 
               return Column(
                 mainAxisSize: MainAxisSize.max,

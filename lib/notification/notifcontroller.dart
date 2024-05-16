@@ -80,6 +80,39 @@ class NotifController {
     return result;
   }
 
+  Future<bool> addDocToNotificationSpecificUser(
+      String titletext,
+      String messagetext,
+      DocumentReference userRef,
+      DocumentReference recetteRef) async {
+    // Le  token permet de cibler l'appareil ( il n'est réinitialisé que dans de rares cas )
+    // Stocker la timesstamp sous forme de milliSeconds, permet de la comparer directement par le serveur node.js ( Date.now() en js retourne une timestamp en milliseconds )
+
+    bool result = true;
+    String title = titletext;
+    String message = messagetext;
+
+    final dbase = FirebaseFirestore.instance;
+    CollectionReference docRef = dbase.collection("Notification");
+
+    final data = {
+      'create_time': FieldValue.serverTimestamp(),
+      'Titre': title,
+      'description': message,
+      'lu': false,
+      'image': "",
+      'userRef': docRef,
+      'Document__Reference__Field': recetteRef,
+    };
+    try {
+      await docRef.add(data);
+    } catch (e) {
+      result = false;
+    }
+
+    return result;
+  }
+
   /// Fonction à personnaliser pour s'abonner à une série de notifications ( une par semaine )
   /// La raccorder à la logique de l'app d'origine en passant par une date
   Future subscribeToChapChapProgram(DateTime date) async {

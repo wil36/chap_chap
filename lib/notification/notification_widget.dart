@@ -74,11 +74,12 @@ class _NotificationWidgetState extends State<NotificationWidget> {
           }
           List<NotificationsRecord?> notificationNotificationsRecordList =
               snapshot.data!;
+          print(notificationNotificationsRecordList.length);
           // ignore: unused_local_variable
-          final notificationNotificationsRecord =
-              notificationNotificationsRecordList.isNotEmpty
-                  ? notificationNotificationsRecordList.first
-                  : null;
+          int notificationNotificationsRecord = 0;
+          notificationNotificationsRecord = notificationNotificationsRecordList
+              .where((element) => element!.lu == false)
+              .length;
           return Scaffold(
             key: scaffoldKey,
             backgroundColor: Colors.white,
@@ -157,9 +158,9 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                 Padding(
                   padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 40),
                   child: Text(
-                    currentUserDocument?.userNotifications == 0
+                    notificationNotificationsRecordList.length == 0
                         ? "Tu n'as pas de nouvelle notification"
-                        : 'Tu as ${currentUserDocument?.userNotifications} nouvelle(s) notification(s)',
+                        : 'Tu as ${notificationNotificationsRecord} nouvelle(s) notification(s)',
                     style: MizzUpTheme.subtitle2.override(
                       fontFamily: 'IBM',
                       color: Colors.black,
@@ -167,7 +168,7 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                     ),
                   ),
                 ),
-                _notifications.isNotEmpty
+                notificationNotificationsRecordList.isNotEmpty
                     ? Column(
                         children: [
                           Container(
@@ -176,86 +177,98 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                               borderRadius: BorderRadius.circular(10),
                               color: Colors.white,
                             ),
-                            child: Column(children: [
-                              Padding(
-                                padding: EdgeInsets.only(top: 10),
-                                child: Material(
-                                  elevation: 4,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(20)),
-                                  child: Container(
-                                    width: 300,
-                                    decoration: BoxDecoration(
-                                      color: MizzUpTheme.secondaryColor,
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(20)),
-                                    ),
-                                    child: Padding(
-                                      padding:
-                                          EdgeInsets.only(left: 10, right: 10),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          SizedBox(
-                                            width: 200,
-                                            child: Row(
-                                              children: [
-                                                IconButton(
-                                                  onPressed: () {
-                                                    print('ok');
-                                                  },
-                                                  color: MizzUpTheme
-                                                      .secondaryColor,
-                                                  iconSize: 15,
-                                                  icon: Icon(
-                                                      Icons.notifications,
-                                                      color: MizzUpTheme
-                                                          .primaryColor),
-                                                ),
-                                                Expanded(
-                                                  child: Text(
-                                                    'Ma notification est cel ?',
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Text('14h30'),
-                                        ],
+                            child: Column(
+                              children: [
+                                // Padding(
+                                //   padding: EdgeInsets.only(top: 10),
+                                //   child: Material(
+                                //     elevation: 4,
+                                //     borderRadius:
+                                //         BorderRadius.all(Radius.circular(20)),
+                                //     child: Container(
+                                //       width: 300,
+                                //       decoration: BoxDecoration(
+                                //         color: MizzUpTheme.secondaryColor,
+                                //         borderRadius: BorderRadius.all(
+                                //             Radius.circular(20)),
+                                //       ),
+                                //       child: Padding(
+                                //         padding: EdgeInsets.only(
+                                //             left: 10, right: 10),
+                                //         child: Row(
+                                //           mainAxisAlignment:
+                                //               MainAxisAlignment.spaceBetween,
+                                //           children: [
+                                //             SizedBox(
+                                //               width: 200,
+                                //               child: Row(
+                                //                 children: [
+                                //                   IconButton(
+                                //                     onPressed: () {
+                                //                       print('ok');
+                                //                     },
+                                //                     color: MizzUpTheme
+                                //                         .secondaryColor,
+                                //                     iconSize: 15,
+                                //                     icon: Icon(
+                                //                         Icons.notifications,
+                                //                         color: MizzUpTheme
+                                //                             .primaryColor),
+                                //                   ),
+                                //                   Expanded(
+                                //                     child: Text(
+                                //                       'Ma notification est cel ?',
+                                //                     ),
+                                //                   ),
+                                //                 ],
+                                //               ),
+                                //             ),
+                                //             Text('14h30'),
+                                //           ],
+                                //         ),
+                                //       ),
+                                //     ),
+                                //   ),
+                                // ),
+                                ...notificationNotificationsRecordList
+                                    .asMap()
+                                    .entries
+                                    .map<Widget>((entry) {
+                                  int index = entry.key;
+                                  return Container(
+                                    decoration: const BoxDecoration(
+                                      border: Border(
+                                        bottom: BorderSide(
+                                          width: 1,
+                                          color: Colors.grey,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ),
-                              ),
-                            ]
-                                /*
-                        _notifications.map((_notification) {
-                          return Container(
-                            decoration: BoxDecoration(
-                              border: Border(
-                                bottom: BorderSide(
-                                    width: 1, color: Colors.grey.shade200),
-                              ),
+                                    child: ListTile(
+                                      title: Text(
+                                        notificationNotificationsRecordList[
+                                                index]!
+                                            .titre!,
+                                        style: const TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w700,
+                                            color: Colors.black),
+                                      ),
+                                      subtitle: Text(
+                                        notificationNotificationsRecordList[
+                                                index]!
+                                            .description!,
+                                        style: const TextStyle(
+                                          fontSize: 15,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                }).toList(),
+                              ],
                             ),
-                            child: ListTile(
-                              title: Text(
-                                _notification['title'],
-                                style: const TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.w700),
-                              ),
-                              subtitle: Text(
-                                _notification['content'],
-                                style: const TextStyle(
-                                    fontSize: 15,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w400),
-                              ),
-                            ),
-                          );
-                        }).toList(),
-                        */
-                                ),
                           )
                         ],
                       )

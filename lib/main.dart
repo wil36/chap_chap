@@ -1,12 +1,15 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:chap_chap/articles/articles_widget.dart';
+import 'package:chap_chap/backend/backend.dart';
 // import 'package:in_app_purchase_storekit/in_app_purchase_storekit.dart';
 import 'package:chap_chap/decouvrir_programme/decouvrir_programme_widget.dart';
 import 'package:chap_chap/forum/forum_widget.dart';
 import 'package:chap_chap/recettes/recettes_widget.dart';
 import 'package:chap_chap/start/launch.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -39,6 +42,7 @@ Future<void> main() async {
   ));
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
+
   MessagingService.getToken();
   runApp(
     MyApp(),
@@ -85,6 +89,16 @@ class _MyAppState extends State<MyApp> {
       ..listen((user) => initialUser ?? setState(() => initialUser = user));
     Future.delayed(const Duration(seconds: 1),
         () => setState(() => displaySplashImage = false));
+
+    final FirebaseMessaging _messaging = FirebaseMessaging.instance;
+    String userId = FirebaseAuth.instance.currentUser!.uid;
+
+    _messaging.getToken().then((value) {
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .update({'token': value!});
+    });
   }
 
   @override
