@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print, unnecessary_statements
 import 'package:chap_chap/forum/Models/forum_model.dart';
 import 'package:chap_chap/forum/detail_forum_widget.dart';
+import 'package:chap_chap/notification/notification_widget.dart';
 import 'package:chap_chap/profil/profil_widget.dart';
 import '../auth/auth_util.dart';
 import '../backend/backend.dart';
@@ -63,11 +64,30 @@ class _ForumWidgetState extends State<ForumWidget> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Padding(
-              padding: const EdgeInsetsDirectional.fromSTEB(0, 40, 20, 0),
+              padding: const EdgeInsetsDirectional.fromSTEB(20, 40, 20, 0),
               child: Row(
                 mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  MizzUpIconButton(
+                    borderColor: MizzUpTheme.secondaryColor,
+                    borderRadius: 20,
+                    buttonSize: 40,
+                    fillColor: MizzUpTheme.secondaryColor,
+                    icon: const FaIcon(
+                      FontAwesomeIcons.bell,
+                      color: MizzUpTheme.primaryColor,
+                      size: 20,
+                    ),
+                    onPressed: () async {
+                      await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const NotificationWidget(),
+                        ),
+                      );
+                    },
+                  ),
                   MizzUpIconButton(
                     borderColor: Colors.transparent,
                     borderRadius: 30,

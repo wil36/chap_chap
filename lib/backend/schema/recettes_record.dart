@@ -95,6 +95,10 @@ abstract class RecettesRecord
       .get()
       .then((s) => serializers.deserializeWith(serializer, serializedData(s))!);
 
+  static Future<RecettesRecord?> getDocumentOnceNull(DocumentReference ref) =>
+      ref.get().then(
+          (s) => serializers.deserializeWith(serializer, serializedData(s))!);
+
   RecettesRecord._();
   factory RecettesRecord([void Function(RecettesRecordBuilder) updates]) =
       _$RecettesRecord;

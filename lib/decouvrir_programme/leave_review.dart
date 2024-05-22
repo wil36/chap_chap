@@ -18,6 +18,7 @@ class LeaveReview extends StatefulWidget {
 class _LeaveReviewState extends State<LeaveReview> {
   TextEditingController avisController = TextEditingController();
   int _rating = 0;
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -167,7 +168,13 @@ class _LeaveReviewState extends State<LeaveReview> {
           ),
           TextButton(
             onPressed: () async {
+              setState(() {
+                isLoading = true;
+              });
               await leaveReview();
+              setState(() {
+                isLoading = false;
+              });
               Navigator.pop(context);
             },
             child: Container(
@@ -177,8 +184,12 @@ class _LeaveReviewState extends State<LeaveReview> {
                   borderRadius: BorderRadius.circular(10),
                   color: MizzUpTheme.secondaryColor,
                 ),
-                child: const Text('Valider mon commentaire',
-                    style: TextStyle(color: Colors.black, fontSize: 16))),
+                child: isLoading
+                    ? Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : Text('Valider mon commentaire',
+                        style: TextStyle(color: Colors.black, fontSize: 16))),
           ),
         ],
       ),

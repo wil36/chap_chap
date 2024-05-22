@@ -1,6 +1,8 @@
 // ignore_for_file: avoid_print
 
+import 'package:chap_chap/notification/notification_user_model.dart';
 import 'package:chap_chap/notification/setting_page.dart';
+import 'package:chap_chap/recettes/recette_suite2_widget.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import '../auth/auth_util.dart';
 import '../backend/backend.dart';
@@ -50,15 +52,24 @@ class _NotificationWidgetState extends State<NotificationWidget> {
     });
   }
 
+  Stream<List<NotificationUserModel>> stream = FirebaseFirestore.instance
+      .collection('notification_user')
+      .where('userRef', isEqualTo: currentUserReference)
+      .where('lu', isEqualTo: false)
+      .orderBy('create_time', descending: true)
+      .snapshots()
+      .map((querySnapshot) {
+    return querySnapshot.docs.map((doc) {
+      Map<String, dynamic> data = doc.data();
+      return NotificationUserModel.fromJson(data);
+    }).toList();
+  });
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: StreamBuilder<List<NotificationsRecord?>>(
-        stream: queryNotificationsRecord(
-          queryBuilder: (notificationsRecord) => notificationsRecord
-              .where('userRef', isEqualTo: currentUserReference),
-          singleRecord: false,
-        ),
+      body: StreamBuilder<List<NotificationUserModel>>(
+        stream: NotificationUserModel.getAllNotifications(),
         builder: (context, snapshot) {
           // Customize what your widget looks like when it's loading.
           if (!snapshot.hasData) {
@@ -72,7 +83,7 @@ class _NotificationWidgetState extends State<NotificationWidget> {
               ),
             );
           }
-          List<NotificationsRecord?> notificationNotificationsRecordList =
+          List<NotificationUserModel?> notificationNotificationsRecordList =
               snapshot.data!;
           print(notificationNotificationsRecordList.length);
           // ignore: unused_local_variable
@@ -109,15 +120,6 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                               ),
                               onPressed: () async {
                                 Navigator.pop(context);
-                                var collection = FirebaseFirestore.instance
-                                    .collection('users')
-                                    .where('uid', isEqualTo: currentUserUid);
-                                var querySnapshots = await collection.get();
-                                for (var doc in querySnapshots.docs) {
-                                  await doc.reference.update({
-                                    'userNotifications': 0,
-                                  });
-                                }
                               },
                             ),
                             Text(
@@ -235,33 +237,101 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                                     .entries
                                     .map<Widget>((entry) {
                                   int index = entry.key;
-                                  return Container(
-                                    decoration: const BoxDecoration(
-                                      border: Border(
-                                        bottom: BorderSide(
-                                          width: 1,
-                                          color: Colors.grey,
-                                        ),
-                                      ),
-                                    ),
-                                    child: ListTile(
-                                      title: Text(
-                                        notificationNotificationsRecordList[
-                                                index]!
-                                            .titre!,
-                                        style: const TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.w700,
-                                            color: Colors.black),
-                                      ),
-                                      subtitle: Text(
-                                        notificationNotificationsRecordList[
-                                                index]!
-                                            .description!,
-                                        style: const TextStyle(
-                                          fontSize: 15,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w400,
+                                  return InkWell(
+                                    onTap: () async {
+                                      if (notificationNotificationsRecordList[
+                                                  index]!
+                                              .type ==
+                                          "Recettes") {
+                                        RecettesRecord.getDocumentOnceNull(
+                                                notificationNotificationsRecordList[
+                                                        index]!
+                                                    .docNotifRef)
+                                            .then((value) async {
+                                          final containerRecettesRecord = value;
+                                          if (containerRecettesRecord == null) {
+                                            return;
+                                          }
+                                          await Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  RecetteSuite2Widget(
+                                                description:
+                                                    containerRecettesRecord
+                                                        .description!,
+                                                dureePrepa:
+                                                    containerRecettesRecord
+                                                        .dureePrepa!,
+                                                etapes: containerRecettesRecord
+                                                    .etapes!,
+                                                listeIngredients:
+                                                    containerRecettesRecord
+                                                        .listeIngredients!,
+                                                niveauDifficulte:
+                                                    containerRecettesRecord
+                                                        .niveauDifficulte!,
+                                                photoPrincipale:
+                                                    containerRecettesRecord
+                                                        .photoPrincipale!,
+                                                titre: containerRecettesRecord
+                                                    .titre!,
+                                                nbIngredients:
+                                                    containerRecettesRecord
+                                                        .nbIngredients!,
+                                                recetteRef:
+                                                    containerRecettesRecord
+                                                        .reference!,
+                                              ),
+                                            ),
+                                          );
+                                        });
+                                      }
+
+                                      NotificationUserModel.markAsRead(
+                                          notificationNotificationsRecordList[
+                                                  index]!
+                                              .id);
+                                    },
+                                    child: Container(
+                                      margin: EdgeInsets.only(bottom: 10),
+
+                                      // decoration: const BoxDecoration(
+                                      //   border: Border(
+                                      //     top: BorderSide(
+                                      //       width: 1,
+                                      //       color: Colors.grey,
+                                      //     ),
+                                      //     // bottom: BorderSide(
+                                      //     //   width: 1,
+                                      //     //   color: Colors.grey,
+                                      //     // ),
+                                      //   ),
+                                      // ),
+                                      child: Material(
+                                        elevation: 1,
+                                        child: ListTile(
+                                          title: Text(
+                                            notificationNotificationsRecordList[
+                                                    index]!
+                                                .title,
+                                            style: const TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.w700,
+                                                color: Colors.black),
+                                          ),
+                                          subtitle: Text(
+                                            notificationNotificationsRecordList[
+                                                    index]!
+                                                .message,
+                                            style: const TextStyle(
+                                              fontSize: 15,
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.w400,
+                                            ),
+                                          ),
+                                          trailing: Icon(
+                                              Icons.arrow_forward_ios_rounded),
                                         ),
                                       ),
                                     ),

@@ -3,6 +3,7 @@
 import 'dart:async';
 
 import 'package:chap_chap/auth/auth_util.dart';
+import 'package:chap_chap/notification/notification_user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../MizzUp_Code/MizzUp_util.dart';
 import 'schema/users_record.dart';
@@ -190,7 +191,7 @@ Stream<List<NotificationsRecord?>> queryNotificationsRecord(
         int limit = -1,
         bool singleRecord = false}) =>
     queryCollection(
-        NotificationsRecord.collection, NotificationsRecord.serializer,
+        NotificationUserModel.collection, NotificationsRecord.serializer,
         queryBuilder: queryBuilder, limit: limit, singleRecord: singleRecord);
 
 Future<List<NotificationsRecord?>> queryNotificationsRecordOnce(

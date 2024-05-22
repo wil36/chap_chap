@@ -83,6 +83,7 @@ class NotifController {
   Future<bool> addDocToNotificationSpecificUser(
       String titletext,
       String messagetext,
+      String type,
       DocumentReference userRef,
       DocumentReference recetteRef) async {
     // Le  token permet de cibler l'appareil ( il n'est réinitialisé que dans de rares cas )
@@ -93,7 +94,7 @@ class NotifController {
     String message = messagetext;
 
     final dbase = FirebaseFirestore.instance;
-    CollectionReference docRef = dbase.collection("Notification");
+    CollectionReference docRef = dbase.collection("notification_user");
 
     final data = {
       'create_time': FieldValue.serverTimestamp(),
@@ -101,11 +102,13 @@ class NotifController {
       'description': message,
       'lu': false,
       'image': "",
-      'userRef': docRef,
+      'userRef': userRef,
+      'type': type,
       'Document__Reference__Field': recetteRef,
     };
     try {
-      await docRef.add(data);
+      final doc = await docRef.add(data);
+      doc.update({"id": doc.id});
     } catch (e) {
       result = false;
     }

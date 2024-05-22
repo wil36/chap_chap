@@ -1,3 +1,4 @@
+import 'package:chap_chap/notification/notification_widget.dart';
 import 'package:chap_chap/profil/profil_widget.dart';
 
 import '../auth/auth_util.dart';
@@ -66,11 +67,30 @@ class _DecouvrirProgrammeWidgetState extends State<DecouvrirProgrammeWidget> {
           child: SingleChildScrollView(
             child: Column(mainAxisSize: MainAxisSize.max, children: [
               Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(0, 40, 20, 0),
+                padding: const EdgeInsetsDirectional.fromSTEB(20, 40, 20, 0),
                 child: Row(
                   mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    MizzUpIconButton(
+                      borderColor: MizzUpTheme.secondaryColor,
+                      borderRadius: 20,
+                      buttonSize: 40,
+                      fillColor: MizzUpTheme.secondaryColor,
+                      icon: const FaIcon(
+                        FontAwesomeIcons.bell,
+                        color: MizzUpTheme.primaryColor,
+                        size: 20,
+                      ),
+                      onPressed: () async {
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const NotificationWidget(),
+                          ),
+                        );
+                      },
+                    ),
                     MizzUpIconButton(
                       borderColor: Colors.transparent,
                       borderRadius: 30,

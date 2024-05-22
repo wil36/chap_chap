@@ -35,6 +35,8 @@ abstract class NotificationsRecord
 
   static CollectionReference get collection =>
       FirebaseFirestore.instance.collection('Notification');
+  static CollectionReference get collection2 =>
+      FirebaseFirestore.instance.collection('notification_user');
 
   static Stream<NotificationsRecord?> getDocument(DocumentReference ref) => ref
       .snapshots()

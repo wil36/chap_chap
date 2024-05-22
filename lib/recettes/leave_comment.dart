@@ -17,6 +17,8 @@ class LeaveComment extends StatefulWidget {
 
 class _LeaveCommentState extends State<LeaveComment> {
   TextEditingController commentController = TextEditingController();
+  bool isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -61,7 +63,11 @@ class _LeaveCommentState extends State<LeaveComment> {
           SizedBox(
             height: 20,
           ),
-          Container(width: MediaQuery.of(context).size.width * 0.8, child: Text(textAlign: TextAlign.center, 'N\'hésitez pas à laisser ton commentaire pour aider la communauté')),
+          Container(
+              width: MediaQuery.of(context).size.width * 0.8,
+              child: Text(
+                  textAlign: TextAlign.center,
+                  'N\'hésitez pas à laisser ton commentaire pour aider la communauté')),
           SizedBox(
             height: 20,
           ),
@@ -98,16 +104,28 @@ class _LeaveCommentState extends State<LeaveComment> {
           ),
           TextButton(
             onPressed: () async {
+              setState(() {
+                isLoading = true;
+              });
               await leaveComment();
+              setState(() {
+                isLoading = false;
+              });
               Navigator.pop(context);
             },
             child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 25),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 15, horizontal: 25),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: MizzUpTheme.secondaryColor,
                 ),
-                child: const Text('Valider mon commentaire', style: TextStyle(color: Colors.black, fontSize: 16))),
+                child: isLoading
+                    ? Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : Text('Valider mon commentaire',
+                        style: TextStyle(color: Colors.black, fontSize: 16))),
           ),
         ],
       ),

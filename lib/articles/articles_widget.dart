@@ -1,4 +1,5 @@
 // ignore_for_file: library_private_types_in_public_api, unrelated_type_equality_checks
+import 'package:chap_chap/notification/notification_widget.dart';
 import 'package:chap_chap/profil/profil_widget.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:html_unescape/html_unescape.dart';
@@ -50,11 +51,30 @@ class _ArticlesWidgetState extends State<ArticlesWidget> {
         body: SingleChildScrollView(
           child: Column(children: [
             Padding(
-              padding: const EdgeInsetsDirectional.fromSTEB(0, 40, 20, 0),
+              padding: const EdgeInsetsDirectional.fromSTEB(20, 40, 20, 0),
               child: Row(
                 mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  MizzUpIconButton(
+                    borderColor: MizzUpTheme.secondaryColor,
+                    borderRadius: 20,
+                    buttonSize: 40,
+                    fillColor: MizzUpTheme.secondaryColor,
+                    icon: const FaIcon(
+                      FontAwesomeIcons.bell,
+                      color: MizzUpTheme.primaryColor,
+                      size: 20,
+                    ),
+                    onPressed: () async {
+                      await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const NotificationWidget(),
+                        ),
+                      );
+                    },
+                  ),
                   MizzUpIconButton(
                     borderColor: Colors.transparent,
                     borderRadius: 30,
