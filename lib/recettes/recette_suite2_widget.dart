@@ -82,10 +82,12 @@ class _RecetteSuite2WidgetState extends State<RecetteSuite2Widget> {
         .collection('recettes')
         .doc(recipeId)
         .get();
-
-    List<Alternative> alternatives = List<Alternative>.from(
-        (querySnapshot.data()!['alternatives'] as List<dynamic>)
-            .map((e) => Alternative.fromJson(e)));
+    List<Alternative> alternatives = [];
+    if (querySnapshot.data()!['alternatives'] != null) {
+      alternatives = List<Alternative>.from(
+          (querySnapshot.data()!['alternatives'] as List<dynamic>)
+              .map((e) => Alternative.fromJson(e)));
+    }
 
     return alternatives;
   }
@@ -558,15 +560,18 @@ class _RecetteSuite2WidgetState extends State<RecetteSuite2Widget> {
             ),
           ),
         ),
-        Container(
-            margin: const EdgeInsets.only(left: 10, bottom: 20),
-            child: Text('Alternatives',
-                style: MizzUpTheme.bodyText1.override(
-                    fontFamily: 'IBM',
-                    color: Colors.black,
-                    useGoogleFonts: false,
-                    fontWeight: FontWeight.w800,
-                    fontSize: 15))),
+        Visibility(
+          visible: alternatives.length > 0 ? true : false,
+          child: Container(
+              margin: const EdgeInsets.only(left: 10, bottom: 20),
+              child: Text('Alternatives',
+                  style: MizzUpTheme.bodyText1.override(
+                      fontFamily: 'IBM',
+                      color: Colors.black,
+                      useGoogleFonts: false,
+                      fontWeight: FontWeight.w800,
+                      fontSize: 15))),
+        ),
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
@@ -1115,24 +1120,24 @@ class MyClickableCard extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(
-            width: MediaQuery.of(context).size.width / 2.5,
-            child: Align(
-              alignment: const AlignmentDirectional(-1, 0),
-              child: Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(15, 5, 0, 0),
-                child: Text(
-                  title,
-                  style: MizzUpTheme.bodyText1.override(
-                    fontFamily: 'IBM',
-                    fontSize: 17,
-                    fontWeight: FontWeight.normal,
-                    useGoogleFonts: false,
-                  ),
-                ),
-              ),
-            ),
-          ),
+          // SizedBox(
+          //   width: MediaQuery.of(context).size.width / 2.5,
+          //   child: Align(
+          //     alignment: const AlignmentDirectional(-1, 0),
+          //     child: Padding(
+          //       padding: const EdgeInsetsDirectional.fromSTEB(15, 5, 0, 0),
+          //       child: Text(
+          //         title,
+          //         style: MizzUpTheme.bodyText1.override(
+          //           fontFamily: 'IBM',
+          //           fontSize: 17,
+          //           fontWeight: FontWeight.normal,
+          //           useGoogleFonts: false,
+          //         ),
+          //       ),
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );
