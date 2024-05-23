@@ -846,17 +846,20 @@ class _StartProgWidgetState extends State<StartProgWidget> {
                       //   ),
                       // ),
 
-                      Container(
-                          margin: const EdgeInsets.only(
-                              left: 30, bottom: 20, top: 20),
-                          child: Text('Alternatives',
-                              textAlign: TextAlign.start,
-                              style: MizzUpTheme.bodyText1.override(
-                                  fontFamily: 'IBM',
-                                  color: Colors.black,
-                                  useGoogleFonts: false,
-                                  fontWeight: FontWeight.w800,
-                                  fontSize: 18))),
+                      Visibility(
+                        visible: alternatives.length > 0 ? true : false,
+                        child: Container(
+                            margin: const EdgeInsets.only(
+                                left: 30, bottom: 20, top: 20),
+                            child: Text('Alternatives',
+                                textAlign: TextAlign.start,
+                                style: MizzUpTheme.bodyText1.override(
+                                    fontFamily: 'IBM',
+                                    color: Colors.black,
+                                    useGoogleFonts: false,
+                                    fontWeight: FontWeight.w800,
+                                    fontSize: 18))),
+                      ),
                       Padding(
                         padding: const EdgeInsets.only(left: 20),
                         child: SingleChildScrollView(
