@@ -215,7 +215,7 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
                           padding: const EdgeInsetsDirectional.fromSTEB(
                               20, 0, 20, 10),
                           child: Text(
-                            'Bienvenue dans ton appli Chap Chap, l\'application pour prendre soin de tes cheveux sans te prendre la tête',
+                            'Bienvenue sur ton appli Chap chap, l’application pour prendre soin de tes cheveux sans te prendre la tête',
                             style: MizzUpTheme.bodyText1.override(
                               fontFamily: 'IBM',
                               color: Colors.white,
@@ -288,6 +288,8 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
                                 child: Material(
                                   borderRadius: BorderRadius.circular(18.0),
                                   elevation: 2,
+                                  color: Colors.white,
+                                  shadowColor: MizzUpTheme.secondaryColor,
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Column(
@@ -1411,7 +1413,6 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
         rightChevronIcon: const Icon(Icons.chevron_right),
         leftChevronVisible: false,
         rightChevronVisible: false,
-        decoration: const BoxDecoration(),
         titleTextFormatter: (date, locale) =>
             DateFormat.yMMMM(locale).format(date).toCapitalized(),
       ),
@@ -1420,9 +1421,13 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
         dowTextFormatter: (date, locale) =>
             DateFormat.E(locale).format(date).toCapitalized(),
       ),
-      calendarStyle: const CalendarStyle(
+      calendarStyle: CalendarStyle(
         markerSize: 5,
         markerMargin: EdgeInsets.symmetric(vertical: 5),
+        // defaultDecoration: BoxDecoration(
+        //   backgroundBlendMode: BlendMode.color,
+        //   color: Colors.white,
+        // ),
         todayTextStyle: TextStyle(
           color: Colors.white,
           fontSize: 16.0,

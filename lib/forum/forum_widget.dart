@@ -205,6 +205,8 @@ class _ForumWidgetState extends State<ForumWidget> {
                             width: double.infinity,
                             child: Material(
                               borderRadius: BorderRadius.circular(18.0),
+                              color: Colors.white,
+                              shadowColor: MizzUpTheme.secondaryColor,
                               elevation: 2,
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
@@ -220,7 +222,7 @@ class _ForumWidgetState extends State<ForumWidget> {
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                         fontFamily: 'IBM',
-                                        color: MizzUpTheme.primaryColor,
+                                        color: Colors.black,
                                         fontWeight: FontWeight.w500,
                                         fontSize: 18,
                                       ),
@@ -233,7 +235,7 @@ class _ForumWidgetState extends State<ForumWidget> {
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                         fontFamily: 'IBM',
-                                        color: MizzUpTheme.primaryColor,
+                                        color: Colors.black,
                                         fontWeight: FontWeight.normal,
                                         fontSize: 14,
                                       ),
@@ -362,6 +364,7 @@ class _ForumWidgetState extends State<ForumWidget> {
         ),
         child: Card(
           elevation: 2,
+          color: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15.0),
           ),

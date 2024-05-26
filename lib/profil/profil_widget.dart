@@ -159,6 +159,7 @@ class _ProfilWidgetState extends State<ProfilWidget> {
                               children: [
                                 Material(
                                   elevation: 1,
+                                  color: Colors.white,
                                   shadowColor: MizzUpTheme.secondaryColor,
                                   child: Padding(
                                     padding: const EdgeInsets.all(12.0),
@@ -227,6 +228,7 @@ class _ProfilWidgetState extends State<ProfilWidget> {
                                   height: 5,
                                 ),
                                 Material(
+                                  color: Colors.white,
                                   elevation: 1,
                                   shadowColor: MizzUpTheme.secondaryColor,
                                   child: Padding(
@@ -288,6 +290,7 @@ class _ProfilWidgetState extends State<ProfilWidget> {
                                 ),
                                 Material(
                                   elevation: 1,
+                                  color: Colors.white,
                                   shadowColor: MizzUpTheme.secondaryColor,
                                   child: Padding(
                                     padding: const EdgeInsets.all(12.0),
@@ -356,6 +359,7 @@ class _ProfilWidgetState extends State<ProfilWidget> {
                                   height: 5,
                                 ),
                                 Material(
+                                  color: Colors.white,
                                   elevation: 1,
                                   shadowColor: MizzUpTheme.secondaryColor,
                                   child: Padding(
@@ -425,6 +429,7 @@ class _ProfilWidgetState extends State<ProfilWidget> {
                                   height: 5,
                                 ),
                                 Material(
+                                  color: Colors.white,
                                   elevation: 1,
                                   shadowColor: MizzUpTheme.secondaryColor,
                                   child: Padding(
@@ -494,6 +499,7 @@ class _ProfilWidgetState extends State<ProfilWidget> {
                                   height: 5,
                                 ),
                                 Material(
+                                  color: Colors.white,
                                   elevation: 1,
                                   shadowColor: MizzUpTheme.secondaryColor,
                                   child: Padding(
@@ -675,6 +681,7 @@ class _ProfilWidgetState extends State<ProfilWidget> {
                   padding: EdgeInsetsDirectional.fromSTEB(
                       0, MediaQuery.of(context).size.height * 0.08, 0, 0),
                   child: Material(
+                    color: Colors.white,
                     elevation: 2,
                     shape: CircleBorder(),
                     child: Container(
@@ -747,6 +754,7 @@ class _ProfilWidgetState extends State<ProfilWidget> {
                               child: ProfilSettings()));
                     },
                     child: Material(
+                      color: Colors.white,
                       elevation: 1,
                       borderRadius: BorderRadius.circular(100),
                       child: Container(

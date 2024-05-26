@@ -562,6 +562,7 @@ class _RecetteSuite2WidgetState extends State<RecetteSuite2Widget> {
                   'link': StyledTextActionTag(
                     (_, attrs) => _openLink(context, attrs),
                     style: const TextStyle(
+                        decorationColor: MizzUpTheme.primaryColor,
                         decoration: TextDecoration.underline,
                         color: MizzUpTheme.primaryColor,
                         fontWeight: FontWeight.bold),
