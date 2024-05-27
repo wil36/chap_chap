@@ -180,7 +180,7 @@ class _ListIngredientsWidgetState extends State<ListIngredientsWidget> {
                                               child: Padding(
                                                 padding:
                                                     const EdgeInsetsDirectional
-                                                            .fromSTEB(
+                                                        .fromSTEB(
                                                         20, 30, 0, 30),
                                                 child: Text(
                                                   'Les poudres',
@@ -216,7 +216,7 @@ class _ListIngredientsWidgetState extends State<ListIngredientsWidget> {
                                                     return Padding(
                                                       padding:
                                                           const EdgeInsetsDirectional
-                                                                  .fromSTEB(
+                                                              .fromSTEB(
                                                               20, 10, 10, 0),
                                                       child: InkWell(
                                                         onTap: () async {
@@ -250,10 +250,10 @@ class _ListIngredientsWidgetState extends State<ListIngredientsWidget> {
                                                                       BorderRadius
                                                                           .circular(
                                                                               15),
-                                                                  child:
-                                                                       Image.network(
-                                                                        valueOrDefault<
-                                                                            String>(
+                                                                  child: Image
+                                                                      .network(
+                                                                    valueOrDefault<
+                                                                        String>(
                                                                       listPoudresItem
                                                                           .image!,
                                                                       'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/chap-chap-1137ns/assets/subghoup3kka/app_launcher_icon.png',
@@ -269,7 +269,7 @@ class _ListIngredientsWidgetState extends State<ListIngredientsWidget> {
                                                                 Padding(
                                                                   padding:
                                                                       const EdgeInsetsDirectional
-                                                                              .fromSTEB(
+                                                                          .fromSTEB(
                                                                           10,
                                                                           0,
                                                                           0,
@@ -384,7 +384,7 @@ class _ListIngredientsWidgetState extends State<ListIngredientsWidget> {
                                               child: Padding(
                                                 padding:
                                                     const EdgeInsetsDirectional
-                                                            .fromSTEB(
+                                                        .fromSTEB(
                                                         20, 30, 0, 30),
                                                 child: Text(
                                                   'Les huiles',
@@ -419,7 +419,7 @@ class _ListIngredientsWidgetState extends State<ListIngredientsWidget> {
                                                     return Padding(
                                                       padding:
                                                           const EdgeInsetsDirectional
-                                                                  .fromSTEB(
+                                                              .fromSTEB(
                                                               20, 10, 10, 0),
                                                       child: InkWell(
                                                         onTap: () async {
@@ -453,10 +453,10 @@ class _ListIngredientsWidgetState extends State<ListIngredientsWidget> {
                                                                       BorderRadius
                                                                           .circular(
                                                                               15),
-                                                                  child:
-                                                                      Image.network(
-                                                                        valueOrDefault<
-                                                                            String>(
+                                                                  child: Image
+                                                                      .network(
+                                                                    valueOrDefault<
+                                                                        String>(
                                                                       listHuilesBaBItem
                                                                           .image!,
                                                                       'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/chap-chap-1137ns/assets/subghoup3kka/app_launcher_icon.png',
@@ -472,7 +472,7 @@ class _ListIngredientsWidgetState extends State<ListIngredientsWidget> {
                                                                 Padding(
                                                                   padding:
                                                                       const EdgeInsetsDirectional
-                                                                              .fromSTEB(
+                                                                          .fromSTEB(
                                                                           10,
                                                                           0,
                                                                           0,
@@ -619,7 +619,7 @@ class _ListIngredientsWidgetState extends State<ListIngredientsWidget> {
                                                 return Padding(
                                                   padding:
                                                       const EdgeInsetsDirectional
-                                                              .fromSTEB(
+                                                          .fromSTEB(
                                                           20, 10, 10, 0),
                                                   child: InkWell(
                                                     onTap: () async {
@@ -670,7 +670,7 @@ class _ListIngredientsWidgetState extends State<ListIngredientsWidget> {
                                                             Padding(
                                                               padding:
                                                                   const EdgeInsetsDirectional
-                                                                          .fromSTEB(
+                                                                      .fromSTEB(
                                                                       10,
                                                                       0,
                                                                       0,
@@ -742,51 +742,51 @@ class _ListIngredientsWidgetState extends State<ListIngredientsWidget> {
                                 );
                               },
                             ),
-                            Padding(
-                              padding: const EdgeInsetsDirectional.fromSTEB(
-                                  0, 20, 0, 10),
-                              child: Container(
-                                width: double.infinity,
-                                decoration: const BoxDecoration(
-                                  color: MizzUpTheme.tertiaryColor,
-                                ),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Padding(
-                                      padding:
-                                          const EdgeInsetsDirectional.fromSTEB(
-                                              0, 5, 0, 0),
-                                      child: Text(
-                                        'En partenariat avec',
-                                        style: MizzUpTheme.title3.override(
-                                          fontFamily: 'IBM',
-                                          color: Colors.white,
-                                          fontSize: 11,
-                                          fontWeight: FontWeight.bold,
-                                          useGoogleFonts: false,
-                                        ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding:
-                                          const EdgeInsetsDirectional.fromSTEB(
-                                              0, 0, 0, 5),
-                                      child: Container(
-                                        width: 250,
-                                        height: 40,
-                                        decoration: const BoxDecoration(),
-                                        child: Image.network(
-                                          'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/chap-chap-1137ns/assets/sn16r1exdgvr/BARABOUCLE_2_BLANC.png',
-                                          fit: BoxFit.contain,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
+                            // Padding(
+                            //   padding: const EdgeInsetsDirectional.fromSTEB(
+                            //       0, 20, 0, 10),
+                            //   child: Container(
+                            //     width: double.infinity,
+                            //     decoration: const BoxDecoration(
+                            //       color: MizzUpTheme.tertiaryColor,
+                            //     ),
+                            //     child: Column(
+                            //       mainAxisSize: MainAxisSize.max,
+                            //       mainAxisAlignment: MainAxisAlignment.center,
+                            //       children: [
+                            //         Padding(
+                            //           padding:
+                            //               const EdgeInsetsDirectional.fromSTEB(
+                            //                   0, 5, 0, 0),
+                            //           child: Text(
+                            //             'En partenariat avec',
+                            //             style: MizzUpTheme.title3.override(
+                            //               fontFamily: 'IBM',
+                            //               color: Colors.white,
+                            //               fontSize: 11,
+                            //               fontWeight: FontWeight.bold,
+                            //               useGoogleFonts: false,
+                            //             ),
+                            //           ),
+                            //         ),
+                            //         Padding(
+                            //           padding:
+                            //               const EdgeInsetsDirectional.fromSTEB(
+                            //                   0, 0, 0, 5),
+                            //           child: Container(
+                            //             width: 250,
+                            //             height: 40,
+                            //             decoration: const BoxDecoration(),
+                            //             child: Image.network(
+                            //               'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/chap-chap-1137ns/assets/sn16r1exdgvr/BARABOUCLE_2_BLANC.png',
+                            //               fit: BoxFit.contain,
+                            //             ),
+                            //           ),
+                            //         ),
+                            //       ],
+                            //     ),
+                            //   ),
+                            // ),
                             StreamBuilder<List<ListIngredientsRecord?>>(
                               stream: queryListIngredientsRecord(
                                 queryBuilder: (listIngredientsRecord) =>
@@ -833,7 +833,7 @@ class _ListIngredientsWidgetState extends State<ListIngredientsWidget> {
                                                 return Padding(
                                                   padding:
                                                       const EdgeInsetsDirectional
-                                                              .fromSTEB(
+                                                          .fromSTEB(
                                                           20, 10, 10, 0),
                                                   child: InkWell(
                                                     onTap: () async {
@@ -884,7 +884,7 @@ class _ListIngredientsWidgetState extends State<ListIngredientsWidget> {
                                                             Padding(
                                                               padding:
                                                                   const EdgeInsetsDirectional
-                                                                          .fromSTEB(
+                                                                      .fromSTEB(
                                                                       10,
                                                                       0,
                                                                       0,
@@ -964,8 +964,10 @@ class _ListIngredientsWidgetState extends State<ListIngredientsWidget> {
                             StreamBuilder<List<ListIngredientsRecord?>>(
                               stream: queryListIngredientsRecord(
                                 queryBuilder: (listIngredientsRecord) =>
-                                    listIngredientsRecord.where('huilesBaB',
-                                        isEqualTo: true).orderBy('create_time', descending: true),
+                                    listIngredientsRecord
+                                        .where('huilesBaB', isEqualTo: true)
+                                        .orderBy('create_time',
+                                            descending: true),
                               ),
                               builder: (context, snapshot) {
                                 // Customize what your widget looks like when it's loading.
@@ -1008,7 +1010,7 @@ class _ListIngredientsWidgetState extends State<ListIngredientsWidget> {
                                                 return Padding(
                                                   padding:
                                                       const EdgeInsetsDirectional
-                                                              .fromSTEB(
+                                                          .fromSTEB(
                                                           20, 10, 10, 0),
                                                   child: InkWell(
                                                     onTap: () async {
@@ -1059,7 +1061,7 @@ class _ListIngredientsWidgetState extends State<ListIngredientsWidget> {
                                                             Padding(
                                                               padding:
                                                                   const EdgeInsetsDirectional
-                                                                          .fromSTEB(
+                                                                      .fromSTEB(
                                                                       10,
                                                                       0,
                                                                       0,

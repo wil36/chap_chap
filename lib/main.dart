@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'package:chap_chap/articles/articles_widget.dart';
 import 'package:chap_chap/backend/backend.dart';
@@ -12,6 +13,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 // import 'package:in_app_purchase/in_app_purchase.dart';
 import 'MizzUp_Code/MizzUp_util.dart';
@@ -23,6 +25,10 @@ import 'MizzUp_Code/MizzUp_theme.dart';
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'notification/messaging_service.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -42,7 +48,23 @@ Future<void> main() async {
   ));
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
+  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+    alert: true,
+    badge: true,
+    sound: true,
+  );
+
+  await FirebaseMessaging.instance.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
   MessagingService.getToken();
   runApp(
     MyApp(),
@@ -82,6 +104,75 @@ class _MyAppState extends State<MyApp> {
   bool displaySplashImage = true;
   final authUserSub = authenticatedUserStream.listen((user) {});
 
+  Future<void> setupInteractedMessage(BuildContext context) async {
+    initialize(context);
+    RemoteMessage? initialMessage =
+        await FirebaseMessaging.instance.getInitialMessage();
+    if (initialMessage != null) {
+      debugPrint(
+          'Message also contained a notification: ${initialMessage.notification!.body}');
+    }
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      debugPrint('Got a message whilst in the foreground!');
+      debugPrint('Message data: ${message.data}');
+
+      if (message.notification != null) {
+        debugPrint('Message data 1 : ${message.data}');
+        display(message);
+      }
+    });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      debugPrint('On message app');
+      debugPrint('Message data: ${message.data}');
+
+      if (message.notification != null) {
+        display(message);
+      }
+    });
+  }
+
+  Future<void> initialize(BuildContext context) async {
+    AndroidNotificationChannel channel = const AndroidNotificationChannel(
+      'high_importance_channel', // id
+      'High Importance Notifications', // title
+      importance: Importance.high,
+    );
+
+    await FlutterLocalNotificationsPlugin()
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
+        ?.createNotificationChannel(channel);
+  }
+
+  void display(RemoteMessage message) async {
+    print(message.notification!.title);
+    print(message.notification!.body);
+    try {
+      final id = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+      const NotificationDetails notificationDetails = NotificationDetails(
+          android: AndroidNotificationDetails(
+        "01",
+        "chap_chap",
+        importance: Importance.max,
+        icon: '@mipmap/ic_launcher',
+        priority: Priority.high,
+        enableVibration: true,
+      ));
+
+      await FlutterLocalNotificationsPlugin().show(
+        id,
+        message.notification!.title,
+        message.notification!.body,
+        notificationDetails,
+        payload: jsonEncode(message.data),
+      );
+    } on Exception catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -99,6 +190,7 @@ class _MyAppState extends State<MyApp> {
           .doc(userId)
           .update({'token': value!});
     });
+    setupInteractedMessage(context);
   }
 
   @override
