@@ -179,18 +179,18 @@ class _MyAppState extends State<MyApp> {
     Future.delayed(const Duration(seconds: 1),
         () => setState(() => displaySplashImage = false));
 
-if(initialUser != null){
-    final FirebaseMessaging _messaging = FirebaseMessaging.instance;
-    String userId = FirebaseAuth.instance.currentUser!.uid;
+    if (initialUser != null) {
+      final FirebaseMessaging _messaging = FirebaseMessaging.instance;
+      String userId = FirebaseAuth.instance.currentUser!.uid;
 
-    _messaging.getToken().then((value) {
-      FirebaseFirestore.instance
-          .collection('users')
-          .doc(userId)
-          .update({'token': value!});
-    });
-    setupInteractedMessage(context); 
-}
+      _messaging.getToken().then((value) {
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(userId)
+            .update({'token': value!});
+      });
+      setupInteractedMessage(context);
+    }
   }
 
   @override

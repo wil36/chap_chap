@@ -1,4 +1,4 @@
-// ignore_for_file: depend_on_referenced_packages, unused_local_variable
+// ignore_for_file: depend_on_referenced_packages, unused_local_variable, deprecated_member_use
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
