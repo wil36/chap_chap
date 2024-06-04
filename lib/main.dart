@@ -179,6 +179,7 @@ class _MyAppState extends State<MyApp> {
     Future.delayed(const Duration(seconds: 1),
         () => setState(() => displaySplashImage = false));
 
+if(initialUser != null){
     final FirebaseMessaging _messaging = FirebaseMessaging.instance;
     String userId = FirebaseAuth.instance.currentUser!.uid;
 
@@ -188,7 +189,8 @@ class _MyAppState extends State<MyApp> {
           .doc(userId)
           .update({'token': value!});
     });
-    setupInteractedMessage(context);
+    setupInteractedMessage(context); 
+}
   }
 
   @override
