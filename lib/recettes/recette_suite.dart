@@ -1,3 +1,4 @@
+import 'package:chap_chap/MizzUp_Code/MizzUp_util.dart';
 import 'package:chap_chap/auth/auth_util.dart';
 import 'package:chap_chap/backend/backend.dart';
 import 'package:chap_chap/recettes/recette_suite2_widget.dart';
@@ -482,6 +483,27 @@ class _RecetteSuiteWidgetState extends State<RecetteSuiteWidget> {
                               ),
                             ),
                           ),
+                          Visibility(
+                            visible: valueOrDefault(streamFree.isNew!, false),
+                            child: Align(
+                              alignment: const Alignment(-1, 0),
+                              child: Container(
+                                margin: EdgeInsets.only(left: 15, top: 30),
+                                child: Center(
+                                  child: Text("New",
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 12)),
+                                ),
+                                width: 40,
+                                height: 20,
+                                decoration: BoxDecoration(
+                                  color: MizzUpTheme.primaryColor,
+                                  // shape: BoxShape.circle,
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                              ),
+                            ),
+                          ),
                           Material(
                             color: Colors.transparent,
                             elevation: 10,
@@ -722,6 +744,26 @@ class _RecetteSuiteWidgetState extends State<RecetteSuiteWidget> {
                   ),
                   width: MediaQuery.of(context).size.width * 0.44,
                   height: MediaQuery.of(context).size.width * 0.46,
+                ),
+              ),
+              Visibility(
+                visible: valueOrDefault(streamPremium.isNew!, false),
+                child: Align(
+                  alignment: const Alignment(-1, 0),
+                  child: Container(
+                    margin: EdgeInsets.only(left: 15, top: 30),
+                    child: Center(
+                      child: Text("New",
+                          style: TextStyle(color: Colors.white, fontSize: 12)),
+                    ),
+                    width: 40,
+                    height: 20,
+                    decoration: BoxDecoration(
+                      color: MizzUpTheme.primaryColor,
+                      // shape: BoxShape.circle,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
                 ),
               ),
               Material(

@@ -170,7 +170,11 @@ class _DetailForumWidgetState extends State<DetailForumWidget> {
                           builder: (context, snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.waiting) {
-                              return CircularProgressIndicator(); // Affichez un indicateur de chargement pendant le chargement initial
+                              return Center(
+                                child: CircularProgressIndicator(
+                                  color: MizzUpTheme.primaryColor,
+                                ),
+                              ); // Affichez un indicateur de chargement pendant le chargement initial
                             } else {
                               if (snapshot.hasError) {
                                 return Text('Error: ${snapshot.error}');

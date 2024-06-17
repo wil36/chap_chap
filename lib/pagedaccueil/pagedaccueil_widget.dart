@@ -502,6 +502,45 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
                                                             ),
                                                           ),
                                                         ),
+                                                        Visibility(
+                                                          visible: valueOrDefault(
+                                                                  pageViewRecettesRecord
+                                                                      .isNew!,
+                                                                  false) ==
+                                                              false,
+                                                          child: Align(
+                                                            alignment:
+                                                                const Alignment(
+                                                                    -1, 0),
+                                                            child: Container(
+                                                              margin: EdgeInsets
+                                                                  .only(
+                                                                      left: 15,
+                                                                      top: 30),
+                                                              child: Center(
+                                                                child: Text(
+                                                                    "New",
+                                                                    style: TextStyle(
+                                                                        color: Colors
+                                                                            .white,
+                                                                        fontSize:
+                                                                            12)),
+                                                              ),
+                                                              width: 40,
+                                                              height: 20,
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                color: MizzUpTheme
+                                                                    .primaryColor,
+                                                                // shape: BoxShape.circle,
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            20),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
                                                         Align(
                                                           alignment:
                                                               const AlignmentDirectional(

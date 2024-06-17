@@ -1,4 +1,5 @@
 // ignore_for_file: avoid_print, unnecessary_statements
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chap_chap/forum/Models/forum_model.dart';
 import 'package:chap_chap/forum/detail_forum_widget.dart';
 import 'package:chap_chap/notification/notification_widget.dart';
@@ -218,7 +219,7 @@ class _ForumWidgetState extends State<ForumWidget> {
                                       height: 15,
                                     ),
                                     Text(
-                                      "<< Seul on va plus-vite, ensemble, on va plus loin. >>",
+                                      "<< Seul on va plus vite, ensemble on va plus loin ! >>",
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                         fontFamily: 'IBM',
@@ -382,8 +383,8 @@ class _ForumWidgetState extends State<ForumWidget> {
                   padding: EdgeInsets.only(bottom: 10),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(12.0),
-                    child: Image.network(
-                      item.photo,
+                    child: CachedNetworkImage(
+                      imageUrl: item.photo,
                       width: double.infinity,
                       height: MediaQuery.of(context).size.width / 3.3,
                       fit: BoxFit.cover,

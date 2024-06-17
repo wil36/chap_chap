@@ -58,6 +58,8 @@ abstract class RecettesRecord
 
   bool? get hided;
 
+  bool? get isNew;
+
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference? get reference;
 
@@ -82,7 +84,8 @@ abstract class RecettesRecord
     ..description = ''
     ..isUp = false
     ..free = false
-    ..hided = false;
+    ..hided = false
+    ..isNew = false;
 
   static CollectionReference get collection =>
       FirebaseFirestore.instance.collection('recettes');
@@ -133,6 +136,7 @@ Map<String, dynamic> createRecettesRecordData({
   String? description,
   bool? isUp,
   bool? hided,
+  bool? isNew,
 }) =>
     serializers.toFirestore(
         RecettesRecord.serializer,
@@ -158,4 +162,5 @@ Map<String, dynamic> createRecettesRecordData({
           ..description = description
           ..free = free
           ..isUp = isUp
-          ..hided = hided));
+          ..hided = hided
+          ..isNew = isNew));

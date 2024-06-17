@@ -181,6 +181,14 @@ class _$RecettesRecordSerializer
         ..add(
             serializers.serialize(value, specifiedType: const FullType(bool)));
     }
+
+    value = object.isNew;
+    if (value != null) {
+      result
+        ..add('isNew')
+        ..add(
+            serializers.serialize(value, specifiedType: const FullType(bool)));
+    }
     value = object.reference;
     if (value != null) {
       result
@@ -298,6 +306,10 @@ class _$RecettesRecordSerializer
           result.hided = serializers.deserialize(value,
               specifiedType: const FullType(bool)) as bool?;
           break;
+        case 'isNew':
+          result.isNew = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool?;
+          break;
         case 'Document__Reference__Field':
           result.reference = serializers.deserialize(value,
               specifiedType: const FullType(DocumentReference, const [
@@ -359,6 +371,8 @@ class _$RecettesRecord extends RecettesRecord {
   @override
   final bool? hided;
   @override
+  final bool? isNew;
+  @override
   final DocumentReference<Object?>? reference;
 
   factory _$RecettesRecord([void Function(RecettesRecordBuilder)? updates]) =>
@@ -388,6 +402,7 @@ class _$RecettesRecord extends RecettesRecord {
       this.description,
       this.isUp,
       this.hided,
+      this.isNew,
       this.reference})
       : super._();
 
@@ -426,6 +441,7 @@ class _$RecettesRecord extends RecettesRecord {
         description == other.description &&
         isUp == other.isUp &&
         hided == other.hided &&
+        isNew == other.isNew &&
         reference == other.reference;
   }
 
@@ -455,6 +471,7 @@ class _$RecettesRecord extends RecettesRecord {
     _$hash = $jc(_$hash, description.hashCode);
     _$hash = $jc(_$hash, isUp.hashCode);
     _$hash = $jc(_$hash, hided.hashCode);
+    _$hash = $jc(_$hash, isNew.hashCode);
     _$hash = $jc(_$hash, reference.hashCode);
     _$hash = $jf(_$hash);
     return _$hash;
@@ -486,6 +503,7 @@ class _$RecettesRecord extends RecettesRecord {
           ..add('description', description)
           ..add('isUp', isUp)
           ..add('hided', hided)
+          ..add('isNew', isNew)
           ..add('reference', reference))
         .toString();
   }
@@ -595,6 +613,10 @@ class RecettesRecordBuilder
   bool? get hided => _$this._hided;
   set hided(bool? hided) => _$this._hided = hided;
 
+  bool? _isNew;
+  bool? get isNew => _$this._isNew;
+  set isNew(bool? isNew) => _$this._isNew = isNew;
+
   DocumentReference<Object?>? _reference;
   DocumentReference<Object?>? get reference => _$this._reference;
   set reference(DocumentReference<Object?>? reference) =>
@@ -630,6 +652,7 @@ class RecettesRecordBuilder
       _description = $v.description;
       _isUp = $v.isUp;
       _hided = $v.hided;
+      _isNew = $v.isNew;
       _reference = $v.reference;
       _$v = null;
     }
@@ -676,6 +699,7 @@ class RecettesRecordBuilder
             description: description,
             isUp: isUp,
             hided: hided,
+            isNew: isNew,
             reference: reference);
     replace(_$result);
     return _$result;

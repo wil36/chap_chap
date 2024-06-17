@@ -32,7 +32,7 @@ class _ProfilSettingsState extends State<ProfilSettings> {
           physics: NeverScrollableScrollPhysics(),
           child: Column(
             children: [
-              SizedBox(height: MediaQuery.of(context).size.width * 0.06),
+              SizedBox(height: MediaQuery.of(context).size.width * 0.07),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -85,9 +85,9 @@ class _ProfilSettingsState extends State<ProfilSettings> {
                 children: [
                   Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(
-                        0, MediaQuery.of(context).size.height * 0.425, 0, 0),
+                        0, MediaQuery.of(context).size.height * 0.2, 0, 0),
                     child: Container(
-                        height: MediaQuery.of(context).size.height * 0.50,
+                        height: MediaQuery.of(context).size.height * 0.80,
                         width: double.infinity,
                         decoration: const BoxDecoration(
                           color: Colors.white,
@@ -102,7 +102,7 @@ class _ProfilSettingsState extends State<ProfilSettings> {
                           children: [
                             SizedBox(
                                 height:
-                                    MediaQuery.of(context).size.height * 0.13),
+                                    MediaQuery.of(context).size.height * 0.17),
                             Text(
                                 textAlign: TextAlign.center,
                                 currentUserDisplayName,
@@ -174,7 +174,7 @@ class _ProfilSettingsState extends State<ProfilSettings> {
                     alignment: const AlignmentDirectional(0, -1),
                     child: Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(
-                          0, MediaQuery.of(context).size.height * 0.25, 0, 0),
+                          0, MediaQuery.of(context).size.height * 0.05, 0, 0),
                       child: Material(
                         elevation: 2,
                         shape: CircleBorder(),
@@ -233,7 +233,7 @@ class _ProfilSettingsState extends State<ProfilSettings> {
                     ),
                   ),
                   Positioned(
-                    top: MediaQuery.of(context).size.height * 0.45,
+                    top: MediaQuery.of(context).size.height * 0.26,
                     left: MediaQuery.of(context).size.width * 0.5 - 25,
                     child: InkWell(
                       onTap: () async {
