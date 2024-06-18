@@ -106,151 +106,159 @@ admin.initializeApp();
 // });
 
 exports.notifyAllUsersOnNewComment = functions.firestore
-    .document("forum_comments/{commentId}")
-    .onCreate(async (snapshot, context) => {
-      const commentData = snapshot.data();
-      const forumId = commentData.forumId;
+  .document("forum_comments/{commentId}")
+  .onCreate(async (snapshot, context) => {
+    const commentData = snapshot.data();
+    const forumId = commentData.forumId;
 
-      try {
+    try {
       // Récupérer le titre du forum
-        const forumSnapshot = await admin
-            .firestore()
-            .collection("forum")
-            .doc(forumId)
-            .get();
-        const forumData = forumSnapshot.data();
-        const forumTitle = forumData.titre;
+      const forumSnapshot = await admin
+        .firestore()
+        .collection("forum")
+        .doc(forumId)
+        .get();
+      const forumData = forumSnapshot.data();
+      const forumTitle = forumData.titre;
 
-        // Récupérer les tokens des utilisateurs
-        const t = admin.firestore();
-        const tokensSnapshot = await t.collection("users").get();
-        const tokens = [];
+      // Récupérer les tokens des utilisateurs
+      const t = admin.firestore();
+      const tokensSnapshot = await t.collection("users").get();
+      const tokens = [];
 
-        tokensSnapshot.forEach((doc) => {
-          const data = doc.data();
-          if (data.token) {
-            tokens.push(data.token);
-          }
-        });
-
-        // Préparer la notification
-        const payload = {
-          notification: {
-            title: `Nouveau commentaire sur le forum ${forumTitle}`,
-            body: "Un nouveau commentaire a été ajouté.",
-          },
-        };
-
-        if (tokens.length > 0) {
-          await admin.messaging().sendToDevice(tokens, payload);
+      tokensSnapshot.forEach((doc) => {
+        const data = doc.data();
+        if (
+          data.token &&
+          data.recevoirNotifForum &&
+          data.recevoirNotifForum == true
+        ) {
+          tokens.push(data.token);
         }
-      } catch (error) {
-        console.error(
-            "Erreur lors de la récupération du titre du " +
-          "forum ou de l'envoi de la notification:",
-            error,
-        );
+      });
+
+      // Préparer la notification
+      const payload = {
+        notification: {
+          title: `Nouveau commentaire sur le forum ${forumTitle}`,
+          body: "Un nouveau commentaire a été ajouté.",
+        },
+      };
+
+      if (tokens.length > 0) {
+        await admin.messaging().sendToDevice(tokens, payload);
       }
-    });
+    } catch (error) {
+      console.error(
+        "Erreur lors de la récupération du titre du " +
+          "forum ou de l'envoi de la notification:",
+        error
+      );
+    }
+  });
 
 exports.notifyUserOnReply = functions.firestore
-    .document("forum_comments_reply/{replyId}")
-    .onCreate(async (snapshot, context) => {
-      const replyData = snapshot.data();
-      const forumCommentId = replyData.forumCommentId;
+  .document("forum_comments_reply/{replyId}")
+  .onCreate(async (snapshot, context) => {
+    const replyData = snapshot.data();
+    const forumCommentId = replyData.forumCommentId;
 
-      try {
+    try {
       // Récupérer le commentaire d'origine
-        const commentSnapshot = await admin
-            .firestore()
-            .collection("forum_comments")
-            .doc(forumCommentId)
-            .get();
-        const commentData = commentSnapshot.data();
-        const userId = commentData.userId;
-        const forumId = commentData.forumId;
+      const commentSnapshot = await admin
+        .firestore()
+        .collection("forum_comments")
+        .doc(forumCommentId)
+        .get();
+      const commentData = commentSnapshot.data();
+      const userId = commentData.userId;
+      const forumId = commentData.forumId;
 
-        // Récupérer le titre du forum
-        const forumSnapshot = await admin
-            .firestore()
-            .collection("forum")
-            .doc(forumId)
-            .get();
-        const forumData = forumSnapshot.data();
-        const forumTitle = forumData.titre;
+      // Récupérer le titre du forum
+      const forumSnapshot = await admin
+        .firestore()
+        .collection("forum")
+        .doc(forumId)
+        .get();
+      const forumData = forumSnapshot.data();
+      const forumTitle = forumData.titre;
 
-        // Récupérer le token de l'utilisateur
-        const userSnapshot = await admin
-            .firestore()
-            .collection("users")
-            .doc(userId)
-            .get();
-        const userData = userSnapshot.data();
-        const token = userData.token;
+      // Récupérer le token de l'utilisateur
+      const userSnapshot = await admin
+        .firestore()
+        .collection("users")
+        .doc(userId)
+        .get();
+      const userData = userSnapshot.data();
+      const token = userData.token;
 
-        // Préparer la notification
-        const payload = {
-          notification: {
-            title: `Nouvelle réponse à votre commentaire`,
-            body: `Quelqu'un a répondu à votre commentaire sur le forum 
+      // Préparer la notification
+      const payload = {
+        notification: {
+          title: `Nouvelle réponse à votre commentaire`,
+          body: `Quelqu'un a répondu à votre commentaire sur le forum 
           ${forumTitle}.`,
-          },
-        };
+        },
+      };
 
-        if (token) {
-          await admin.messaging().sendToDevice(token, payload);
-        }
-      } catch (error) {
-        console.error(
-            "Erreur lors de la récupération du commentaire, " +
-          "du titre du forum ou de l'envoi de la notification:",
-            error,
-        );
+      if (token && data.recevoirNotifForum && data.recevoirNotifForum == true) {
+        await admin.messaging().sendToDevice(token, payload);
       }
-    });
+    } catch (error) {
+      console.error(
+        "Erreur lors de la récupération du commentaire, " +
+          "du titre du forum ou de l'envoi de la notification:",
+        error
+      );
+    }
+  });
 
 exports.sendNotificationOnNewField = functions.firestore
-    .document("notification_user/{docId}")
-    .onCreate(async (snap, context) => {
-      const newValue = snap.data();
+  .document("notification_user/{docId}")
+  .onCreate(async (snap, context) => {
+    const newValue = snap.data();
 
-      // Assurez-vous que les champs nécessaires existent dans le document
-      if (newValue.userRef && newValue.Titre && newValue.description) {
-        try {
+    // Assurez-vous que les champs nécessaires existent dans le document
+    if (newValue.userRef && newValue.Titre && newValue.description) {
+      try {
         // Obtenez la référence du document utilisateur
-          const userRef = newValue.userRef;
-          const userSnapshot = await userRef.get();
+        const userRef = newValue.userRef;
+        const userSnapshot = await userRef.get();
 
-          if (!userSnapshot.exists) {
-            console.error("User document not found");
-            return null;
-          }
-
-          const userData = userSnapshot.data();
-
-          // Assurez-vous que le champ token existe dans le document utilisateur
-          if (userData.token) {
-            const payload = {
-              notification: {
-                title: newValue.Titre,
-                body: newValue.description,
-              },
-            };
-
-            // Envoyez la notification
-            const response = await admin
-                .messaging()
-                .sendToDevice(userData.token, payload);
-            console.log("Notification sent successfully:", response);
-          } else {
-            console.error("No token found in user document");
-          }
-        } catch (error) {
-          console.error("Error sending notification:", error);
+        if (!userSnapshot.exists) {
+          console.error("User document not found");
+          return null;
         }
-      } else {
-        console.error("Missing required fields in notification_user document");
-      }
 
-      return null;
-    });
+        const userData = userSnapshot.data();
+
+        // Assurez-vous que le champ token existe dans le document utilisateur
+        if (
+          userData.token &&
+          userData.recevoirNotif &&
+          userData.recevoirNotif == true
+        ) {
+          const payload = {
+            notification: {
+              title: newValue.Titre,
+              body: newValue.description,
+            },
+          };
+
+          // Envoyez la notification
+          const response = await admin
+            .messaging()
+            .sendToDevice(userData.token, payload);
+          console.log("Notification sent successfully:", response);
+        } else {
+          console.error("No token found in user document");
+        }
+      } catch (error) {
+        console.error("Error sending notification:", error);
+      }
+    } else {
+      console.error("Missing required fields in notification_user document");
+    }
+
+    return null;
+  });
