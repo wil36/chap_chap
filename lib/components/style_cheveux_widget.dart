@@ -34,9 +34,11 @@ class _StyleCheveuxWidgetState extends State<StyleCheveuxWidget> {
       for (var i = 0; i < columnCheveuxUserRecordList.length; i++) {
         defaultChoiceIndex.add(columnCheveuxUserRecordList[i]!.styleCheveux!);
       }
-      setState(() {
-        isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
     });
     super.initState();
   }

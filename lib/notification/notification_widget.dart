@@ -52,19 +52,6 @@ class _NotificationWidgetState extends State<NotificationWidget> {
     });
   }
 
-  Stream<List<NotificationUserModel>> stream = FirebaseFirestore.instance
-      .collection('notification_user')
-      .where('userRef', isEqualTo: currentUserReference)
-      .where('lu', isEqualTo: false)
-      .orderBy('create_time', descending: true)
-      .snapshots()
-      .map((querySnapshot) {
-    return querySnapshot.docs.map((doc) {
-      Map<String, dynamic> data = doc.data();
-      return NotificationUserModel.fromJson(data);
-    }).toList();
-  });
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -88,9 +75,8 @@ class _NotificationWidgetState extends State<NotificationWidget> {
           print(notificationNotificationsRecordList.length);
           // ignore: unused_local_variable
           int notificationNotificationsRecord = 0;
-          notificationNotificationsRecord = notificationNotificationsRecordList
-              .where((element) => element!.lu == false)
-              .length;
+          notificationNotificationsRecord =
+              notificationNotificationsRecordList.length;
           return Scaffold(
             key: scaffoldKey,
             backgroundColor: Colors.white,
@@ -237,101 +223,172 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                                     .entries
                                     .map<Widget>((entry) {
                                   int index = entry.key;
-                                  return InkWell(
-                                    onTap: () async {
-                                      if (notificationNotificationsRecordList[
-                                                  index]!
-                                              .type ==
-                                          "Recettes") {
-                                        RecettesRecord.getDocumentOnceNull(
+                                  return Padding(
+                                    padding: const EdgeInsets.only(bottom: 10),
+                                    child: Dismissible(
+                                      key: UniqueKey(),
+                                      confirmDismiss: (direction) async {
+                                        if (direction ==
+                                            DismissDirection.endToStart) {
+                                          showDialog<bool>(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return AlertDialog(
+                                                  title: Text('Confirmation'),
+                                                  content: Text(
+                                                      'Voulez-vous supprimer ?'),
+                                                  actions: <Widget>[
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        Navigator.of(context)
+                                                            .pop(false);
+                                                      },
+                                                      child: Text('Non'),
+                                                    ),
+                                                    TextButton(
+                                                      onPressed: () async {
+                                                        await Future.delayed(
+                                                            const Duration(
+                                                                milliseconds:
+                                                                    500));
+
+                                                        NotificationUserModel
+                                                            .deleteNotification(
+                                                                notificationNotificationsRecordList[
+                                                                        index]!
+                                                                    .id);
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      },
+                                                      child: Text('Oui'),
+                                                    ),
+                                                  ],
+                                                );
+                                              });
+                                          return false;
+                                        } else {
+                                          return false;
+                                        }
+                                      },
+                                      background: Container(
+                                        color: MizzUpTheme.secondaryColor,
+                                        child: Align(
+                                          alignment: Alignment.centerRight,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Icon(
+                                              Icons.delete,
+                                              color: MizzUpTheme.primaryColor,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      child: InkWell(
+                                        onTap: () async {
+                                          if (notificationNotificationsRecordList[
+                                                      index]!
+                                                  .type ==
+                                              "Recettes") {
+                                            RecettesRecord.getDocumentOnceNull(
+                                                    notificationNotificationsRecordList[
+                                                            index]!
+                                                        .docNotifRef)
+                                                .then((value) async {
+                                              final containerRecettesRecord =
+                                                  value;
+                                              if (containerRecettesRecord ==
+                                                  null) {
+                                                return;
+                                              }
+                                              await Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      RecetteSuite2Widget(
+                                                    description:
+                                                        containerRecettesRecord
+                                                            .description!,
+                                                    dureePrepa:
+                                                        containerRecettesRecord
+                                                            .dureePrepa!,
+                                                    etapes:
+                                                        containerRecettesRecord
+                                                            .etapes!,
+                                                    listeIngredients:
+                                                        containerRecettesRecord
+                                                            .listeIngredients!,
+                                                    niveauDifficulte:
+                                                        containerRecettesRecord
+                                                            .niveauDifficulte!,
+                                                    photoPrincipale:
+                                                        containerRecettesRecord
+                                                            .photoPrincipale!,
+                                                    titre:
+                                                        containerRecettesRecord
+                                                            .titre!,
+                                                    nbIngredients:
+                                                        containerRecettesRecord
+                                                            .nbIngredients!,
+                                                    recetteRef:
+                                                        containerRecettesRecord
+                                                            .reference!,
+                                                  ),
+                                                ),
+                                              );
+                                              NotificationUserModel.markAsRead(
+                                                  notificationNotificationsRecordList[
+                                                          index]!
+                                                      .id);
+                                            });
+                                          }
+                                        },
+                                        child: Material(
+                                          color:
+                                              notificationNotificationsRecordList[
+                                                              index]!
+                                                          .lu ==
+                                                      false
+                                                  ? MizzUpTheme.secondaryColor
+                                                      .withOpacity(0.3)
+                                                  : Colors.white,
+                                          elevation: 0,
+                                          child: Container(
+                                            margin: EdgeInsets.only(
+                                                bottom: 5, top: 5),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                            child: ListTile(
+                                              subtitle: Text(
                                                 notificationNotificationsRecordList[
                                                         index]!
-                                                    .docNotifRef)
-                                            .then((value) async {
-                                          final containerRecettesRecord = value;
-                                          if (containerRecettesRecord == null) {
-                                            return;
-                                          }
-                                          await Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  RecetteSuite2Widget(
-                                                description:
-                                                    containerRecettesRecord
-                                                        .description!,
-                                                dureePrepa:
-                                                    containerRecettesRecord
-                                                        .dureePrepa!,
-                                                etapes: containerRecettesRecord
-                                                    .etapes!,
-                                                listeIngredients:
-                                                    containerRecettesRecord
-                                                        .listeIngredients!,
-                                                niveauDifficulte:
-                                                    containerRecettesRecord
-                                                        .niveauDifficulte!,
-                                                photoPrincipale:
-                                                    containerRecettesRecord
-                                                        .photoPrincipale!,
-                                                titre: containerRecettesRecord
-                                                    .titre!,
-                                                nbIngredients:
-                                                    containerRecettesRecord
-                                                        .nbIngredients!,
-                                                recetteRef:
-                                                    containerRecettesRecord
-                                                        .reference!,
+                                                    .message,
+                                                maxLines: 3,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: const TextStyle(
+                                                  fontSize: 15,
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.w400,
+                                                ),
+                                              ),
+                                              leading: Container(
+                                                width: 30,
+                                                height: 30,
+                                                decoration: BoxDecoration(
+                                                    color: MizzUpTheme
+                                                        .primaryColor,
+                                                    shape: BoxShape.circle),
+                                                child: Icon(
+                                                  Icons
+                                                      .notifications_none_outlined,
+                                                  size: 20,
+                                                  color: MizzUpTheme
+                                                      .secondaryColor,
+                                                ),
                                               ),
                                             ),
-                                          );
-                                        });
-                                      }
-
-                                      NotificationUserModel.markAsRead(
-                                          notificationNotificationsRecordList[
-                                                  index]!
-                                              .id);
-                                    },
-                                    child: Container(
-                                      margin: EdgeInsets.only(bottom: 10),
-
-                                      // decoration: const BoxDecoration(
-                                      //   border: Border(
-                                      //     top: BorderSide(
-                                      //       width: 1,
-                                      //       color: Colors.grey,
-                                      //     ),
-                                      //     // bottom: BorderSide(
-                                      //     //   width: 1,
-                                      //     //   color: Colors.grey,
-                                      //     // ),
-                                      //   ),
-                                      // ),
-                                      child: Material(
-                                        elevation: 1,
-                                        child: ListTile(
-                                          title: Text(
-                                            notificationNotificationsRecordList[
-                                                    index]!
-                                                .title,
-                                            style: const TextStyle(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.w700,
-                                                color: Colors.black),
                                           ),
-                                          subtitle: Text(
-                                            notificationNotificationsRecordList[
-                                                    index]!
-                                                .message,
-                                            style: const TextStyle(
-                                              fontSize: 15,
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.w400,
-                                            ),
-                                          ),
-                                          trailing: Icon(
-                                              Icons.arrow_forward_ios_rounded),
                                         ),
                                       ),
                                     ),

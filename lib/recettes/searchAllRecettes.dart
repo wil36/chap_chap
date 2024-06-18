@@ -182,7 +182,11 @@ class _SearchAllRecetteWidgetState extends State<SearchAllRecetteWidget> {
                                                 ),
                                               );
                                             },
-                                          ).then((value) => setState(() {}));
+                                          ).then((value) {
+                                            if (mounted) {
+                                              setState(() {});
+                                            }
+                                          });
                                         },
                                         child: Row(
                                           mainAxisSize: MainAxisSize.max,
@@ -191,7 +195,7 @@ class _SearchAllRecetteWidgetState extends State<SearchAllRecetteWidget> {
                                               child: Padding(
                                                 padding:
                                                     const EdgeInsetsDirectional
-                                                            .fromSTEB(
+                                                        .fromSTEB(
                                                         10, 20, 20, 0),
                                                 child: Column(
                                                   mainAxisSize:

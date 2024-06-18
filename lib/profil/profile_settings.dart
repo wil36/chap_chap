@@ -66,7 +66,11 @@ class _ProfilSettingsState extends State<ProfilSettings> {
                             ),
                           );
                         },
-                      ).then((value) => setState(() {}));
+                      ).then((value) {
+                        if (mounted) {
+                          setState(() {});
+                        }
+                      });
                     },
                     child: Container(
                       padding: const EdgeInsets.all(8),
@@ -251,7 +255,11 @@ class _ProfilSettingsState extends State<ProfilSettings> {
                               ),
                             );
                           },
-                        ).then((value) => setState(() {}));
+                        ).then((value) {
+                          if (mounted) {
+                            setState(() {});
+                          }
+                        });
                       },
                       child: Material(
                         elevation: 1,

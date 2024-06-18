@@ -444,7 +444,11 @@ class _RecetteSuiteWidgetState extends State<RecetteSuiteWidget> {
                           ),
                         );
                       },
-                    ).then((value) => setState(() {}));
+                    ).then((value) {
+                      if (mounted) {
+                        setState(() {});
+                      }
+                    });
                   },
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -719,7 +723,11 @@ class _RecetteSuiteWidgetState extends State<RecetteSuiteWidget> {
               ),
             );
           },
-        ).then((value) => setState(() {}));
+        ).then((value) {
+          if (mounted) {
+            setState(() {});
+          }
+        });
       },
       child: Column(
         children: [

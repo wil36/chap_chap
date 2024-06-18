@@ -346,7 +346,11 @@ class _RecettesWidgetState extends State<RecettesWidget> {
                                                                                         ),
                                                                                       );
                                                                                     },
-                                                                                  ).then((value) => setState(() {}));
+                                                                                  ).then((value) {
+                                                                                    if (mounted) {
+                                                                                      setState(() {});
+                                                                                    }
+                                                                                  });
                                                                                 },
                                                                                 child: ClipRRect(
                                                                                   borderRadius: BorderRadius.circular(20),

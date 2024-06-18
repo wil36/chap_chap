@@ -35,9 +35,12 @@ class _Profilchap2WidgetState extends State<Profilchap2Widget> {
       for (var i = 0; i < columnCheveuxUserRecordList.length; i++) {
         defaultChoiceIndex.add(columnCheveuxUserRecordList[i]!.styleCheveux!);
       }
-      setState(() {
-        isLoading = false;
-      });
+
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
     });
     super.initState();
   }

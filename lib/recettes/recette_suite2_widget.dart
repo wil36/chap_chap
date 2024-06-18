@@ -72,9 +72,11 @@ class _RecetteSuite2WidgetState extends State<RecetteSuite2Widget> {
     super.initState();
     getMessage();
     getAlternativesForRecipe(widget.recetteRef.id).then((value) {
-      setState(() {
-        alternatives = value;
-      });
+      if (mounted) {
+        setState(() {
+          alternatives = value;
+        });
+      }
     });
   }
 
@@ -652,7 +654,11 @@ class _RecetteSuite2WidgetState extends State<RecetteSuite2Widget> {
                                         ),
                                       );
                                     },
-                                  ).then((value) => setState(() {}));
+                                  ).then((value) {
+                                    if (mounted) {
+                                      setState(() {});
+                                    }
+                                  });
                                 },
                                 child: Container(
                                     margin: const EdgeInsets.only(right: 40),
@@ -874,8 +880,11 @@ class _RecetteSuite2WidgetState extends State<RecetteSuite2Widget> {
                                                           ),
                                                         );
                                                       },
-                                                    ).then((value) =>
-                                                        setState(() {}));
+                                                    ).then((value) {
+                                                      if (mounted) {
+                                                        setState(() {});
+                                                      }
+                                                    });
                                                   },
                                                   child: Container(
                                                       padding: const EdgeInsets
@@ -986,7 +995,11 @@ class _RecetteSuite2WidgetState extends State<RecetteSuite2Widget> {
                     ),
                   );
                 },
-              ).then((value) => setState(() {}));
+              ).then((value) {
+                if (mounted) {
+                  setState(() {});
+                }
+              });
             },
             child: Container(
                 padding:
@@ -1064,7 +1077,11 @@ class _RecetteSuite2WidgetState extends State<RecetteSuite2Widget> {
               ),
             );
           },
-        ).then((value) => setState(() {}));
+        ).then((value) {
+          if (mounted) {
+            setState(() {});
+          }
+        });
       } else if (selected == 'delete') {
         await deleteComment(comment.id);
       }

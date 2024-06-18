@@ -81,7 +81,11 @@ class _DetailForumWidgetState extends State<DetailForumWidget> {
                 ),
               );
             },
-          ).then((value) => setState(() {}));
+          ).then((value) {
+            if (mounted) {
+              setState(() {});
+            }
+          });
         },
         child: Icon(
           Icons.add,
@@ -309,7 +313,11 @@ class _DetailForumWidgetState extends State<DetailForumWidget> {
                                       ),
                                     );
                                   },
-                                ).then((value) => setState(() {}));
+                                ).then((value) {
+                                  if (mounted) {
+                                    setState(() {});
+                                  }
+                                });
                               } else if (value == 'delete') {
                                 // Logique pour supprimer le commentaire
                                 showDialog(

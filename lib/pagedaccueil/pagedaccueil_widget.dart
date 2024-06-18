@@ -477,9 +477,12 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
                                                                             ),
                                                                           );
                                                                         },
-                                                                      ).then((value) =>
+                                                                      ).then((value) {
+                                                                        if (mounted) {
                                                                           setState(
-                                                                              () {}));
+                                                                              () {});
+                                                                        }
+                                                                      });
                                                                     },
                                                                     child:
                                                                         ClipRRect(
@@ -504,10 +507,9 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
                                                         ),
                                                         Visibility(
                                                           visible: valueOrDefault(
-                                                                  pageViewRecettesRecord
-                                                                      .isNew!,
-                                                                  false) ==
-                                                              false,
+                                                              pageViewRecettesRecord
+                                                                  .isNew!,
+                                                              false),
                                                           child: Align(
                                                             alignment:
                                                                 const Alignment(

@@ -182,7 +182,11 @@ class _ProfilWidgetState extends State<ProfilWidget> {
                                               ),
                                             );
                                           },
-                                        ).then((value) => setState(() {}));
+                                        ).then((value) {
+                                          if (mounted) {
+                                            setState(() {});
+                                          }
+                                        });
                                       },
                                       child: Row(
                                         mainAxisSize: MainAxisSize.max,
@@ -313,7 +317,11 @@ class _ProfilWidgetState extends State<ProfilWidget> {
                                               ),
                                             );
                                           },
-                                        ).then((value) => setState(() {}));
+                                        ).then((value) {
+                                          if (mounted) {
+                                            setState(() {});
+                                          }
+                                        });
                                       },
                                       child: Row(
                                         mainAxisSize: MainAxisSize.max,
@@ -383,7 +391,11 @@ class _ProfilWidgetState extends State<ProfilWidget> {
                                               ),
                                             );
                                           },
-                                        ).then((value) => setState(() {}));
+                                        ).then((value) {
+                                          if (mounted) {
+                                            setState(() {});
+                                          }
+                                        });
                                       },
                                       child: Row(
                                         mainAxisSize: MainAxisSize.max,
@@ -453,7 +465,11 @@ class _ProfilWidgetState extends State<ProfilWidget> {
                                               ),
                                             );
                                           },
-                                        ).then((value) => setState(() {}));
+                                        ).then((value) {
+                                          if (mounted) {
+                                            setState(() {});
+                                          }
+                                        });
                                       },
                                       child: Row(
                                         mainAxisSize: MainAxisSize.max,
@@ -523,7 +539,11 @@ class _ProfilWidgetState extends State<ProfilWidget> {
                                               ),
                                             );
                                           },
-                                        ).then((value) => setState(() {}));
+                                        ).then((value) {
+                                          if (mounted) {
+                                            setState(() {});
+                                          }
+                                        });
                                       },
                                       child: Row(
                                         mainAxisSize: MainAxisSize.max,

@@ -43,10 +43,12 @@ class _ForumWidgetState extends State<ForumWidget> {
   void initState() {
     super.initState();
     getForumData().then((value) {
-      setState(() {
-        items = value;
-        isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          items = value;
+          isLoading = false;
+        });
+      }
     });
   }
 

@@ -87,7 +87,9 @@ class _ReplyCommentForumState extends State<ReplyCommentForum> {
           ).then((value) async {
             forumComment =
                 await getSingleForumComment(widget.forumCommentModel.id);
-            setState(() {});
+            if (mounted) {
+              setState(() {});
+            }
           });
         },
         child: Icon(
@@ -449,7 +451,11 @@ class _ReplyCommentForumState extends State<ReplyCommentForum> {
                                       ),
                                     );
                                   },
-                                ).then((value) => setState(() {}));
+                                ).then((value) {
+                                  if (mounted) {
+                                    setState(() {});
+                                  }
+                                });
                               } else if (value == 'delete') {
                                 // Logique pour supprimer le commentaire
                                 showDialog(

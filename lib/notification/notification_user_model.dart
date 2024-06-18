@@ -59,7 +59,7 @@ class NotificationUserModel {
     return FirebaseFirestore.instance
         .collection('notification_user')
         .where('userRef', isEqualTo: currentUserReference)
-        .where('lu', isEqualTo: false)
+        // .where('lu', isEqualTo: false)
         .orderBy('create_time', descending: true)
         .snapshots()
         .map((snapshots) => snapshots.docs
@@ -87,5 +87,12 @@ class NotificationUserModel {
         .collection('notification_user')
         .doc(id)
         .update({'lu': true});
+  }
+
+  static Future<void> deleteNotification(String id) async {
+    await FirebaseFirestore.instance
+        .collection('notification_user')
+        .doc(id)
+        .delete();
   }
 }

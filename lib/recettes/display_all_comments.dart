@@ -242,8 +242,11 @@ class _DisplayAllCommentsState extends State<DisplayAllComments> {
                                                               ),
                                                             );
                                                           },
-                                                        ).then((value) =>
-                                                            setState(() {}));
+                                                        ).then((value) {
+                                                          if (mounted) {
+                                                            setState(() {});
+                                                          }
+                                                        });
                                                       },
                                                       child: Container(
                                                           padding:
@@ -594,7 +597,11 @@ class _DisplayAllCommentsState extends State<DisplayAllComments> {
               ),
             );
           },
-        ).then((value) => setState(() {}));
+        ).then((value) {
+          if (mounted) {
+            setState(() {});
+          }
+        });
       } else if (selected == 'delete') {
         await deleteCommentAnswer(comment.id);
       }

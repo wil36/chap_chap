@@ -64,9 +64,11 @@ class _StartProgWidgetState extends State<StartProgWidget> {
   void initState() {
     getAlternativesForRecipe(widget.detailsProgramme!.reference!.id)
         .then((value) {
-      setState(() {
-        alternatives = value;
-      });
+      if (mounted) {
+        setState(() {
+          alternatives = value;
+        });
+      }
     });
     super.initState();
   }

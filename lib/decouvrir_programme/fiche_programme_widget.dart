@@ -349,7 +349,11 @@ class _FicheProgrammeWidgetState extends State<FicheProgrammeWidget> {
                                                 ),
                                               );
                                             },
-                                          ).then((value) => setState(() {}));
+                                          ).then((value) {
+                                            if (mounted) {
+                                              setState(() {});
+                                            }
+                                          });
                                         },
                                         child: Container(
                                             margin: const EdgeInsets.only(
@@ -644,7 +648,11 @@ class _FicheProgrammeWidgetState extends State<FicheProgrammeWidget> {
                             ),
                           );
                         },
-                      ).then((value) => setState(() {}));
+                      ).then((value) {
+                        if (mounted) {
+                          setState(() {});
+                        }
+                      });
                     },
                     child: Center(
                       child: Container(
@@ -746,7 +754,11 @@ class _FicheProgrammeWidgetState extends State<FicheProgrammeWidget> {
                                               ),
                                             );
                                           },
-                                        ).then((value) => setState(() {}));
+                                        ).then((value) {
+                                          if (mounted) {
+                                            setState(() {});
+                                          }
+                                        });
                                       },
                                       child: Container(
                                           margin:
@@ -1036,7 +1048,11 @@ class _FicheProgrammeWidgetState extends State<FicheProgrammeWidget> {
                               ),
                             );
                           },
-                        ).then((value) => setState(() {}));
+                        ).then((value) {
+                          if (mounted) {
+                            setState(() {});
+                          }
+                        });
                       },
                       child: Center(
                         child: Container(
