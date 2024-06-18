@@ -8,7 +8,9 @@ import '../auth/auth_util.dart';
 import '../backend/backend.dart';
 import '../MizzUp_Code/MizzUp_icon_button.dart';
 import '../MizzUp_Code/MizzUp_theme.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
+import 'package:collection/collection.dart';
 
 class NotificationWidget extends StatefulWidget {
   const NotificationWidget({Key? key}) : super(key: key);
@@ -20,6 +22,19 @@ class NotificationWidget extends StatefulWidget {
 class _NotificationWidgetState extends State<NotificationWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final List _notifications = [];
+  var groupByDate = {};
+  String dateText = "";
+  int lastIndex = 0;
+  String nowDate = DateTime(
+    DateTime.now().year,
+    DateTime.now().month,
+    DateTime.now().day,
+  ).toString().substring(0, 10);
+  String beforeDay = DateTime(
+    DateTime.now().subtract(const Duration(days: 1)).year,
+    DateTime.now().subtract(const Duration(days: 1)).month,
+    DateTime.now().subtract(const Duration(days: 1)).day,
+  ).toString().substring(0, 10);
 
   @override
   void initState() {
@@ -72,11 +87,14 @@ class _NotificationWidgetState extends State<NotificationWidget> {
           }
           List<NotificationUserModel?> notificationNotificationsRecordList =
               snapshot.data!;
-          print(notificationNotificationsRecordList.length);
           // ignore: unused_local_variable
-          int notificationNotificationsRecord = 0;
-          notificationNotificationsRecord =
-              notificationNotificationsRecordList.length;
+
+          if (notificationNotificationsRecordList.length != 0) {
+            groupByDate = groupBy(
+                notificationNotificationsRecordList,
+                (NotificationUserModel? obj) =>
+                    obj!.createTime.toDate().toString().substring(0, 10));
+          }
           return Scaffold(
             key: scaffoldKey,
             backgroundColor: Colors.white,
@@ -148,7 +166,7 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                   child: Text(
                     notificationNotificationsRecordList.length == 0
                         ? "Tu n'as pas de nouvelle notification"
-                        : 'Tu as ${notificationNotificationsRecord} nouvelle(s) notification(s)',
+                        : 'Tu as ${notificationNotificationsRecordList.length} nouvelle(s) notification(s)',
                     style: MizzUpTheme.subtitle2.override(
                       fontFamily: 'IBM',
                       color: Colors.black,
@@ -160,7 +178,7 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                     ? Column(
                         children: [
                           Container(
-                            margin: const EdgeInsets.all(20),
+                            margin: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
                               color: Colors.white,
@@ -218,182 +236,255 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                                 //     ),
                                 //   ),
                                 // ),
-                                ...notificationNotificationsRecordList
-                                    .asMap()
-                                    .entries
-                                    .map<Widget>((entry) {
-                                  int index = entry.key;
-                                  return Padding(
-                                    padding: const EdgeInsets.only(bottom: 10),
-                                    child: Dismissible(
-                                      key: UniqueKey(),
-                                      confirmDismiss: (direction) async {
-                                        if (direction ==
-                                            DismissDirection.endToStart) {
-                                          showDialog<bool>(
-                                              context: context,
-                                              builder: (BuildContext context) {
-                                                return AlertDialog(
-                                                  title: Text('Confirmation'),
-                                                  content: Text(
-                                                      'Voulez-vous supprimer ?'),
-                                                  actions: <Widget>[
-                                                    TextButton(
-                                                      onPressed: () {
-                                                        Navigator.of(context)
-                                                            .pop(false);
-                                                      },
-                                                      child: Text('Non'),
-                                                    ),
-                                                    TextButton(
-                                                      onPressed: () async {
-                                                        await Future.delayed(
-                                                            const Duration(
-                                                                milliseconds:
-                                                                    500));
 
-                                                        NotificationUserModel
-                                                            .deleteNotification(
-                                                                notificationNotificationsRecordList[
-                                                                        index]!
-                                                                    .id);
-                                                        Navigator.of(context)
-                                                            .pop();
-                                                      },
-                                                      child: Text('Oui'),
+                                ListView.builder(
+                                    itemCount: groupByDate.length,
+                                    shrinkWrap: true,
+                                    itemBuilder: (context, index1) {
+                                      return Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(15.0),
+                                            child: Text(
+                                              groupByDate.keys
+                                                          .toList()[index1] ==
+                                                      nowDate
+                                                  ? 'Aujourd\'hui'
+                                                  : groupByDate.keys.toList()[
+                                                              index1] ==
+                                                          beforeDay
+                                                      ? 'Hier'
+                                                      : '${groupByDate.keys.toList()[index1]}',
+                                              style: TextStyle(
+                                                  color:
+                                                      MizzUpTheme.tertiaryColor,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                          ListView.builder(
+                                              itemCount: groupByDate[groupByDate
+                                                      .keys
+                                                      .toList()[index1]]!
+                                                  .length,
+                                              shrinkWrap: true,
+                                              itemBuilder: (context, index) {
+                                                NotificationUserModel notif =
+                                                    groupByDate[groupByDate.keys
+                                                            .toList()[index1]]![
+                                                        index];
+                                                print("object ${notif.id}");
+                                                return Column(
+                                                  children: [
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              bottom: 10),
+                                                      child: Dismissible(
+                                                        key: UniqueKey(),
+                                                        confirmDismiss:
+                                                            (direction) async {
+                                                          if (direction ==
+                                                              DismissDirection
+                                                                  .endToStart) {
+                                                            showDialog<bool>(
+                                                                context:
+                                                                    context,
+                                                                builder:
+                                                                    (BuildContext
+                                                                        context) {
+                                                                  return AlertDialog(
+                                                                    title: Text(
+                                                                        'Confirmation'),
+                                                                    content: Text(
+                                                                        'Voulez-vous supprimer ?'),
+                                                                    actions: <Widget>[
+                                                                      TextButton(
+                                                                        onPressed:
+                                                                            () {
+                                                                          Navigator.of(context)
+                                                                              .pop(false);
+                                                                        },
+                                                                        child: Text(
+                                                                            'Non'),
+                                                                      ),
+                                                                      TextButton(
+                                                                        onPressed:
+                                                                            () async {
+                                                                          await Future.delayed(
+                                                                              const Duration(milliseconds: 500));
+
+                                                                          NotificationUserModel.deleteNotification(
+                                                                              notif.id);
+                                                                          Navigator.of(context)
+                                                                              .pop();
+                                                                        },
+                                                                        child: Text(
+                                                                            'Oui'),
+                                                                      ),
+                                                                    ],
+                                                                  );
+                                                                });
+                                                            return false;
+                                                          } else {
+                                                            return false;
+                                                          }
+                                                        },
+                                                        background: Container(
+                                                          color: MizzUpTheme
+                                                              .secondaryColor,
+                                                          child: Align(
+                                                            alignment: Alignment
+                                                                .centerRight,
+                                                            child: Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(8.0),
+                                                              child: Icon(
+                                                                Icons.delete,
+                                                                color: MizzUpTheme
+                                                                    .primaryColor,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        child: InkWell(
+                                                          onTap: () async {
+                                                            if (notif.type ==
+                                                                "Recettes") {
+                                                              RecettesRecord
+                                                                      .getDocumentOnceNull(
+                                                                          notif
+                                                                              .docNotifRef)
+                                                                  .then(
+                                                                      (value) async {
+                                                                final containerRecettesRecord =
+                                                                    value;
+                                                                if (containerRecettesRecord ==
+                                                                    null) {
+                                                                  return;
+                                                                }
+                                                                await Navigator
+                                                                    .push(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                    builder:
+                                                                        (context) =>
+                                                                            RecetteSuite2Widget(
+                                                                      description:
+                                                                          containerRecettesRecord
+                                                                              .description!,
+                                                                      dureePrepa:
+                                                                          containerRecettesRecord
+                                                                              .dureePrepa!,
+                                                                      etapes: containerRecettesRecord
+                                                                          .etapes!,
+                                                                      listeIngredients:
+                                                                          containerRecettesRecord
+                                                                              .listeIngredients!,
+                                                                      niveauDifficulte:
+                                                                          containerRecettesRecord
+                                                                              .niveauDifficulte!,
+                                                                      photoPrincipale:
+                                                                          containerRecettesRecord
+                                                                              .photoPrincipale!,
+                                                                      titre: containerRecettesRecord
+                                                                          .titre!,
+                                                                      nbIngredients:
+                                                                          containerRecettesRecord
+                                                                              .nbIngredients!,
+                                                                      recetteRef:
+                                                                          containerRecettesRecord
+                                                                              .reference!,
+                                                                    ),
+                                                                  ),
+                                                                );
+
+                                                                NotificationUserModel
+                                                                    .markAsRead(
+                                                                        notif
+                                                                            .id);
+                                                              });
+                                                            }
+                                                          },
+                                                          child: Material(
+                                                            color: notif.lu ==
+                                                                    false
+                                                                ? MizzUpTheme
+                                                                    .secondaryColor
+                                                                    .withOpacity(
+                                                                        0.3)
+                                                                : Colors.white,
+                                                            elevation: 0,
+                                                            child: Container(
+                                                              margin: EdgeInsets
+                                                                  .only(
+                                                                      bottom: 5,
+                                                                      top: 5),
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10),
+                                                              ),
+                                                              child: ListTile(
+                                                                subtitle: Text(
+                                                                  notif.message,
+                                                                  maxLines: 3,
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
+                                                                  style:
+                                                                      const TextStyle(
+                                                                    fontSize:
+                                                                        15,
+                                                                    color: Colors
+                                                                        .black,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400,
+                                                                  ),
+                                                                ),
+                                                                trailing: Text(
+                                                                  DateFormat(
+                                                                          'HH:mm')
+                                                                      .format(notif
+                                                                          .createTime
+                                                                          .toDate()),
+                                                                ),
+                                                                leading:
+                                                                    Container(
+                                                                  width: 30,
+                                                                  height: 30,
+                                                                  decoration: BoxDecoration(
+                                                                      color: MizzUpTheme
+                                                                          .primaryColor,
+                                                                      shape: BoxShape
+                                                                          .circle),
+                                                                  child: Icon(
+                                                                    Icons
+                                                                        .notifications_none_outlined,
+                                                                    size: 20,
+                                                                    color: MizzUpTheme
+                                                                        .secondaryColor,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
                                                     ),
                                                   ],
                                                 );
-                                              });
-                                          return false;
-                                        } else {
-                                          return false;
-                                        }
-                                      },
-                                      background: Container(
-                                        color: MizzUpTheme.secondaryColor,
-                                        child: Align(
-                                          alignment: Alignment.centerRight,
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Icon(
-                                              Icons.delete,
-                                              color: MizzUpTheme.primaryColor,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      child: InkWell(
-                                        onTap: () async {
-                                          if (notificationNotificationsRecordList[
-                                                      index]!
-                                                  .type ==
-                                              "Recettes") {
-                                            RecettesRecord.getDocumentOnceNull(
-                                                    notificationNotificationsRecordList[
-                                                            index]!
-                                                        .docNotifRef)
-                                                .then((value) async {
-                                              final containerRecettesRecord =
-                                                  value;
-                                              if (containerRecettesRecord ==
-                                                  null) {
-                                                return;
-                                              }
-                                              await Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      RecetteSuite2Widget(
-                                                    description:
-                                                        containerRecettesRecord
-                                                            .description!,
-                                                    dureePrepa:
-                                                        containerRecettesRecord
-                                                            .dureePrepa!,
-                                                    etapes:
-                                                        containerRecettesRecord
-                                                            .etapes!,
-                                                    listeIngredients:
-                                                        containerRecettesRecord
-                                                            .listeIngredients!,
-                                                    niveauDifficulte:
-                                                        containerRecettesRecord
-                                                            .niveauDifficulte!,
-                                                    photoPrincipale:
-                                                        containerRecettesRecord
-                                                            .photoPrincipale!,
-                                                    titre:
-                                                        containerRecettesRecord
-                                                            .titre!,
-                                                    nbIngredients:
-                                                        containerRecettesRecord
-                                                            .nbIngredients!,
-                                                    recetteRef:
-                                                        containerRecettesRecord
-                                                            .reference!,
-                                                  ),
-                                                ),
-                                              );
-                                              NotificationUserModel.markAsRead(
-                                                  notificationNotificationsRecordList[
-                                                          index]!
-                                                      .id);
-                                            });
-                                          }
-                                        },
-                                        child: Material(
-                                          color:
-                                              notificationNotificationsRecordList[
-                                                              index]!
-                                                          .lu ==
-                                                      false
-                                                  ? MizzUpTheme.secondaryColor
-                                                      .withOpacity(0.3)
-                                                  : Colors.white,
-                                          elevation: 0,
-                                          child: Container(
-                                            margin: EdgeInsets.only(
-                                                bottom: 5, top: 5),
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                            ),
-                                            child: ListTile(
-                                              subtitle: Text(
-                                                notificationNotificationsRecordList[
-                                                        index]!
-                                                    .message,
-                                                maxLines: 3,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: const TextStyle(
-                                                  fontSize: 15,
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.w400,
-                                                ),
-                                              ),
-                                              leading: Container(
-                                                width: 30,
-                                                height: 30,
-                                                decoration: BoxDecoration(
-                                                    color: MizzUpTheme
-                                                        .primaryColor,
-                                                    shape: BoxShape.circle),
-                                                child: Icon(
-                                                  Icons
-                                                      .notifications_none_outlined,
-                                                  size: 20,
-                                                  color: MizzUpTheme
-                                                      .secondaryColor,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                }).toList(),
+                                              }),
+                                        ],
+                                      );
+                                    })
                               ],
                             ),
                           )

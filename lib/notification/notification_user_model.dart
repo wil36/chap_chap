@@ -77,7 +77,6 @@ class NotificationUserModel {
 
     return snapshot.docs.map((doc) {
       final notif = NotificationUserModel.fromJson(doc.data());
-      print(notif);
       return notif;
     }).toList();
   }

@@ -1,4 +1,3 @@
-import 'package:chap_chap/backend/schema/index.dart';
 import 'package:chap_chap/notification/notifcontroller.dart';
 import 'package:flutter/material.dart';
 // ignore_for_file: avoid_print, deprecated_member_use
@@ -238,29 +237,14 @@ class _ReplyCommentState extends State<ReplyComment> {
     });
     var userRef =
         FirebaseFirestore.instance.collection('users').doc(widget.user['uid']);
+    RecettesRecord? recetteRecord =
+        await RecettesRecord.getDocumentOnceNull(widget.comment['recipe_id']);
     await NotifController().addDocToNotificationSpecificUser(
         'Nouvelle réponse',
-        "Vous avez une nouvelle réponse pour votre commentaire sur la recette",
+        "Tu as une nouvelle réponse pour ton commentaire sur la recette " +
+            recetteRecord!.titre.toString(),
         'Recettes',
         userRef,
         widget.comment['recipe_id']);
-  }
-
-  Future<void> sendNotification(String token) async {
-    // final firebaseMessaging = FirebaseMessaging.instance;
-    // final message = {
-    //   'notification': {
-    //     'title': 'Nouvelle réponse',
-    //     'body':
-    //         'Vous avez une nouvelle réponse pour votre commentaire sur la recette ',
-    //   },
-    //   'data': {
-    //     'click_action': 'FLUTTER_NOTIFICATION_CLICK',
-    //     'id': '1',
-    //     'status': 'done'
-    //   },
-    //   'token': user.data()!['token']
-    // };
-    // await firebaseMessaging.sendMessage(message);
   }
 }
