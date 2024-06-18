@@ -213,7 +213,7 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
           useMaterial3: false,
           colorScheme: ColorScheme.fromSwatch(primarySwatch: customColor)
-              .copyWith(background: customColor)),
+              .copyWith(surface: customColor)),
       home: initialUser == null || displaySplashImage
           ? Container(
               color: Colors.transparent,

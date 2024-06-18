@@ -1,5 +1,3 @@
-
-
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -84,7 +82,7 @@ class _FFButtonWidgetState extends State<FFButtonWidget> {
             overflow: TextOverflow.ellipsis,
           );
 
-   final onPressed = widget.showLoadingIndicator
+    final onPressed = widget.showLoadingIndicator
         ? () async {
             if (loading) {
               return;
@@ -101,39 +99,38 @@ class _FFButtonWidgetState extends State<FFButtonWidget> {
         : () => widget.onPressed();
 
     ButtonStyle style = ButtonStyle(
-      shape: MaterialStateProperty.all<OutlinedBorder>(
+      shape: WidgetStateProperty.all<OutlinedBorder>(
         RoundedRectangleBorder(
-          borderRadius:
-            BorderRadius.circular(widget.options.borderRadius!),
+          borderRadius: BorderRadius.circular(widget.options.borderRadius!),
           side: widget.options.borderSide ?? BorderSide.none,
         ),
       ),
-      foregroundColor: MaterialStateProperty.resolveWith<Color?>(
+      foregroundColor: WidgetStateProperty.resolveWith<Color?>(
         (states) {
-          if (states.contains(MaterialState.disabled)) {
+          if (states.contains(WidgetState.disabled)) {
             return widget.options.disabledTextColor;
           }
           return widget.options.textStyle!.color;
         },
       ),
-      backgroundColor: MaterialStateProperty.resolveWith<Color?>(
+      backgroundColor: WidgetStateProperty.resolveWith<Color?>(
         (states) {
-          if (states.contains(MaterialState.disabled)) {
+          if (states.contains(WidgetState.disabled)) {
             return widget.options.disabledColor;
           }
           return widget.options.color;
         },
       ),
-      overlayColor: MaterialStateProperty.resolveWith<Color?>((states) {
-        if (states.contains(MaterialState.pressed)) {
+      overlayColor: WidgetStateProperty.resolveWith<Color?>((states) {
+        if (states.contains(WidgetState.pressed)) {
           return widget.options.splashColor;
         }
         return null;
       }),
-      padding: MaterialStateProperty.all(widget.options.padding ??
+      padding: WidgetStateProperty.all(widget.options.padding ??
           const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0)),
       elevation:
-          MaterialStateProperty.all<double>(widget.options.elevation ?? 2.0),
+          WidgetStateProperty.all<double>(widget.options.elevation ?? 2.0),
     );
 
     if (widget.icon != null || widget.iconData != null) {
