@@ -131,7 +131,8 @@ exports.notifyAllUsersOnNewComment = functions.firestore
         if (
           data.token &&
           data.recevoirNotifForum &&
-          data.recevoirNotifForum == true
+          data.recevoirNotifForum == true &&
+          data.uid != commentData.userId
         ) {
           tokens.push(data.token);
         }
@@ -201,7 +202,12 @@ exports.notifyUserOnReply = functions.firestore
         },
       };
 
-      if (token && data.recevoirNotifForum && data.recevoirNotifForum == true) {
+      if (
+        token &&
+        userData.recevoirNotifForum &&
+        userData.recevoirNotifForum == true &&
+        userData.uid != userId
+      ) {
         await admin.messaging().sendToDevice(token, payload);
       }
     } catch (error) {
