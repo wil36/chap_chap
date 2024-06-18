@@ -4,6 +4,7 @@ import 'package:chap_chap/MizzUp_Code/MizzUp_theme.dart';
 import 'package:chap_chap/auth/auth_util.dart';
 import 'package:chap_chap/notification/messaging_service.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -21,6 +22,7 @@ class _SettingPageState extends State<SettingPage> {
   bool _programmesNotification = false;
   bool _routinesNotification = false;
   bool _articlesNotification = false;
+  bool _forumNotification = false;
 
   @override
   void initState() {
@@ -33,6 +35,7 @@ class _SettingPageState extends State<SettingPage> {
     _programmesNotification = prefs.getBool('ProgrammesNotification') ?? false;
     _routinesNotification = prefs.getBool('RoutinesNotification') ?? false;
     _articlesNotification = prefs.getBool('ArticlesNotification') ?? false;
+    _forumNotification = prefs.getBool('ForumNotification') ?? false;
     setState(() {});
   }
 
@@ -123,7 +126,6 @@ class _SettingPageState extends State<SettingPage> {
                         }
                         await messaging
                             .subscribeToTopic('ProgrammesNotification');
-                        
                       } else {
                         await messaging
                             .unsubscribeFromTopic('ProgrammesNotification');
@@ -153,7 +155,7 @@ class _SettingPageState extends State<SettingPage> {
                     onChanged: (bool value) async {
                       setState(() {
                         _routinesNotification = value;
-                         prefs.setBool('RoutinesNotification', value);
+                        prefs.setBool('RoutinesNotification', value);
                       });
                       if (value) {
                         if (currentUserDocument?.recevoirNotif != true) {
@@ -193,7 +195,7 @@ class _SettingPageState extends State<SettingPage> {
                     onChanged: (bool value) async {
                       setState(() {
                         _articlesNotification = value;
-                         prefs.setBool('ArticlesNotification', value);
+                        prefs.setBool('ArticlesNotification', value);
                       });
                       if (value) {
                         if (currentUserDocument?.recevoirNotif != true) {
@@ -207,6 +209,58 @@ class _SettingPageState extends State<SettingPage> {
                       } else {
                         await messaging
                             .unsubscribeFromTopic('ArticlesNotification');
+                      }
+                    },
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(left: 15),
+                  child: Divider(),
+                ),
+                ListTile(
+                  dense: true,
+                  title: Text(
+                    'Forum',
+                    style: MizzUpTheme.title1.override(
+                      fontFamily: 'IBM',
+                      color: Colors.black,
+                      useGoogleFonts: false,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 14,
+                    ),
+                  ),
+                  trailing: CupertinoSwitch(
+                    activeColor: MizzUpTheme.primaryColor,
+                    value: _forumNotification,
+                    onChanged: (bool value) async {
+                      setState(() {
+                        _forumNotification = value;
+                        prefs.setBool('ForumNotification', value);
+                      });
+                      if (value) {
+                        if (currentUserDocument?.recevoirNotif != true) {
+                          FirebaseFirestore.instance
+                              .collection('users')
+                              .doc(FirebaseAuth.instance.currentUser!.uid)
+                              .update({
+                            'recevoirNotif': true,
+                            'recevoirNotifForum': true,
+                          });
+                        } else {
+                          FirebaseFirestore.instance
+                              .collection('users')
+                              .doc(FirebaseAuth.instance.currentUser!.uid)
+                              .update({
+                            'recevoirNotifForum': true,
+                          });
+                        }
+                      } else {
+                        FirebaseFirestore.instance
+                            .collection('users')
+                            .doc(FirebaseAuth.instance.currentUser!.uid)
+                            .update({
+                          'recevoirNotifForum': false,
+                        });
                       }
                     },
                   ),

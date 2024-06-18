@@ -164,7 +164,9 @@ class _ReplyCommentForumState extends State<ReplyCommentForum> {
                           builder: (context, snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.waiting) {
-                              return CircularProgressIndicator(); // Affichez un indicateur de chargement pendant le chargement initial
+                              return Center(
+                                  child:
+                                      CircularProgressIndicator()); // Affichez un indicateur de chargement pendant le chargement initial
                             } else {
                               if (snapshot.hasError) {
                                 return Text('Error: ${snapshot.error}');

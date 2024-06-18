@@ -179,7 +179,8 @@ class _MyAppState extends State<MyApp> {
     Future.delayed(const Duration(seconds: 1),
         () => setState(() => displaySplashImage = false));
 
-    if (initialUser != null) {
+    if (FirebaseAuth.instance.currentUser != null) {
+      print("Hello from init state");
       final FirebaseMessaging _messaging = FirebaseMessaging.instance;
       String userId = FirebaseAuth.instance.currentUser!.uid;
 

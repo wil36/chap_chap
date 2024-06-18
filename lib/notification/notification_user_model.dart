@@ -1,4 +1,5 @@
 import 'package:chap_chap/auth/auth_util.dart';
+import '../MizzUp_Code/MizzUp_util.dart';
 import 'package:chap_chap/backend/backend.dart';
 
 class NotificationUserModel {
@@ -26,15 +27,19 @@ class NotificationUserModel {
 
   factory NotificationUserModel.fromJson(Map<String, dynamic> json) {
     return NotificationUserModel(
-      userRef: json['userRef'] as DocumentReference,
-      title: json['Titre'],
-      message: json['description'],
-      lu: json['lu'],
-      image: json['image'],
-      type: json['type'],
-      docNotifRef: json['Document__Reference__Field'] as DocumentReference,
-      createTime: json['create_time'] as Timestamp,
-      id: json['id'],
+      userRef: valueOrDefault(
+          json['userRef'] as DocumentReference, currentUserReference!),
+      title: valueOrDefault(json['Titre'] as String, ''),
+      message: valueOrDefault(json['description'] as String, ''),
+      lu: valueOrDefault(json['lu'] as bool, false),
+      image: valueOrDefault(json['image'] as String, ''),
+      type: valueOrDefault(json['type'] as String, ''),
+      docNotifRef: valueOrDefault(
+          json['Document__Reference__Field'] as DocumentReference,
+          currentUserReference!),
+      createTime:
+          valueOrDefault(json['create_time'] as Timestamp, Timestamp.now()),
+      id: valueOrDefault(json['id'] as String, ''),
     );
   }
 
