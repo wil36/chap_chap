@@ -250,26 +250,23 @@ class _RecetteSuiteWidgetState extends State<RecetteSuiteWidget> {
   }
 
   Widget noMemberText() {
-    return Row(
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        Padding(
-          padding: const EdgeInsetsDirectional.fromSTEB(20, 20, 0, 20),
-          child: SizedBox(
-            width: MediaQuery.of(context).size.width - 20,
-            child: Text(
-              "Afin d'accéder à nos recettes, il faudra passer à la version premium de l'application 🙂",
-              style: MizzUpTheme.bodyText1.override(
-                fontFamily: 'IBM',
-                color: Colors.black,
-                fontSize: 12,
-                fontWeight: FontWeight.w400,
-                useGoogleFonts: false,
-              ),
-            ),
+    return Padding(
+      padding: const EdgeInsetsDirectional.fromSTEB(20, 20, 20, 20),
+      child: ConstrainedBox(
+        constraints:
+            BoxConstraints(minWidth: MediaQuery.of(context).size.width),
+        child: Text(
+          "Pour accéder à toutes nos recettes, il faudra passer à la version Premium !",
+          maxLines: 2,
+          style: MizzUpTheme.bodyText1.override(
+            fontFamily: 'IBM',
+            color: Colors.black,
+            fontSize: 12,
+            fontWeight: FontWeight.w400,
+            useGoogleFonts: false,
           ),
         ),
-      ],
+      ),
     );
   }
 
@@ -996,6 +993,7 @@ class _RecetteSuiteWidgetState extends State<RecetteSuiteWidget> {
                 );
               }
               List<RecettesRecord?> wrapRecettesRecordList = snapshot.data!;
+              wrapRecettesRecordList.sort((a, b) => b!.isNew! ? 1 : -1);
               return GridView.builder(
                   padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 10),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
