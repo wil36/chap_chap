@@ -54,7 +54,8 @@ class _StartProgWidgetState extends State<StartProgWidget> {
         .get();
 
     List<Alternative> alternatives = List<Alternative>.from(
-        (querySnapshot.data()!['alternatives'] as List<dynamic>)
+        (valueOrDefault(querySnapshot.data()!['alternatives'], {})
+                as List<dynamic>)
             .map((e) => Alternative.fromJson(e)));
 
     return alternatives;
@@ -506,19 +507,22 @@ class _StartProgWidgetState extends State<StartProgWidget> {
                           ),
                         ),
                       },
-                      Align(
-                        alignment: const AlignmentDirectional(-1, 0),
-                        child: Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(
-                              35, 20, 20, 0),
-                          child: Text(
-                            'On sait qu’il y a surement des semaines où tu n’auras peut-être pas la motivation de te lancer dans des recettes mais ne t’inquiète pas on a sélectionné les meilleurs produits tout prêts pour ces moment-là :',
-                            style: MizzUpTheme.bodyText1.override(
-                              fontFamily: 'IBM',
-                              color: Colors.black,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                              useGoogleFonts: false,
+                      Visibility(
+                        visible: alternatives.length > 0 ? true : false,
+                        child: Align(
+                          alignment: const AlignmentDirectional(-1, 0),
+                          child: Padding(
+                            padding: const EdgeInsetsDirectional.fromSTEB(
+                                35, 20, 20, 0),
+                            child: Text(
+                              'On sait qu’il y a surement des semaines où tu n’auras peut-être pas la motivation de te lancer dans des recettes mais ne t’inquiète pas on a sélectionné les meilleurs produits tout prêts pour ces moment-là :',
+                              style: MizzUpTheme.bodyText1.override(
+                                fontFamily: 'IBM',
+                                color: Colors.black,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                                useGoogleFonts: false,
+                              ),
                             ),
                           ),
                         ),
