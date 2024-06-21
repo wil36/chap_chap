@@ -66,36 +66,6 @@ class _ReplyCommentForumState extends State<ReplyCommentForum> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: MizzUpTheme.tertiaryColor,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          await showModalBottomSheet(
-            isScrollControlled: true,
-            backgroundColor: Colors.transparent,
-            context: context,
-            builder: (context) {
-              return Padding(
-                padding: MediaQuery.of(context).viewInsets,
-                child: Container(
-                  height: MediaQuery.of(context).size.height * 0.9,
-                  child: AddCommentReplyForum(
-                      forumComment: widget.forumCommentModel,
-                      forumCommentReply: null,
-                      isAnAnswer: false),
-                ),
-              );
-            },
-          ).then((value) async {
-            forumComment =
-                await getSingleForumComment(widget.forumCommentModel.id);
-            if (mounted) {
-              setState(() {});
-            }
-          });
-        },
-        child: Icon(
-          Icons.add,
-        ),
-      ),
       body: SingleChildScrollView(
         controller: scrollController,
         physics: NeverScrollableScrollPhysics(),
@@ -242,9 +212,9 @@ class _ReplyCommentForumState extends State<ReplyCommentForum> {
                   ),
                 );
               }
-              var user = snapshot.data;
-              String userPhoto = user!.photoUrl!.isNotEmpty
-                  ? user.photoUrl!
+              // var user = snapshot.data;
+              String userPhoto = forumCommentModel.userProfilePhoto.isNotEmpty
+                  ? forumCommentModel.userProfilePhoto
                   : 'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/chap-chap-1137ns/assets/n3ejaipxw085/user-22.jpg';
 
               return SizedBox(
@@ -338,16 +308,45 @@ class _ReplyCommentForumState extends State<ReplyCommentForum> {
                           child: Row(
                             children: [
                               IconButton(
-                                onPressed: () async {},
+                                onPressed: () async {
+                                  await showModalBottomSheet(
+                                    isScrollControlled: true,
+                                    backgroundColor: Colors.transparent,
+                                    context: context,
+                                    builder: (context) {
+                                      return Padding(
+                                        padding:
+                                            MediaQuery.of(context).viewInsets,
+                                        child: Container(
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.9,
+                                          child: AddCommentReplyForum(
+                                              forumComment:
+                                                  widget.forumCommentModel,
+                                              forumCommentReply: null,
+                                              isAnAnswer: false),
+                                        ),
+                                      );
+                                    },
+                                  ).then((value) async {
+                                    forumComment = await getSingleForumComment(
+                                        widget.forumCommentModel.id);
+                                    if (mounted) {
+                                      setState(() {});
+                                    }
+                                  });
+                                },
                                 icon: Icon(
-                                  Icons.comment_outlined,
+                                  Icons.add,
                                   size: 20,
                                   color: Colors.white,
                                 ),
                               ),
                               Text(
                                   forumCommentModel.commentCount.toString() +
-                                      " Replies",
+                                      " Réponse(s)",
                                   style: MizzUpTheme.bodyText3),
                             ],
                           ),
@@ -387,9 +386,10 @@ class _ReplyCommentForumState extends State<ReplyCommentForum> {
                   ),
                 );
               }
-              var user = snapshot.data;
-              String userPhoto = user!.photoUrl!.isNotEmpty
-                  ? user.photoUrl!
+              // var user = snapshot.data;
+              String userPhoto = forumCommentReplyModel
+                      .userProfilePhoto.isNotEmpty
+                  ? forumCommentReplyModel.userProfilePhoto
                   : 'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/chap-chap-1137ns/assets/n3ejaipxw085/user-22.jpg';
               return SizedBox(
                 child: Column(

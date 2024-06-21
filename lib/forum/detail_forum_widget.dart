@@ -403,7 +403,7 @@ class _DetailForumWidgetState extends State<DetailForumWidget> {
                               ),
                               Text(
                                   forumCommentModel.likeCount.toString() +
-                                      " Like(s)",
+                                      " Vote(s)",
                                   style: MizzUpTheme.bodyText3),
                             ],
                           ),
