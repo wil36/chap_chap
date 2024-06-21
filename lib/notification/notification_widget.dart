@@ -296,36 +296,40 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                                                                 builder:
                                                                     (BuildContext
                                                                         context) {
-                                                                  return AlertDialog(
-                                                                    title: Text(
-                                                                        'Confirmation'),
-                                                                    content: Text(
-                                                                        'Voulez-vous supprimer ?'),
-                                                                    actions: <Widget>[
-                                                                      TextButton(
-                                                                        onPressed:
-                                                                            () {
-                                                                          Navigator.of(context)
-                                                                              .pop(false);
-                                                                        },
-                                                                        child: Text(
-                                                                            'Non'),
-                                                                      ),
-                                                                      TextButton(
-                                                                        onPressed:
-                                                                            () async {
-                                                                          await Future.delayed(
-                                                                              const Duration(milliseconds: 500));
+                                                                  return Theme(
+                                                                    data:
+                                                                        ThemeData(
+                                                                      useMaterial3:
+                                                                          false,
+                                                                    ),
+                                                                    child:
+                                                                        AlertDialog(
+                                                                      title: Text(
+                                                                          'Confirmation'),
+                                                                      content: Text(
+                                                                          'Voulez-vous supprimer ?'),
+                                                                      actions: <Widget>[
+                                                                        TextButton(
+                                                                          onPressed:
+                                                                              () {
+                                                                            Navigator.of(context).pop(false);
+                                                                          },
+                                                                          child:
+                                                                              Text('Non'),
+                                                                        ),
+                                                                        TextButton(
+                                                                          onPressed:
+                                                                              () async {
+                                                                            await Future.delayed(const Duration(milliseconds: 500));
 
-                                                                          NotificationUserModel.deleteNotification(
-                                                                              notif.id);
-                                                                          Navigator.of(context)
-                                                                              .pop();
-                                                                        },
-                                                                        child: Text(
-                                                                            'Oui'),
-                                                                      ),
-                                                                    ],
+                                                                            NotificationUserModel.deleteNotification(notif.id);
+                                                                            Navigator.of(context).pop();
+                                                                          },
+                                                                          child:
+                                                                              Text('Oui'),
+                                                                        ),
+                                                                      ],
+                                                                    ),
                                                                   );
                                                                 });
                                                             return false;

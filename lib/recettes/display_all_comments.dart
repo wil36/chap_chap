@@ -425,61 +425,63 @@ class _DisplayAllCommentsState extends State<DisplayAllComments> {
                                                                                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                                                               crossAxisAlignment: CrossAxisAlignment.start,
                                                                                               children: [
-                                                                                                Row(
-                                                                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                                                  children: [
-                                                                                                    Row(
-                                                                                                      children: [
-                                                                                                        ClipRRect(
-                                                                                                          borderRadius: BorderRadius.circular(30), // Adjust the radius to your liking
-                                                                                                          child: Image.network(
-                                                                                                            userPhoto,
-                                                                                                            width: 30,
-                                                                                                            height: 30,
-                                                                                                            fit: BoxFit.cover,
+                                                                                                SingleChildScrollView(
+                                                                                                  child: Row(
+                                                                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                                                    children: [
+                                                                                                      Row(
+                                                                                                        children: [
+                                                                                                          ClipRRect(
+                                                                                                            borderRadius: BorderRadius.circular(30), // Adjust the radius to your liking
+                                                                                                            child: Image.network(
+                                                                                                              userPhoto,
+                                                                                                              width: 30,
+                                                                                                              height: 30,
+                                                                                                              fit: BoxFit.cover,
+                                                                                                            ),
                                                                                                           ),
-                                                                                                        ),
-                                                                                                        SizedBox(width: 10),
-                                                                                                        Column(
-                                                                                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                                                                                          children: [
-                                                                                                            Text(
-                                                                                                              user['display_name'],
-                                                                                                              style: MizzUpTheme.bodyText1.override(
-                                                                                                                color: Colors.black,
-                                                                                                                fontFamily: 'IBM',
-                                                                                                                fontSize: 14,
-                                                                                                                fontWeight: FontWeight.w600,
-                                                                                                                useGoogleFonts: false,
+                                                                                                          SizedBox(width: 10),
+                                                                                                          Column(
+                                                                                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                                            children: [
+                                                                                                              Text(
+                                                                                                                user['display_name'],
+                                                                                                                style: MizzUpTheme.bodyText1.override(
+                                                                                                                  color: Colors.black,
+                                                                                                                  fontFamily: 'IBM',
+                                                                                                                  fontSize: 14,
+                                                                                                                  fontWeight: FontWeight.w600,
+                                                                                                                  useGoogleFonts: false,
+                                                                                                                ),
                                                                                                               ),
-                                                                                                            ),
-                                                                                                          ],
-                                                                                                        ),
-                                                                                                      ],
-                                                                                                    ),
-                                                                                                    Text(
-                                                                                                      DateFormat.yMd('fr_FR').format(reply['date'].toDate()),
-                                                                                                      style: MizzUpTheme.bodyText1.override(
-                                                                                                        color: Colors.grey,
-                                                                                                        fontFamily: 'IBM',
-                                                                                                        fontSize: 10,
-                                                                                                        useGoogleFonts: false,
+                                                                                                            ],
+                                                                                                          ),
+                                                                                                        ],
                                                                                                       ),
-                                                                                                    ),
-                                                                                                    SizedBox(width: 5),
-                                                                                                    reply["user"] == currentUserUid
-                                                                                                        ? GestureDetector(
-                                                                                                            onTap: () {
-                                                                                                              showCommentOptions(context, reply);
-                                                                                                            },
-                                                                                                            child: Icon(
-                                                                                                              Icons.more_vert,
-                                                                                                              color: Colors.grey,
-                                                                                                              size: 20,
-                                                                                                            ),
-                                                                                                          )
-                                                                                                        : SizedBox()
-                                                                                                  ],
+                                                                                                      Text(
+                                                                                                        DateFormat.yMd('fr_FR').format(reply['date'].toDate()),
+                                                                                                        style: MizzUpTheme.bodyText1.override(
+                                                                                                          color: Colors.grey,
+                                                                                                          fontFamily: 'IBM',
+                                                                                                          fontSize: 10,
+                                                                                                          useGoogleFonts: false,
+                                                                                                        ),
+                                                                                                      ),
+                                                                                                      SizedBox(width: 5),
+                                                                                                      reply["user"] == currentUserUid
+                                                                                                          ? GestureDetector(
+                                                                                                              onTap: () {
+                                                                                                                showCommentOptions(context, reply);
+                                                                                                              },
+                                                                                                              child: Icon(
+                                                                                                                Icons.more_vert,
+                                                                                                                color: Colors.grey,
+                                                                                                                size: 20,
+                                                                                                              ),
+                                                                                                            )
+                                                                                                          : SizedBox()
+                                                                                                    ],
+                                                                                                  ),
                                                                                                 ),
                                                                                                 SizedBox(
                                                                                                   height: 10,

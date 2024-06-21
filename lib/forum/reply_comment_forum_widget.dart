@@ -463,29 +463,34 @@ class _ReplyCommentForumState extends State<ReplyCommentForum> {
                                 showDialog(
                                   context: context,
                                   builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      title: Text('Confirmer la suppression'),
-                                      content: Text(
-                                          'Voulez-vous vraiment supprimer ce commentaire ?'),
-                                      actions: <Widget>[
-                                        TextButton(
-                                          child: Text('Annuler'),
-                                          onPressed: () {
-                                            Navigator.of(context)
-                                                .pop(); // Fermer la boîte de dialogue
-                                          },
-                                        ),
-                                        TextButton(
-                                          child: Text('Supprimer'),
-                                          onPressed: () {
-                                            Navigator.of(context)
-                                                .pop(); // Fermer la boîte de dialogue
-                                            deleteCommentReply(
-                                                forumCommentReplyModel
-                                                    .id); // Appeler la fonction de suppression
-                                          },
-                                        ),
-                                      ],
+                                    return Theme(
+                                      data: ThemeData(
+                                        useMaterial3: false,
+                                      ),
+                                      child: AlertDialog(
+                                        title: Text('Confirmer la suppression'),
+                                        content: Text(
+                                            'Voulez-vous vraiment supprimer ce commentaire ?'),
+                                        actions: <Widget>[
+                                          TextButton(
+                                            child: Text('Annuler'),
+                                            onPressed: () {
+                                              Navigator.of(context)
+                                                  .pop(); // Fermer la boîte de dialogue
+                                            },
+                                          ),
+                                          TextButton(
+                                            child: Text('Supprimer'),
+                                            onPressed: () {
+                                              Navigator.of(context)
+                                                  .pop(); // Fermer la boîte de dialogue
+                                              deleteCommentReply(
+                                                  forumCommentReplyModel
+                                                      .id); // Appeler la fonction de suppression
+                                            },
+                                          ),
+                                        ],
+                                      ),
                                     );
                                   },
                                 );

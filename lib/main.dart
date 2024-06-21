@@ -302,214 +302,219 @@ class _NavBarPageState extends State<NavBarPage> {
           });
         },
       ),
-      bottomNavigationBar: BottomAppBar(
-        shape: const CircularNotchedRectangle(),
-        notchMargin: 4.0,
-        elevation: 10,
-        color: MizzUpTheme.secondaryColor,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: SizedBox(
-            height: 85,
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    IconButton(
-                      icon: const Icon(Icons.home_filled),
-                      color: MizzUpTheme.primaryColor,
-                      onPressed: () async {
-                        await Navigator.push(
-                          context,
-                          PageTransition(
-                            type: PageTransitionType.fade,
-                            duration: Duration(milliseconds: 500),
-                            reverseDuration: Duration(milliseconds: 500),
-                            child: NavBarPage(index: 5),
-                          ),
-                        );
-                      },
-                    ),
-                    Text(
-                      'Accueil',
-                      style: MizzUpTheme.bodyText1.override(
-                        fontFamily: 'Poppins',
+      bottomNavigationBar: Theme(
+        data: ThemeData(
+          useMaterial3: false,
+        ),
+        child: BottomAppBar(
+          shape: const CircularNotchedRectangle(),
+          notchMargin: 4.0,
+          elevation: 10,
+          color: MizzUpTheme.secondaryColor,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: SizedBox(
+              height: 85,
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Column(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      IconButton(
+                        icon: const Icon(Icons.home_filled),
                         color: MizzUpTheme.primaryColor,
-                        fontSize: 11,
+                        onPressed: () async {
+                          await Navigator.push(
+                            context,
+                            PageTransition(
+                              type: PageTransitionType.fade,
+                              duration: Duration(milliseconds: 500),
+                              reverseDuration: Duration(milliseconds: 500),
+                              child: NavBarPage(index: 5),
+                            ),
+                          );
+                        },
                       ),
-                    ),
-                    Visibility(
-                        visible: _index == 5,
-                        child: Container(
-                          margin: EdgeInsets.only(top: 2),
-                          height: 5,
-                          width: 5,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(50),
-                            color: MizzUpTheme.primaryColor,
-                          ),
-                        )),
-                  ],
-                ),
-                Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    IconButton(
-                      icon: const Icon(Icons.pending_actions),
-                      color: MizzUpTheme.primaryColor,
-                      onPressed: () async {
-                        await Navigator.push(
-                          context,
-                          PageTransition(
-                            type: PageTransitionType.fade,
-                            duration: Duration(milliseconds: 500),
-                            reverseDuration: Duration(milliseconds: 500),
-                            child: NavBarPage(index: 0),
-                          ),
-                        );
-                      },
-                    ),
-                    Text(
-                      'Programmes',
-                      style: MizzUpTheme.bodyText1.override(
-                        fontFamily: 'Poppins',
+                      Text(
+                        'Accueil',
+                        style: MizzUpTheme.bodyText1.override(
+                          fontFamily: 'Poppins',
+                          color: MizzUpTheme.primaryColor,
+                          fontSize: 11,
+                        ),
+                      ),
+                      Visibility(
+                          visible: _index == 5,
+                          child: Container(
+                            margin: EdgeInsets.only(top: 2),
+                            height: 5,
+                            width: 5,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50),
+                              color: MizzUpTheme.primaryColor,
+                            ),
+                          )),
+                    ],
+                  ),
+                  Column(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      IconButton(
+                        icon: const Icon(Icons.pending_actions),
                         color: MizzUpTheme.primaryColor,
-                        fontSize: 11,
+                        onPressed: () async {
+                          await Navigator.push(
+                            context,
+                            PageTransition(
+                              type: PageTransitionType.fade,
+                              duration: Duration(milliseconds: 500),
+                              reverseDuration: Duration(milliseconds: 500),
+                              child: NavBarPage(index: 0),
+                            ),
+                          );
+                        },
                       ),
-                    ),
-                    Visibility(
-                        visible: _index == 0,
-                        child: Container(
-                          margin: EdgeInsets.only(top: 2),
-                          height: 5,
-                          width: 5,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(50),
-                            color: MizzUpTheme.primaryColor,
-                          ),
-                        )),
-                  ],
-                ),
-                Column(
-                  children: <Widget>[
-                    IconButton(
-                      icon: const Icon(Icons.bookmark_border),
-                      color: MizzUpTheme.primaryColor,
-                      onPressed: () async {
-                        await Navigator.push(
-                          context,
-                          PageTransition(
-                            type: PageTransitionType.fade,
-                            duration: Duration(milliseconds: 500),
-                            reverseDuration: Duration(milliseconds: 500),
-                            child: NavBarPage(index: 3),
-                          ),
-                        );
-                      },
-                    ),
-                    Text(
-                      'Articles',
-                      style: MizzUpTheme.bodyText1.override(
-                        fontFamily: 'Poppins',
+                      Text(
+                        'Programmes',
+                        style: MizzUpTheme.bodyText1.override(
+                          fontFamily: 'Poppins',
+                          color: MizzUpTheme.primaryColor,
+                          fontSize: 11,
+                        ),
+                      ),
+                      Visibility(
+                          visible: _index == 0,
+                          child: Container(
+                            margin: EdgeInsets.only(top: 2),
+                            height: 5,
+                            width: 5,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50),
+                              color: MizzUpTheme.primaryColor,
+                            ),
+                          )),
+                    ],
+                  ),
+                  Column(
+                    children: <Widget>[
+                      IconButton(
+                        icon: const Icon(Icons.bookmark_border),
                         color: MizzUpTheme.primaryColor,
-                        fontSize: 11,
+                        onPressed: () async {
+                          await Navigator.push(
+                            context,
+                            PageTransition(
+                              type: PageTransitionType.fade,
+                              duration: Duration(milliseconds: 500),
+                              reverseDuration: Duration(milliseconds: 500),
+                              child: NavBarPage(index: 3),
+                            ),
+                          );
+                        },
                       ),
-                    ),
-                    Visibility(
-                        visible: _index == 3,
-                        child: Container(
-                          margin: EdgeInsets.only(top: 2),
-                          height: 5,
-                          width: 5,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(50),
-                            color: MizzUpTheme.primaryColor,
-                          ),
-                        )),
-                  ],
-                ),
-                Column(
-                  children: <Widget>[
-                    IconButton(
-                      icon: const Icon(Icons.menu_book_outlined),
-                      color: MizzUpTheme.primaryColor,
-                      onPressed: () async {
-                        await Navigator.push(
-                          context,
-                          PageTransition(
-                            type: PageTransitionType.fade,
-                            duration: Duration(milliseconds: 500),
-                            reverseDuration: Duration(milliseconds: 500),
-                            child: NavBarPage(index: 1),
-                          ),
-                        );
-                      },
-                    ),
-                    Text(
-                      'Recettes',
-                      style: MizzUpTheme.bodyText1.override(
-                        fontFamily: 'Poppins',
+                      Text(
+                        'Articles',
+                        style: MizzUpTheme.bodyText1.override(
+                          fontFamily: 'Poppins',
+                          color: MizzUpTheme.primaryColor,
+                          fontSize: 11,
+                        ),
+                      ),
+                      Visibility(
+                          visible: _index == 3,
+                          child: Container(
+                            margin: EdgeInsets.only(top: 2),
+                            height: 5,
+                            width: 5,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50),
+                              color: MizzUpTheme.primaryColor,
+                            ),
+                          )),
+                    ],
+                  ),
+                  Column(
+                    children: <Widget>[
+                      IconButton(
+                        icon: const Icon(Icons.menu_book_outlined),
                         color: MizzUpTheme.primaryColor,
-                        fontSize: 11,
+                        onPressed: () async {
+                          await Navigator.push(
+                            context,
+                            PageTransition(
+                              type: PageTransitionType.fade,
+                              duration: Duration(milliseconds: 500),
+                              reverseDuration: Duration(milliseconds: 500),
+                              child: NavBarPage(index: 1),
+                            ),
+                          );
+                        },
                       ),
-                    ),
-                    Visibility(
-                        visible: _index == 1,
-                        child: Container(
-                          margin: EdgeInsets.only(top: 2),
-                          height: 5,
-                          width: 5,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(50),
-                            color: MizzUpTheme.primaryColor,
-                          ),
-                        )),
-                  ],
-                ),
-                Column(
-                  children: <Widget>[
-                    IconButton(
-                      icon: const Icon(Icons.chat_bubble_outline_rounded),
-                      color: MizzUpTheme.primaryColor,
-                      onPressed: () async {
-                        await Navigator.push(
-                          context,
-                          PageTransition(
-                            type: PageTransitionType.fade,
-                            duration: Duration(milliseconds: 500),
-                            reverseDuration: Duration(milliseconds: 500),
-                            child: NavBarPage(index: 4),
-                          ),
-                        );
-                      },
-                    ),
-                    Text(
-                      'Forum',
-                      style: MizzUpTheme.bodyText1.override(
-                        fontFamily: 'Poppins',
+                      Text(
+                        'Recettes',
+                        style: MizzUpTheme.bodyText1.override(
+                          fontFamily: 'Poppins',
+                          color: MizzUpTheme.primaryColor,
+                          fontSize: 11,
+                        ),
+                      ),
+                      Visibility(
+                          visible: _index == 1,
+                          child: Container(
+                            margin: EdgeInsets.only(top: 2),
+                            height: 5,
+                            width: 5,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50),
+                              color: MizzUpTheme.primaryColor,
+                            ),
+                          )),
+                    ],
+                  ),
+                  Column(
+                    children: <Widget>[
+                      IconButton(
+                        icon: const Icon(Icons.chat_bubble_outline_rounded),
                         color: MizzUpTheme.primaryColor,
-                        fontSize: 11,
+                        onPressed: () async {
+                          await Navigator.push(
+                            context,
+                            PageTransition(
+                              type: PageTransitionType.fade,
+                              duration: Duration(milliseconds: 500),
+                              reverseDuration: Duration(milliseconds: 500),
+                              child: NavBarPage(index: 4),
+                            ),
+                          );
+                        },
                       ),
-                    ),
-                    Visibility(
-                        visible: _index == 4,
-                        child: Container(
-                          margin: EdgeInsets.only(top: 2),
-                          height: 5,
-                          width: 5,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(50),
-                            color: MizzUpTheme.primaryColor,
-                          ),
-                        )),
-                  ],
-                ),
-              ],
+                      Text(
+                        'Forum',
+                        style: MizzUpTheme.bodyText1.override(
+                          fontFamily: 'Poppins',
+                          color: MizzUpTheme.primaryColor,
+                          fontSize: 11,
+                        ),
+                      ),
+                      Visibility(
+                          visible: _index == 4,
+                          child: Container(
+                            margin: EdgeInsets.only(top: 2),
+                            height: 5,
+                            width: 5,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50),
+                              color: MizzUpTheme.primaryColor,
+                            ),
+                          )),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
