@@ -1,8 +1,10 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:chap_chap/MizzUp_Code/MizzUp_util.dart';
 import 'package:chap_chap/auth/auth_util.dart';
 import 'package:chap_chap/forum/Models/forum_comments_model.dart';
 import 'package:chap_chap/forum/Models/forum_comments_reply_model.dart';
+import 'package:chap_chap/notification/notifcontroller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 // ignore_for_file: avoid_print, deprecated_member_use
@@ -194,6 +196,39 @@ class _AddCommentReplyForumState extends State<AddCommentReplyForum> {
           .update({'id': commentId}); // Met à jour l'ID dans le document
 
       await incrementCommentCount(forumCommentModel.forumCommentId, 1);
+
+      if (widget.forumComment!.userId !=
+          FirebaseAuth.instance.currentUser!.uid) {
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(widget.forumComment!.userId)
+            .get()
+            .then((value1) async {
+          if (value1.exists &&
+              valueOrDefault(
+                  value1.data()!['recevoirNotifForum'] ?? false, false)) {
+            FirebaseFirestore.instance
+                .collection('forum')
+                .doc(widget.forumComment!.forumId)
+                .get()
+                .then((value) async {
+              if (value.data() != null) {
+                await NotifController().addDocToNotificationSpecificUser(
+                    'Nouvelle réponse',
+                    "Tu as une nouvelle réponse pour ton commentaire dans le forum " +
+                        valueOrDefault(value.data()!['titre'], ""),
+                    'Forum',
+                    FirebaseFirestore.instance
+                        .collection('users')
+                        .doc(widget.forumComment!.userId),
+                    FirebaseFirestore.instance
+                        .collection('forum')
+                        .doc(widget.forumComment!.forumId));
+              }
+            });
+          }
+        });
+      }
     }
   }
 }

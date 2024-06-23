@@ -5,6 +5,7 @@ import 'package:chap_chap/backend/backend.dart';
 import 'package:chap_chap/forum/Models/forum_comments_model.dart';
 import 'package:chap_chap/forum/Models/forum_comments_reply_model.dart';
 import 'package:chap_chap/forum/add_comment_reply_forum.dart';
+import 'package:chap_chap/notification/notifcontroller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -271,85 +272,93 @@ class _ReplyCommentForumState extends State<ReplyCommentForum> {
                                 await getSingleForumComment(forumComment!.id);
                             setState(() {});
                           },
-                          child: Row(
-                            children: [
-                              IconButton(
-                                onPressed: () async {
-                                  await incrementLikeCount(
-                                      forumCommentModel.id,
-                                      1,
-                                      FirebaseAuth.instance.currentUser!.uid);
-                                  forumComment = await getSingleForumComment(
-                                      forumComment!.id);
-                                  setState(() {});
-                                },
-                                icon: Icon(
-                                  forumCommentModel.likedBy.contains(
-                                          FirebaseAuth
-                                              .instance.currentUser!.uid)
-                                      ? Icons.thumb_up_alt
-                                      : Icons.thumb_up_alt_outlined,
-                                  size: 20,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              Text(
-                                  forumCommentModel.likeCount.toString() +
-                                      " Vote(s)",
-                                  style: MizzUpTheme.bodyText3),
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          width: 15,
-                        ),
-                        InkWell(
-                          onTap: () {},
-                          child: Row(
-                            children: [
-                              IconButton(
-                                onPressed: () async {
-                                  await showModalBottomSheet(
-                                    isScrollControlled: true,
-                                    backgroundColor: Colors.transparent,
-                                    context: context,
-                                    builder: (context) {
-                                      return Padding(
-                                        padding:
-                                            MediaQuery.of(context).viewInsets,
-                                        child: Container(
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.9,
-                                          child: AddCommentReplyForum(
-                                              forumComment:
-                                                  widget.forumCommentModel,
-                                              forumCommentReply: null,
-                                              isAnAnswer: false),
-                                        ),
-                                      );
-                                    },
-                                  ).then((value) async {
+                          child: SingleChildScrollView(
+                            child: Row(
+                              children: [
+                                IconButton(
+                                  onPressed: () async {
+                                    await incrementLikeCount(
+                                        forumCommentModel.id,
+                                        1,
+                                        FirebaseAuth.instance.currentUser!.uid);
                                     forumComment = await getSingleForumComment(
-                                        widget.forumCommentModel.id);
-                                    if (mounted) {
-                                      setState(() {});
-                                    }
-                                  });
-                                },
-                                icon: Icon(
-                                  Icons.add,
-                                  size: 20,
-                                  color: Colors.white,
+                                        forumComment!.id);
+                                    setState(() {});
+                                  },
+                                  icon: Icon(
+                                    forumCommentModel.likedBy.contains(
+                                            FirebaseAuth
+                                                .instance.currentUser!.uid)
+                                        ? Icons.thumb_up_alt
+                                        : Icons.thumb_up_alt_outlined,
+                                    size: 20,
+                                    color: Colors.white,
+                                  ),
                                 ),
-                              ),
-                              Text(
-                                  forumCommentModel.commentCount.toString() +
-                                      " Réponse(s)",
-                                  style: MizzUpTheme.bodyText3),
-                            ],
+                                Text(
+                                    forumCommentModel.likeCount.toString() +
+                                        " Vote(s)",
+                                    style: MizzUpTheme.bodyText3),
+                              ],
+                            ),
                           ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                IconButton(
+                                  onPressed: () async {},
+                                  icon: Icon(
+                                    Icons.comment,
+                                    size: 20,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                Text(
+                                    forumCommentModel.commentCount.toString() +
+                                        " Réponse(s)",
+                                    style: MizzUpTheme.bodyText3),
+                              ],
+                            ),
+                            IconButton(
+                              onPressed: () async {
+                                await showModalBottomSheet(
+                                  isScrollControlled: true,
+                                  backgroundColor: Colors.transparent,
+                                  context: context,
+                                  builder: (context) {
+                                    return Padding(
+                                      padding:
+                                          MediaQuery.of(context).viewInsets,
+                                      child: Container(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.9,
+                                        child: AddCommentReplyForum(
+                                            forumComment:
+                                                widget.forumCommentModel,
+                                            forumCommentReply: null,
+                                            isAnAnswer: false),
+                                      ),
+                                    );
+                                  },
+                                ).then((value) async {
+                                  forumComment = await getSingleForumComment(
+                                      widget.forumCommentModel.id);
+                                  if (mounted) {
+                                    setState(() {});
+                                  }
+                                });
+                              },
+                              icon: Icon(
+                                Icons.add,
+                                size: 25,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     )
@@ -594,6 +603,40 @@ class _ReplyCommentForumState extends State<ReplyCommentForum> {
 
         await snapshot.reference
             .update({'likeCount': newLikeCount, 'likedBy': likedBy});
+        if (widget.forumCommentModel.userId !=
+            FirebaseAuth.instance.currentUser!.uid) {
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(widget.forumCommentModel.userId)
+              .get()
+              .then((value1) async {
+            if (value1.exists &&
+                valueOrDefault(
+                    value1.data()!['recevoirNotifForum'] ?? false, false)) {
+              FirebaseFirestore.instance
+                  .collection('forum')
+                  .doc(widget.forumCommentModel.forumId)
+                  .get()
+                  .then((value) async {
+                if (value.data() != null) {
+                  await NotifController().addDocToNotificationSpecificUser(
+                      'Nouvelle réponse',
+                      "Tu as un nouveau vote pour ta réponse au commentaire de " +
+                          widget.forumCommentModel.userFirstName +
+                          " dans le forum " +
+                          valueOrDefault(value.data()!['titre'], ""),
+                      'Forum',
+                      FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(comment.userId),
+                      FirebaseFirestore.instance
+                          .collection('forum')
+                          .doc(widget.forumCommentModel.forumId));
+                }
+              });
+            }
+          });
+        }
       } else {
         int currentLikeCount = comment.likeCount;
         int newLikeCount = currentLikeCount - incrementAmount;
@@ -680,6 +723,39 @@ class _ReplyCommentForumState extends State<ReplyCommentForum> {
 
         await snapshot.reference
             .update({'likeCount': newLikeCount, 'likedBy': likedBy});
+
+        if (widget.forumCommentModel.userId !=
+            FirebaseAuth.instance.currentUser!.uid) {
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(widget.forumCommentModel.userId)
+              .get()
+              .then((value1) async {
+            if (value1.exists &&
+                valueOrDefault(
+                    value1.data()!['recevoirNotifForum'] ?? false, false)) {
+              FirebaseFirestore.instance
+                  .collection('forum')
+                  .doc(widget.forumCommentModel.forumId)
+                  .get()
+                  .then((value) async {
+                if (value.data() != null) {
+                  await NotifController().addDocToNotificationSpecificUser(
+                      'Nouvelle réponse',
+                      "Tu as un nouveau vote pour ton commentaire dans le forum " +
+                          valueOrDefault(value.data()!['titre'], ""),
+                      'Forum',
+                      FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(widget.forumCommentModel.userId),
+                      FirebaseFirestore.instance
+                          .collection('forum')
+                          .doc(widget.forumCommentModel.forumId));
+                }
+              });
+            }
+          });
+        }
       } else {
         int currentLikeCount = comment.likeCount;
         int newLikeCount = currentLikeCount - incrementAmount;

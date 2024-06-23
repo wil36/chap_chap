@@ -221,7 +221,7 @@ class _ForumWidgetState extends State<ForumWidget> {
                                       height: 15,
                                     ),
                                     Text(
-                                      "<< Seul on va plus vite, ensemble on va plus loin ! >>",
+                                      "Seul on va plus vite, ensemble on va plus loin !",
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                         fontFamily: 'IBM',

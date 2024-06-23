@@ -6,6 +6,7 @@ import 'package:chap_chap/forum/Models/forum_comments_model.dart';
 import 'package:chap_chap/forum/Models/forum_model.dart';
 import 'package:chap_chap/forum/add_comment_forum.dart';
 import 'package:chap_chap/forum/reply_comment_forum_widget.dart';
+import 'package:chap_chap/notification/notifcontroller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -44,7 +45,7 @@ class _DetailForumWidgetState extends State<DetailForumWidget> {
   @override
   void initState() {
     super.initState();
-
+    print("object ${widget.forumModel.id}");
     setState(() {
       forumCommentStream = FirebaseFirestore.instance
           .collection('forum_comments')
@@ -490,6 +491,37 @@ class _DetailForumWidgetState extends State<DetailForumWidget> {
 
         await snapshot.reference
             .update({'likeCount': newLikeCount, 'likedBy': likedBy});
+        if (comment.userId != FirebaseAuth.instance.currentUser!.uid) {
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(comment.userId)
+              .get()
+              .then((value1) async {
+            if (value1.exists &&
+                valueOrDefault(
+                    value1.data()!['recevoirNotifForum'] ?? false, false)) {
+              FirebaseFirestore.instance
+                  .collection('forum')
+                  .doc(comment.forumId)
+                  .get()
+                  .then((value) async {
+                if (value.data() != null) {
+                  await NotifController().addDocToNotificationSpecificUser(
+                      'Nouvelle réponse',
+                      "Tu as un nouveau vote pour ton commentaire dans le forum " +
+                          valueOrDefault(value.data()!['titre'], ""),
+                      'Forum',
+                      FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(comment.userId),
+                      FirebaseFirestore.instance
+                          .collection('forum')
+                          .doc(comment.forumId));
+                }
+              });
+            }
+          });
+        }
       } else {
         int currentLikeCount = comment.likeCount;
         int newLikeCount = currentLikeCount - incrementAmount;
