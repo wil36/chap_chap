@@ -7,6 +7,7 @@ import 'package:chap_chap/forum/Models/forum_model.dart';
 import 'package:chap_chap/forum/add_comment_forum.dart';
 import 'package:chap_chap/forum/reply_comment_forum_widget.dart';
 import 'package:chap_chap/notification/notifcontroller.dart';
+import 'package:chap_chap/profil/other_profile_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -263,30 +264,41 @@ class _DetailForumWidgetState extends State<DetailForumWidget> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            CircleAvatar(
-                              radius: 20,
-                              backgroundImage: NetworkImage(valueOrDefault<
-                                      String?>(userPhoto,
-                                  "https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/chap-chap-1137ns/assets/n3ejaipxw085/user-22.jpg")!),
-                              backgroundColor: Colors.transparent,
-                            ),
-                            SizedBox(
-                              width: 13,
-                            ),
-                            Text(
-                              forumCommentModel.userName,
-                              style: TextStyle(
-                                fontFamily: 'IBM',
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
+                        GestureDetector(
+                          onTap: () async {
+                            await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => OtherProfilePage(
+                                    userId: forumCommentModel.userId,
+                                  ),
+                                ));
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              CircleAvatar(
+                                radius: 20,
+                                backgroundImage: NetworkImage(valueOrDefault<
+                                        String?>(userPhoto,
+                                    "https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/chap-chap-1137ns/assets/n3ejaipxw085/user-22.jpg")!),
+                                backgroundColor: Colors.transparent,
                               ),
-                            ),
-                          ],
+                              SizedBox(
+                                width: 13,
+                              ),
+                              Text(
+                                forumCommentModel.userName,
+                                style: TextStyle(
+                                  fontFamily: 'IBM',
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                         Visibility(
                           visible: forumCommentModel.userId ==
@@ -402,10 +414,16 @@ class _DetailForumWidgetState extends State<DetailForumWidget> {
                                   color: Colors.white,
                                 ),
                               ),
-                              Text(
-                                  forumCommentModel.likeCount.toString() +
-                                      " Vote(s)",
-                                  style: MizzUpTheme.bodyText3),
+                              InkWell(
+                                onTap: () {
+                                  incrementLikeCount(forumCommentModel.id, 1,
+                                      FirebaseAuth.instance.currentUser!.uid);
+                                },
+                                child: Text(
+                                    forumCommentModel.likeCount.toString() +
+                                        " Like(s)",
+                                    style: MizzUpTheme.bodyText3),
+                              ),
                             ],
                           ),
                         ),
@@ -437,10 +455,26 @@ class _DetailForumWidgetState extends State<DetailForumWidget> {
                                   color: Colors.white,
                                 ),
                               ),
-                              Text(
-                                  forumCommentModel.commentCount.toString() +
-                                      " Réponse(s)",
-                                  style: MizzUpTheme.bodyText3),
+                              InkWell(
+                                onTap: () async {
+                                  await Navigator.push(
+                                    context,
+                                    PageTransition(
+                                      type: PageTransitionType.fade,
+                                      duration: Duration(milliseconds: 500),
+                                      reverseDuration:
+                                          Duration(milliseconds: 500),
+                                      child: ReplyCommentForum(
+                                        forumCommentModel: forumCommentModel,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: Text(
+                                    forumCommentModel.commentCount.toString() +
+                                        " Réponse(s)",
+                                    style: MizzUpTheme.bodyText3),
+                              ),
                             ],
                           ),
                         ),
@@ -508,7 +542,7 @@ class _DetailForumWidgetState extends State<DetailForumWidget> {
                 if (value.data() != null) {
                   await NotifController().addDocToNotificationSpecificUser(
                       'Nouvelle réponse',
-                      "Tu as un nouveau vote pour ton commentaire dans le forum " +
+                      "Tu as un nouveau like pour ton commentaire dans le forum " +
                           valueOrDefault(value.data()!['titre'], ""),
                       'Forum',
                       FirebaseFirestore.instance

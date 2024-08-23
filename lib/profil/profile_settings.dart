@@ -32,7 +32,7 @@ class _ProfilSettingsState extends State<ProfilSettings> {
           physics: NeverScrollableScrollPhysics(),
           child: Column(
             children: [
-              SizedBox(height: MediaQuery.of(context).size.width * 0.07),
+              SizedBox(height: MediaQuery.of(context).size.width * 0.15),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

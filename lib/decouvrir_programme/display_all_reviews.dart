@@ -1,5 +1,6 @@
 import 'package:chap_chap/MizzUp_Code/MizzUp_util.dart';
 import 'package:chap_chap/decouvrir_programme/fiche_programme_widget.dart';
+import 'package:chap_chap/profil/other_profile_page.dart';
 import 'package:chap_chap/recettes/recette_suite2_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -140,49 +141,64 @@ class _DisplayAllReviewsState extends State<DisplayAllReviews> {
                                                       MainAxisAlignment
                                                           .spaceBetween,
                                                   children: [
-                                                    Row(
-                                                      children: [
-                                                        ClipRRect(
-                                                          borderRadius:
-                                                              BorderRadius.circular(
-                                                                  50), // Adjust the radius to your liking
-                                                          child: Image.network(
-                                                            valueOrDefault<
-                                                                    String?>(
-                                                                userPhoto,
-                                                                "https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/chap-chap-1137ns/assets/n3ejaipxw085/user-22.jpg")!,
-                                                            width: 30,
-                                                            height: 30,
-                                                            fit: BoxFit.cover,
-                                                          ),
-                                                        ),
-                                                        SizedBox(width: 10),
-                                                        Column(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            Text(
-                                                              user[
-                                                                  'display_name'],
-                                                              style: MizzUpTheme
-                                                                  .bodyText1
-                                                                  .override(
-                                                                color: Colors
-                                                                    .black,
-                                                                fontFamily:
-                                                                    'IBM',
-                                                                fontSize: 14,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w600,
-                                                                useGoogleFonts:
-                                                                    false,
+                                                    GestureDetector(
+                                                      onTap: () async {
+                                                        await Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  OtherProfilePage(
+                                                                userId: review[
+                                                                    'user_id'],
                                                               ),
+                                                            ));
+                                                      },
+                                                      child: Row(
+                                                        children: [
+                                                          ClipRRect(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        50), // Adjust the radius to your liking
+                                                            child:
+                                                                Image.network(
+                                                              valueOrDefault<
+                                                                      String?>(
+                                                                  userPhoto,
+                                                                  "https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/chap-chap-1137ns/assets/n3ejaipxw085/user-22.jpg")!,
+                                                              width: 30,
+                                                              height: 30,
+                                                              fit: BoxFit.cover,
                                                             ),
-                                                          ],
-                                                        ),
-                                                      ],
+                                                          ),
+                                                          SizedBox(width: 10),
+                                                          Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                user[
+                                                                    'display_name'],
+                                                                style: MizzUpTheme
+                                                                    .bodyText1
+                                                                    .override(
+                                                                  color: Colors
+                                                                      .black,
+                                                                  fontFamily:
+                                                                      'IBM',
+                                                                  fontSize: 14,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                  useGoogleFonts:
+                                                                      false,
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ],
+                                                      ),
                                                     ),
                                                     Text(
                                                       review['date']

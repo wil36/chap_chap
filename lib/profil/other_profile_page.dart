@@ -40,7 +40,7 @@ class _OtherProfilePageState extends State<OtherProfilePage> {
               return SingleChildScrollView(
                 child: Column(
                   children: [
-                    SizedBox(height: MediaQuery.of(context).size.width * 0.06),
+                    SizedBox(height: MediaQuery.of(context).size.width * 0.15),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -65,9 +65,9 @@ class _OtherProfilePageState extends State<OtherProfilePage> {
                       children: [
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(0,
-                              MediaQuery.of(context).size.height * 0.425, 0, 0),
+                              MediaQuery.of(context).size.height * 0.2, 0, 0),
                           child: Container(
-                              height: MediaQuery.of(context).size.height * 0.50,
+                              height: MediaQuery.of(context).size.height * 0.70,
                               width: double.infinity,
                               decoration: const BoxDecoration(
                                 color: Colors.white,
@@ -166,7 +166,7 @@ class _OtherProfilePageState extends State<OtherProfilePage> {
                           child: Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(
                                 0,
-                                MediaQuery.of(context).size.height * 0.25,
+                                MediaQuery.of(context).size.height * 0.06,
                                 0,
                                 0),
                             child: Material(

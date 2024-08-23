@@ -7,6 +7,7 @@ import 'package:chap_chap/profil/profil_widget.dart';
 import 'package:chap_chap/recettes/recette_suite.dart';
 import 'package:chap_chap/recettes/recetteRef.dart';
 import 'package:chap_chap/recettes/recette_suite.dart';
+import 'package:chap_chap/recettes/searchAllRecettes.dart';
 import 'package:flutter_svg/svg.dart';
 import '../auth/auth_util.dart';
 import '../backend/backend.dart';
@@ -161,6 +162,49 @@ class _RecettesWidgetState extends State<RecettesWidget> {
                                       color: Colors.white,
                                       useGoogleFonts: false,
                                     ),
+                                  ),
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () async {
+                                  await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const SearchAllRecetteWidget(),
+                                    ),
+                                  );
+                                },
+                                child: Container(
+                                  margin: const EdgeInsetsDirectional.fromSTEB(
+                                      20, 10, 20, 0),
+                                  padding: const EdgeInsetsDirectional.fromSTEB(
+                                      15, 0, 0, 0),
+                                  height: 50,
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      const Icon(
+                                        Icons.search,
+                                        size: 18,
+                                        color: MizzUpTheme.primaryColor,
+                                      ),
+                                      SizedBox(
+                                        width: 15,
+                                      ),
+                                      Text(
+                                        'Rechercher',
+                                        style: MizzUpTheme.bodyText1.override(
+                                          fontFamily: 'IBM',
+                                          color: MizzUpTheme.primaryColor,
+                                          useGoogleFonts: false,
+                                        ),
+                                      )
+                                    ],
                                   ),
                                 ),
                               ),

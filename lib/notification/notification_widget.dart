@@ -444,8 +444,6 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                                                                       item.id =
                                                                           value
                                                                               .id;
-                                                                      print(
-                                                                          'Helllo ${item.description}');
                                                                       Navigator
                                                                           .push(
                                                                         context,

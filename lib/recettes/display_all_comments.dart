@@ -1,4 +1,5 @@
 import 'package:chap_chap/auth/auth_util.dart';
+import 'package:chap_chap/profil/other_profile_page.dart';
 import 'package:chap_chap/recettes/recette_suite2_widget.dart';
 import 'package:chap_chap/recettes/reply_comment.dart';
 import 'package:flutter/material.dart';
@@ -132,46 +133,61 @@ class _DisplayAllCommentsState extends State<DisplayAllComments> {
                                                       MainAxisAlignment
                                                           .spaceBetween,
                                                   children: [
-                                                    Row(
-                                                      children: [
-                                                        ClipRRect(
-                                                          borderRadius:
-                                                              BorderRadius.circular(
-                                                                  50), // Adjust the radius to your liking
-                                                          child: Image.network(
-                                                            userPhoto,
-                                                            width: 30,
-                                                            height: 30,
-                                                            fit: BoxFit.cover,
-                                                          ),
-                                                        ),
-                                                        SizedBox(width: 10),
-                                                        Column(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            Text(
-                                                              user[
-                                                                  'display_name'],
-                                                              style: MizzUpTheme
-                                                                  .bodyText1
-                                                                  .override(
-                                                                color: Colors
-                                                                    .black,
-                                                                fontFamily:
-                                                                    'IBM',
-                                                                fontSize: 14,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w600,
-                                                                useGoogleFonts:
-                                                                    false,
+                                                    GestureDetector(
+                                                      onTap: () async {
+                                                        await Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  OtherProfilePage(
+                                                                userId: recipe[
+                                                                    'user_id'],
                                                               ),
+                                                            ));
+                                                      },
+                                                      child: Row(
+                                                        children: [
+                                                          ClipRRect(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        50), // Adjust the radius to your liking
+                                                            child:
+                                                                Image.network(
+                                                              userPhoto,
+                                                              width: 30,
+                                                              height: 30,
+                                                              fit: BoxFit.cover,
                                                             ),
-                                                          ],
-                                                        ),
-                                                      ],
+                                                          ),
+                                                          SizedBox(width: 10),
+                                                          Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                user[
+                                                                    'display_name'],
+                                                                style: MizzUpTheme
+                                                                    .bodyText1
+                                                                    .override(
+                                                                  color: Colors
+                                                                      .black,
+                                                                  fontFamily:
+                                                                      'IBM',
+                                                                  fontSize: 14,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                  useGoogleFonts:
+                                                                      false,
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ],
+                                                      ),
                                                     ),
                                                     Text(
                                                       recipe['date']
@@ -429,34 +445,45 @@ class _DisplayAllCommentsState extends State<DisplayAllComments> {
                                                                                                   child: Row(
                                                                                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                                                                     children: [
-                                                                                                      Row(
-                                                                                                        children: [
-                                                                                                          ClipRRect(
-                                                                                                            borderRadius: BorderRadius.circular(30), // Adjust the radius to your liking
-                                                                                                            child: Image.network(
-                                                                                                              userPhoto,
-                                                                                                              width: 30,
-                                                                                                              height: 30,
-                                                                                                              fit: BoxFit.cover,
-                                                                                                            ),
-                                                                                                          ),
-                                                                                                          SizedBox(width: 10),
-                                                                                                          Column(
-                                                                                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                                                                                            children: [
-                                                                                                              Text(
-                                                                                                                user['display_name'],
-                                                                                                                style: MizzUpTheme.bodyText1.override(
-                                                                                                                  color: Colors.black,
-                                                                                                                  fontFamily: 'IBM',
-                                                                                                                  fontSize: 14,
-                                                                                                                  fontWeight: FontWeight.w600,
-                                                                                                                  useGoogleFonts: false,
+                                                                                                      GestureDetector(
+                                                                                                        onTap: () async {
+                                                                                                          await Navigator.push(
+                                                                                                              context,
+                                                                                                              MaterialPageRoute(
+                                                                                                                builder: (context) => OtherProfilePage(
+                                                                                                                  userId: user['uid'],
                                                                                                                 ),
+                                                                                                              ));
+                                                                                                        },
+                                                                                                        child: Row(
+                                                                                                          children: [
+                                                                                                            ClipRRect(
+                                                                                                              borderRadius: BorderRadius.circular(30), // Adjust the radius to your liking
+                                                                                                              child: Image.network(
+                                                                                                                userPhoto,
+                                                                                                                width: 30,
+                                                                                                                height: 30,
+                                                                                                                fit: BoxFit.cover,
                                                                                                               ),
-                                                                                                            ],
-                                                                                                          ),
-                                                                                                        ],
+                                                                                                            ),
+                                                                                                            SizedBox(width: 10),
+                                                                                                            Column(
+                                                                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                                              children: [
+                                                                                                                Text(
+                                                                                                                  user['display_name'],
+                                                                                                                  style: MizzUpTheme.bodyText1.override(
+                                                                                                                    color: Colors.black,
+                                                                                                                    fontFamily: 'IBM',
+                                                                                                                    fontSize: 14,
+                                                                                                                    fontWeight: FontWeight.w600,
+                                                                                                                    useGoogleFonts: false,
+                                                                                                                  ),
+                                                                                                                ),
+                                                                                                              ],
+                                                                                                            ),
+                                                                                                          ],
+                                                                                                        ),
                                                                                                       ),
                                                                                                       Text(
                                                                                                         DateFormat.yMd('fr_FR').format(reply['date'].toDate()),
