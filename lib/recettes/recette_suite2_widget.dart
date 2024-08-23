@@ -150,7 +150,7 @@ class _RecetteSuite2WidgetState extends State<RecetteSuite2Widget> {
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(top: 20),
+          padding: EdgeInsets.only(top: 35),
           child:
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             Padding(

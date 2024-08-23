@@ -33,6 +33,7 @@ class _ProfilWidgetState extends State<ProfilWidget> {
       key: scaffoldKey,
       backgroundColor: Colors.white,
       body: Container(
+        padding: EdgeInsets.only(top: 20),
         width: double.infinity,
         height: double.infinity,
         decoration: const BoxDecoration(

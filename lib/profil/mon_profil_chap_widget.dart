@@ -464,6 +464,7 @@ class _MonProfilChapWidgetState extends State<MonProfilChapWidget> {
                           TextFormField(
                             textInputAction: TextInputAction.next,
                             controller: instagramController,
+                            focusNode: instagramFocusNode,
                             obscureText: false,
                             decoration: InputDecoration(
                               prefixText: '@',
@@ -515,6 +516,7 @@ class _MonProfilChapWidgetState extends State<MonProfilChapWidget> {
                         children: [
                           Text('TikTok'),
                           TextFormField(
+                            focusNode: tikTokFocusNode,
                             textInputAction: TextInputAction.next,
                             controller: tikTokController,
                             obscureText: false,
@@ -570,6 +572,7 @@ class _MonProfilChapWidgetState extends State<MonProfilChapWidget> {
                           TextFormField(
                             textInputAction: TextInputAction.next,
                             controller: bioController,
+                            focusNode: bioFocusNode,
                             obscureText: false,
                             decoration: InputDecoration(
                               suffixIcon: bioController.text.isEmpty

@@ -1,4 +1,5 @@
 import 'package:chap_chap/notification/notifcontroller.dart';
+import 'package:chap_chap/profil/other_profile_page.dart';
 import 'package:flutter/material.dart';
 // ignore_for_file: avoid_print, deprecated_member_use
 import '../MizzUp_Code/MizzUp_icon_button.dart';
@@ -97,35 +98,47 @@ class _ReplyCommentState extends State<ReplyComment> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Row(
-                              children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(
-                                      50), // Adjust the radius to your liking
-                                  child: Image.network(
-                                    userPhoto,
-                                    width: 30,
-                                    height: 30,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                                SizedBox(width: 10),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      widget.user['display_name'],
-                                      style: MizzUpTheme.bodyText1.override(
-                                        color: Colors.black,
-                                        fontFamily: 'IBM',
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600,
-                                        useGoogleFonts: false,
+                            GestureDetector(
+                              onTap: () async {
+                                await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => OtherProfilePage(
+                                        userId: widget.user['uid'],
                                       ),
+                                    ));
+                              },
+                              child: Row(
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(
+                                        50), // Adjust the radius to your liking
+                                    child: Image.network(
+                                      userPhoto,
+                                      width: 30,
+                                      height: 30,
+                                      fit: BoxFit.cover,
                                     ),
-                                  ],
-                                ),
-                              ],
+                                  ),
+                                  SizedBox(width: 10),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        widget.user['display_name'],
+                                        style: MizzUpTheme.bodyText1.override(
+                                          color: Colors.black,
+                                          fontFamily: 'IBM',
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w600,
+                                          useGoogleFonts: false,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                             Text(
                               widget.comment['date']

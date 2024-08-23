@@ -6,6 +6,7 @@ import 'package:chap_chap/forum/Models/forum_comments_model.dart';
 import 'package:chap_chap/forum/Models/forum_comments_reply_model.dart';
 import 'package:chap_chap/forum/add_comment_reply_forum.dart';
 import 'package:chap_chap/notification/notifcontroller.dart';
+import 'package:chap_chap/profil/other_profile_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -227,30 +228,41 @@ class _ReplyCommentForumState extends State<ReplyCommentForum> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            CircleAvatar(
-                              radius: 20,
-                              backgroundImage: NetworkImage(valueOrDefault<
-                                      String?>(userPhoto,
-                                  "https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/chap-chap-1137ns/assets/n3ejaipxw085/user-22.jpg")!),
-                              backgroundColor: Colors.transparent,
-                            ),
-                            SizedBox(
-                              width: 13,
-                            ),
-                            Text(
-                              forumCommentModel.userName,
-                              style: TextStyle(
-                                fontFamily: 'IBM',
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
+                        GestureDetector(
+                          onTap: () async {
+                            await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => OtherProfilePage(
+                                    userId: forumCommentModel.userId,
+                                  ),
+                                ));
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              CircleAvatar(
+                                radius: 20,
+                                backgroundImage: NetworkImage(valueOrDefault<
+                                        String?>(userPhoto,
+                                    "https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/chap-chap-1137ns/assets/n3ejaipxw085/user-22.jpg")!),
+                                backgroundColor: Colors.transparent,
                               ),
-                            ),
-                          ],
+                              SizedBox(
+                                width: 13,
+                              ),
+                              Text(
+                                forumCommentModel.userName,
+                                style: TextStyle(
+                                  fontFamily: 'IBM',
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -295,10 +307,21 @@ class _ReplyCommentForumState extends State<ReplyCommentForum> {
                                     color: Colors.white,
                                   ),
                                 ),
-                                Text(
-                                    forumCommentModel.likeCount.toString() +
-                                        " Vote(s)",
-                                    style: MizzUpTheme.bodyText3),
+                                InkWell(
+                                  onTap: () async {
+                                    await incrementLikeCount(
+                                        forumCommentModel.id,
+                                        1,
+                                        FirebaseAuth.instance.currentUser!.uid);
+                                    forumComment = await getSingleForumComment(
+                                        forumComment!.id);
+                                    setState(() {});
+                                  },
+                                  child: Text(
+                                      forumCommentModel.likeCount.toString() +
+                                          " Like(s)",
+                                      style: MizzUpTheme.bodyText3),
+                                ),
                               ],
                             ),
                           ),
@@ -316,10 +339,14 @@ class _ReplyCommentForumState extends State<ReplyCommentForum> {
                                     color: Colors.white,
                                   ),
                                 ),
-                                Text(
-                                    forumCommentModel.commentCount.toString() +
-                                        " Réponse(s)",
-                                    style: MizzUpTheme.bodyText3),
+                                InkWell(
+                                  onTap: () {},
+                                  child: Text(
+                                      forumCommentModel.commentCount
+                                              .toString() +
+                                          " Réponse(s)",
+                                      style: MizzUpTheme.bodyText3),
+                                ),
                               ],
                             ),
                             IconButton(
@@ -409,30 +436,41 @@ class _ReplyCommentForumState extends State<ReplyCommentForum> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            CircleAvatar(
-                              radius: 20,
-                              backgroundImage: NetworkImage(valueOrDefault<
-                                      String?>(userPhoto,
-                                  "https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/chap-chap-1137ns/assets/n3ejaipxw085/user-22.jpg")!),
-                              backgroundColor: Colors.transparent,
-                            ),
-                            SizedBox(
-                              width: 13,
-                            ),
-                            Text(
-                              forumCommentReplyModel.userName,
-                              style: TextStyle(
-                                fontFamily: 'IBM',
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
+                        GestureDetector(
+                          onTap: () async {
+                            await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => OtherProfilePage(
+                                    userId: forumCommentReplyModel.userId,
+                                  ),
+                                ));
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              CircleAvatar(
+                                radius: 20,
+                                backgroundImage: NetworkImage(valueOrDefault<
+                                        String?>(userPhoto,
+                                    "https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/chap-chap-1137ns/assets/n3ejaipxw085/user-22.jpg")!),
+                                backgroundColor: Colors.transparent,
                               ),
-                            ),
-                          ],
+                              SizedBox(
+                                width: 13,
+                              ),
+                              Text(
+                                forumCommentReplyModel.userName,
+                                style: TextStyle(
+                                  fontFamily: 'IBM',
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                         Visibility(
                           visible: forumCommentReplyModel.userId ==
@@ -558,10 +596,19 @@ class _ReplyCommentForumState extends State<ReplyCommentForum> {
                                   color: Colors.black,
                                 ),
                               ),
-                              Text(
-                                  forumCommentReplyModel.likeCount.toString() +
-                                      " Vote(s)",
-                                  style: MizzUpTheme.bodyText2),
+                              InkWell(
+                                onTap: () {
+                                  incrementLikeCountReply(
+                                      forumCommentReplyModel.id,
+                                      1,
+                                      FirebaseAuth.instance.currentUser!.uid);
+                                },
+                                child: Text(
+                                    forumCommentReplyModel.likeCount
+                                            .toString() +
+                                        " Like(s)",
+                                    style: MizzUpTheme.bodyText2),
+                              ),
                             ],
                           ),
                         ),
@@ -621,7 +668,7 @@ class _ReplyCommentForumState extends State<ReplyCommentForum> {
                 if (value.data() != null) {
                   await NotifController().addDocToNotificationSpecificUser(
                       'Nouvelle réponse',
-                      "Tu as un nouveau vote pour ta réponse au commentaire de " +
+                      "Tu as un nouveau like pour ta réponse au commentaire de " +
                           widget.forumCommentModel.userFirstName +
                           " dans le forum " +
                           valueOrDefault(value.data()!['titre'], ""),
@@ -742,7 +789,7 @@ class _ReplyCommentForumState extends State<ReplyCommentForum> {
                 if (value.data() != null) {
                   await NotifController().addDocToNotificationSpecificUser(
                       'Nouvelle réponse',
-                      "Tu as un nouveau vote pour ton commentaire dans le forum " +
+                      "Tu as un nouveau like pour ton commentaire dans le forum " +
                           valueOrDefault(value.data()!['titre'], ""),
                       'Forum',
                       FirebaseFirestore.instance
