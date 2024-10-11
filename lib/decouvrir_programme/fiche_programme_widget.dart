@@ -110,16 +110,17 @@ class _FicheProgrammeWidgetState extends State<FicheProgrammeWidget> {
                           children: [
                             Padding(
                               padding: const EdgeInsetsDirectional.fromSTEB(
-                                  0, 40, 0, 0),
+                                  20, 40, 0, 0),
                               child: MizzUpIconButton(
                                 borderColor: Colors.transparent,
                                 borderRadius: 30,
+                                fillColor: Color(Colors.white.value),
                                 borderWidth: 1,
-                                buttonSize: 60,
+                                buttonSize: 40,
                                 icon: const Icon(
                                   Icons.arrow_back,
                                   color: MizzUpTheme.tertiaryColor,
-                                  size: 30,
+                                  size: 20,
                                 ),
                                 onPressed: () async {
                                   Navigator.pop(context);

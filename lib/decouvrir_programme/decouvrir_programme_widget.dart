@@ -50,7 +50,7 @@ class _DecouvrirProgrammeWidgetState extends State<DecouvrirProgrammeWidget> {
     } else if (titre == 'Programme Chap Chap') {
       return 'assets/programmes/chapchap.jpg';
     } else if (titre == 'Programme Mom') {
-      return 'assets/programmes/chapchap.jpg';
+      return 'assets/programmes/mom.jpg';
     } else if (titre == 'Programme Découverte') {
       return 'assets/programmes/decouverte.jpg';
     } else if (titre == 'Programme Transition') {

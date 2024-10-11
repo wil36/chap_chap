@@ -42,6 +42,12 @@ extension StringExtension on String {
 class _ProgrammeSuiteWidgetState extends State<ProgrammeSuiteWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
+  void _openLink(BuildContext context, Map<String?, String?> attrs) async {
+    final String? link = attrs['href'];
+
+    await launchURL('$link');
+  }
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<UsersRecord?>(
@@ -484,11 +490,55 @@ class _ProgrammeSuiteWidgetState extends State<ProgrammeSuiteWidget> {
                                                   padding:
                                                       const EdgeInsetsDirectional
                                                           .fromSTEB(0, 0, 0, 0),
-                                                  child: Text(
-                                                    detailsWeekDetailsWeekProgRecord
-                                                        .titreEtape3!,
-                                                    style:
-                                                        MizzUpTheme.bodyText1,
+                                                  child: StyledText(
+                                                    newLineAsBreaks: true,
+                                                    text:
+                                                        detailsWeekDetailsWeekProgRecord
+                                                            .titreEtape3!,
+                                                    style: MizzUpTheme.bodyText1
+                                                        .override(
+                                                            fontFamily: 'IBM',
+                                                            color: Colors.black,
+                                                            useGoogleFonts:
+                                                                false,
+                                                            fontWeight:
+                                                                FontWeight.w400,
+                                                            fontSize: 13),
+                                                    tags: {
+                                                      'bold': StyledTextTag(
+                                                          style: MizzUpTheme
+                                                              .bodyText1
+                                                              .override(
+                                                                  fontFamily:
+                                                                      'IBM',
+                                                                  color:
+                                                                      MizzUpTheme
+                                                                          .primaryColor,
+                                                                  useGoogleFonts:
+                                                                      false,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontSize:
+                                                                      15)),
+                                                      'link':
+                                                          StyledTextActionTag(
+                                                        (_, attrs) => _openLink(
+                                                            context, attrs),
+                                                        style: const TextStyle(
+                                                            decorationColor:
+                                                                MizzUpTheme
+                                                                    .primaryColor,
+                                                            decoration:
+                                                                TextDecoration
+                                                                    .underline,
+                                                            color: MizzUpTheme
+                                                                .primaryColor,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ),
+                                                    },
                                                   ),
                                                 ),
                                               ),

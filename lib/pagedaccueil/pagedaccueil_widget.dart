@@ -80,7 +80,7 @@ class _PagedaccueilWidgetState extends State<PagedaccueilWidget> {
     } else if (titre == 'Programme Chap Chap') {
       return 'assets/programmes/chapchap.jpg';
     } else if (titre == 'Programme Mom') {
-      return 'assets/programmes/chapchap.jpg';
+      return 'assets/programmes/mom.jpg';
     } else if (titre == 'Programme Découverte') {
       return 'assets/programmes/decouverte.jpg';
     } else if (titre == 'Programme Transition') {

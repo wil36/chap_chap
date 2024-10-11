@@ -7,6 +7,7 @@ import 'package:chap_chap/profil/profil_widget.dart';
 import 'package:chap_chap/recettes/recette_suite.dart';
 import 'package:chap_chap/recettes/recetteRef.dart';
 import 'package:chap_chap/recettes/recette_suite.dart';
+import 'package:chap_chap/recettes/searchAllRecettes.dart';
 import 'package:flutter_svg/svg.dart';
 import '../auth/auth_util.dart';
 import '../backend/backend.dart';
@@ -164,9 +165,46 @@ class _RecettesWidgetState extends State<RecettesWidget> {
                                   ),
                                 ),
                               ),
+                              Container(
+                                width: MediaQuery.of(context).size.width,
+                                height: 60,
+                                margin: const EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 15),
+                                decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(8),
+                                  ),
+                                ),
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const SearchAllRecetteWidget(),
+                                      ),
+                                    );
+                                  },
+                                  child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 20, vertical: 5),
+                                      child: Row(
+                                        children: [
+                                          Text(
+                                            "Rechercher",
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                color:
+                                                    MizzUpTheme.primaryColor),
+                                          ),
+                                        ],
+                                      )),
+                                ),
+                              ),
                               SizedBox(
                                 height:
-                                    MediaQuery.of(context).size.height * 0.05,
+                                    MediaQuery.of(context).size.height * 0.03,
                               ),
                               Container(
                                 width: MediaQuery.of(context).size.width,

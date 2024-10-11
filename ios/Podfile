@@ -31,8 +31,11 @@ target 'Runner' do
   pod 'GoogleUtilities'
   use_frameworks! :linkage => :static
   use_modular_headers! 
+  pod 'FirebaseCore', :modular_headers => true
+  pod 'FirebaseFirestoreInternal', :modular_headers => true
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__)) 
 end
+
 
 post_install do |installer|
   installer.pods_project.targets.each do |target|
@@ -56,6 +59,9 @@ post_install do |installer|
       ]
       
     end
+     target.build_configurations.each do |build_configuration|
+        build_configuration.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'arm64'
+    end
     if target.name == ‘BoringSSL-GRPC’
       target.source_build_phase.files.each do |file|
         if file.settings && file.settings[‘COMPILER_FLAGS’]
@@ -70,6 +76,7 @@ end
 
 target 'ImageNotification' do
   use_frameworks! :linkage => :static
+  use_modular_headers! 
   pod 'Firebase/Messaging'
   pod 'GoogleUtilities'
 end
