@@ -54,19 +54,39 @@ Future<void> main() async {
     sound: true,
   );
 
-  await FirebaseMessaging.instance.requestPermission(
-    alert: true,
-    announcement: false,
-    badge: true,
-    carPlay: false,
-    criticalAlert: false,
-    provisional: false,
-    sound: true,
-  );
+  await requestNotificationPermission();
+
   MessagingService.getToken();
   runApp(
     MyApp(),
   );
+}
+
+bool isPermissionRequesting = false;
+
+Future<void> requestNotificationPermission() async {
+  if (isPermissionRequesting) {
+    print("Une demande d'autorisation est déjà en cours.");
+    return;
+  }
+
+  try {
+    isPermissionRequesting = true;
+    await FirebaseMessaging.instance.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+    print("Permissions accordées");
+  } catch (e) {
+    print("Erreur lors de la demande d'autorisation: $e");
+  } finally {
+    isPermissionRequesting = false;
+  }
 }
 
 const MaterialColor customColor = MaterialColor(
