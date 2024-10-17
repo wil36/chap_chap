@@ -6,6 +6,7 @@ import 'package:chap_chap/forum/Models/forum_comments_model.dart';
 import 'package:chap_chap/forum/Models/forum_comments_reply_model.dart';
 import 'package:chap_chap/forum/add_comment_reply_forum.dart';
 import 'package:chap_chap/notification/notifcontroller.dart';
+import 'package:chap_chap/profil/other_profile_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -28,7 +29,7 @@ class _ReplyCommentForumState extends State<ReplyCommentForum> {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection('forum_comments_reply')
         .where('forumCommentId', isEqualTo: widget.forumCommentModel.id)
-        .orderBy('createdDate', descending: true)
+        .orderBy('createdDate', descending: false)
         .get();
     List<ForumCommentReplyModel> forumCommentReplyList =
         querySnapshot.docs.map((doc) {
@@ -53,7 +54,7 @@ class _ReplyCommentForumState extends State<ReplyCommentForum> {
       forumCommentReplyStream = FirebaseFirestore.instance
           .collection('forum_comments_reply')
           .where('forumCommentId', isEqualTo: widget.forumCommentModel.id)
-          .orderBy('createdDate', descending: true)
+          .orderBy('createdDate', descending: false)
           .snapshots()
           .map((querySnapshot) => querySnapshot.docs
               .map((doc) => ForumCommentReplyModel.fromJson(doc.data()))
@@ -227,31 +228,46 @@ class _ReplyCommentForumState extends State<ReplyCommentForum> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            CircleAvatar(
-                              radius: 20,
-                              backgroundImage: NetworkImage(valueOrDefault<
-                                      String?>(userPhoto,
-                                  "https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/chap-chap-1137ns/assets/n3ejaipxw085/user-22.jpg")!),
-                              backgroundColor: Colors.transparent,
-                            ),
-                            SizedBox(
-                              width: 13,
-                            ),
-                            Text(
-                              forumCommentModel.userName,
-                              style: TextStyle(
-                                fontFamily: 'IBM',
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => OtherProfilePage(
+                                    userId: forumCommentModel.userId),
                               ),
-                            ),
-                          ],
+                            );
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              CircleAvatar(
+                                radius: 20,
+                                backgroundImage: NetworkImage(valueOrDefault<
+                                        String?>(userPhoto,
+                                    "https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/chap-chap-1137ns/assets/n3ejaipxw085/user-22.jpg")!),
+                                backgroundColor: Colors.transparent,
+                              ),
+                              SizedBox(
+                                width: 13,
+                              ),
+                              Text(
+                                forumCommentModel.userName,
+                                style: TextStyle(
+                                  fontFamily: 'IBM',
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
+                        Text(
+                          timeAgo(forumCommentModel.createdDate),
+                          style: TextStyle(color: Colors.white),
+                        )
                       ],
                     ),
                     SizedBox(
@@ -420,118 +436,142 @@ class _ReplyCommentForumState extends State<ReplyCommentForum> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => OtherProfilePage(
+                                    userId: forumCommentReplyModel.userId),
+                              ),
+                            );
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              CircleAvatar(
+                                radius: 20,
+                                backgroundImage: NetworkImage(valueOrDefault<
+                                        String?>(userPhoto,
+                                    "https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/chap-chap-1137ns/assets/n3ejaipxw085/user-22.jpg")!),
+                                backgroundColor: Colors.transparent,
+                              ),
+                              SizedBox(
+                                width: 13,
+                              ),
+                              Text(
+                                forumCommentReplyModel.userName,
+                                style: TextStyle(
+                                  fontFamily: 'IBM',
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            CircleAvatar(
-                              radius: 20,
-                              backgroundImage: NetworkImage(valueOrDefault<
-                                      String?>(userPhoto,
-                                  "https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/chap-chap-1137ns/assets/n3ejaipxw085/user-22.jpg")!),
-                              backgroundColor: Colors.transparent,
+                            Text(
+                              timeAgo(forumCommentReplyModel.createdDate),
+                              style: TextStyle(color: Colors.black),
                             ),
                             SizedBox(
-                              width: 13,
+                              width: 10,
                             ),
-                            Text(
-                              forumCommentReplyModel.userName,
-                              style: TextStyle(
-                                fontFamily: 'IBM',
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
+                            Visibility(
+                              visible: forumCommentReplyModel.userId ==
+                                  FirebaseAuth.instance.currentUser!.uid,
+                              child: PopupMenuButton<String>(
+                                onSelected: (value) async {
+                                  if (value == 'edit') {
+                                    // Logique pour modifier le commentaire
+                                    await showModalBottomSheet(
+                                      isScrollControlled: true,
+                                      backgroundColor: Colors.transparent,
+                                      context: context,
+                                      builder: (context) {
+                                        return Padding(
+                                          padding:
+                                              MediaQuery.of(context).viewInsets,
+                                          child: Container(
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.9,
+                                            child: AddCommentReplyForum(
+                                                forumComment:
+                                                    widget.forumCommentModel,
+                                                forumCommentReply:
+                                                    forumCommentReplyModel,
+                                                isAnAnswer: true),
+                                          ),
+                                        );
+                                      },
+                                    ).then((value) {
+                                      if (mounted) {
+                                        setState(() {});
+                                      }
+                                    });
+                                  } else if (value == 'delete') {
+                                    // Logique pour supprimer le commentaire
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return Theme(
+                                          data: ThemeData(
+                                            useMaterial3: false,
+                                          ),
+                                          child: AlertDialog(
+                                            title: Text(
+                                                'Confirmer la suppression'),
+                                            content: Text(
+                                                'Voulez-vous vraiment supprimer ce commentaire ?'),
+                                            actions: <Widget>[
+                                              TextButton(
+                                                child: Text('Annuler'),
+                                                onPressed: () {
+                                                  Navigator.of(context)
+                                                      .pop(); // Fermer la boîte de dialogue
+                                                },
+                                              ),
+                                              TextButton(
+                                                child: Text('Supprimer'),
+                                                onPressed: () {
+                                                  Navigator.of(context)
+                                                      .pop(); // Fermer la boîte de dialogue
+                                                  deleteCommentReply(
+                                                      forumCommentReplyModel
+                                                          .id); // Appeler la fonction de suppression
+                                                },
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  }
+                                },
+                                itemBuilder: (BuildContext context) =>
+                                    <PopupMenuEntry<String>>[
+                                  PopupMenuItem<String>(
+                                    value: 'edit',
+                                    child: Text('Modifier le commentaire'),
+                                  ),
+                                  PopupMenuItem<String>(
+                                    value: 'delete',
+                                    child: Text('Supprimer le commentaire'),
+                                  ),
+                                ],
+                                child: Icon(
+                                  Icons.more_vert,
+                                  color: Colors.black,
+                                ),
                               ),
                             ),
                           ],
-                        ),
-                        Visibility(
-                          visible: forumCommentReplyModel.userId ==
-                              FirebaseAuth.instance.currentUser!.uid,
-                          child: PopupMenuButton<String>(
-                            onSelected: (value) async {
-                              if (value == 'edit') {
-                                // Logique pour modifier le commentaire
-                                await showModalBottomSheet(
-                                  isScrollControlled: true,
-                                  backgroundColor: Colors.transparent,
-                                  context: context,
-                                  builder: (context) {
-                                    return Padding(
-                                      padding:
-                                          MediaQuery.of(context).viewInsets,
-                                      child: Container(
-                                        height:
-                                            MediaQuery.of(context).size.height *
-                                                0.9,
-                                        child: AddCommentReplyForum(
-                                            forumComment:
-                                                widget.forumCommentModel,
-                                            forumCommentReply:
-                                                forumCommentReplyModel,
-                                            isAnAnswer: true),
-                                      ),
-                                    );
-                                  },
-                                ).then((value) {
-                                  if (mounted) {
-                                    setState(() {});
-                                  }
-                                });
-                              } else if (value == 'delete') {
-                                // Logique pour supprimer le commentaire
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return Theme(
-                                      data: ThemeData(
-                                        useMaterial3: false,
-                                      ),
-                                      child: AlertDialog(
-                                        title: Text('Confirmer la suppression'),
-                                        content: Text(
-                                            'Voulez-vous vraiment supprimer ce commentaire ?'),
-                                        actions: <Widget>[
-                                          TextButton(
-                                            child: Text('Annuler'),
-                                            onPressed: () {
-                                              Navigator.of(context)
-                                                  .pop(); // Fermer la boîte de dialogue
-                                            },
-                                          ),
-                                          TextButton(
-                                            child: Text('Supprimer'),
-                                            onPressed: () {
-                                              Navigator.of(context)
-                                                  .pop(); // Fermer la boîte de dialogue
-                                              deleteCommentReply(
-                                                  forumCommentReplyModel
-                                                      .id); // Appeler la fonction de suppression
-                                            },
-                                          ),
-                                        ],
-                                      ),
-                                    );
-                                  },
-                                );
-                              }
-                            },
-                            itemBuilder: (BuildContext context) =>
-                                <PopupMenuEntry<String>>[
-                              PopupMenuItem<String>(
-                                value: 'edit',
-                                child: Text('Modifier le commentaire'),
-                              ),
-                              PopupMenuItem<String>(
-                                value: 'delete',
-                                child: Text('Supprimer le commentaire'),
-                              ),
-                            ],
-                            child: Icon(
-                              Icons.more_vert,
-                              color: Colors.black,
-                            ),
-                          ),
                         )
                       ],
                     ),
@@ -602,6 +642,32 @@ class _ReplyCommentForumState extends State<ReplyCommentForum> {
         .doc(commentId)
         .delete();
     decrementCommentCount(widget.forumCommentModel.id, 1);
+  }
+
+  String timeAgo(DateTime dateTime) {
+    Duration difference = DateTime.now().difference(dateTime);
+
+    if (difference.inSeconds < 60) {
+      return "il y a ${difference.inSeconds} secondes";
+    } else if (difference.inMinutes < 60) {
+      return difference.inMinutes == 1
+          ? "il y a une minute"
+          : "il y a ${difference.inMinutes} minutes";
+    } else if (difference.inHours < 24) {
+      return difference.inHours == 1
+          ? "il y a une heure"
+          : "il y a ${difference.inHours} heures";
+    } else if (difference.inDays < 30) {
+      return difference.inDays == 1
+          ? "il y a un jour"
+          : "il y a ${difference.inDays} jours";
+    } else if (difference.inDays < 365) {
+      int months = (difference.inDays / 30).floor();
+      return months == 1 ? "il y a un mois" : "il y a $months mois";
+    } else {
+      int years = (difference.inDays / 365).floor();
+      return years == 1 ? "il y a un an" : "il y a $years ans";
+    }
   }
 
   Future<void> incrementLikeCountReply(

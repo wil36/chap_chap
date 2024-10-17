@@ -72,6 +72,18 @@ class NotificationUserModel {
             .toList());
   }
 
+  static Stream<List<NotificationUserModel>> getNonLuNotifications() {
+    return FirebaseFirestore.instance
+        .collection('notification_user')
+        .where('userRef', isEqualTo: currentUserReference)
+        .where('lu', isEqualTo: false)
+        .orderBy('create_time', descending: true)
+        .snapshots()
+        .map((snapshots) => snapshots.docs
+            .map((doc) => NotificationUserModel.fromJson(doc.data()))
+            .toList());
+  }
+
   static Future<List<NotificationUserModel>> getAllNotificationsSync() async {
     final snapshot = await FirebaseFirestore.instance
         .collection('notification_user')

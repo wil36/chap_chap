@@ -2,6 +2,7 @@
 
 import 'package:chap_chap/components/condition_hygiene_widget.dart';
 import 'package:chap_chap/MizzUp_Code/MizzUp_widgets.dart';
+import 'package:chap_chap/notification/notification_user_model.dart';
 import 'package:chap_chap/notification/notification_widget.dart';
 import 'package:chap_chap/profil/profil_widget.dart';
 import 'package:chap_chap/recettes/recette_suite.dart';
@@ -67,26 +68,63 @@ class _RecettesWidgetState extends State<RecettesWidget> {
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                MizzUpIconButton(
-                                  borderColor: MizzUpTheme.secondaryColor,
-                                  borderRadius: 20,
-                                  buttonSize: 40,
-                                  fillColor: MizzUpTheme.secondaryColor,
-                                  icon: const FaIcon(
-                                    FontAwesomeIcons.bell,
-                                    color: MizzUpTheme.primaryColor,
-                                    size: 20,
-                                  ),
-                                  onPressed: () async {
-                                    await Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            const NotificationWidget(),
-                                      ),
-                                    );
-                                  },
-                                ),
+                                StreamBuilder<List<NotificationUserModel>>(
+                                    stream: NotificationUserModel
+                                        .getNonLuNotifications(),
+                                    builder: (context, snapshot) {
+                                      if (!snapshot.hasData) {
+                                        return Container();
+                                      }
+                                      List<NotificationUserModel?>
+                                          notificationNotificationsRecordList =
+                                          snapshot.data!;
+                                      return Stack(
+                                        children: [
+                                          MizzUpIconButton(
+                                            borderColor:
+                                                MizzUpTheme.secondaryColor,
+                                            borderRadius: 20,
+                                            buttonSize: 40,
+                                            fillColor:
+                                                MizzUpTheme.secondaryColor,
+                                            icon: const FaIcon(
+                                              FontAwesomeIcons.bell,
+                                              color: MizzUpTheme.primaryColor,
+                                              size: 20,
+                                            ),
+                                            onPressed: () async {
+                                              await Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const NotificationWidget(),
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                          Visibility(
+                                            visible:
+                                                notificationNotificationsRecordList
+                                                        .length >
+                                                    0,
+                                            child: Align(
+                                              alignment:
+                                                  AlignmentDirectional(0, 0),
+                                              child: CircleAvatar(
+                                                radius: 10,
+                                                backgroundColor: Colors.red,
+                                                child: Text(
+                                                    notificationNotificationsRecordList
+                                                                .length >
+                                                            10
+                                                        ? "9+"
+                                                        : "${notificationNotificationsRecordList.length}"),
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      );
+                                    }),
                                 MizzUpIconButton(
                                   borderColor: Colors.transparent,
                                   borderRadius: 30,

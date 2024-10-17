@@ -1,6 +1,7 @@
 import 'package:chap_chap/MizzUp_Code/MizzUp_util.dart';
 import 'package:chap_chap/auth/auth_util.dart';
 import 'package:chap_chap/backend/backend.dart';
+import 'package:chap_chap/notification/notification_user_model.dart';
 import 'package:chap_chap/recettes/recette_suite2_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -88,25 +89,55 @@ class _RecetteSuiteWidgetState extends State<RecetteSuiteWidget> {
                     },
                   ),
                 ),
-                MizzUpIconButton(
-                  borderColor: MizzUpTheme.secondaryColor,
-                  borderRadius: 20,
-                  buttonSize: 40,
-                  fillColor: MizzUpTheme.secondaryColor,
-                  icon: const FaIcon(
-                    FontAwesomeIcons.bell,
-                    color: MizzUpTheme.primaryColor,
-                    size: 20,
-                  ),
-                  onPressed: () async {
-                    await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const NotificationWidget(),
-                      ),
-                    );
-                  },
-                ),
+                StreamBuilder<List<NotificationUserModel>>(
+                    stream: NotificationUserModel.getNonLuNotifications(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return Container();
+                      }
+                      List<NotificationUserModel?>
+                          notificationNotificationsRecordList = snapshot.data!;
+                      return Stack(
+                        children: [
+                          MizzUpIconButton(
+                            borderColor: MizzUpTheme.secondaryColor,
+                            borderRadius: 20,
+                            buttonSize: 40,
+                            fillColor: MizzUpTheme.secondaryColor,
+                            icon: const FaIcon(
+                              FontAwesomeIcons.bell,
+                              color: MizzUpTheme.primaryColor,
+                              size: 20,
+                            ),
+                            onPressed: () async {
+                              await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const NotificationWidget(),
+                                ),
+                              );
+                            },
+                          ),
+                          Visibility(
+                            visible:
+                                notificationNotificationsRecordList.length > 0,
+                            child: Align(
+                              alignment: AlignmentDirectional(0, 0),
+                              child: CircleAvatar(
+                                radius: 10,
+                                backgroundColor: Colors.red,
+                                child: Text(notificationNotificationsRecordList
+                                            .length >
+                                        10
+                                    ? "9+"
+                                    : "${notificationNotificationsRecordList.length}"),
+                              ),
+                            ),
+                          )
+                        ],
+                      );
+                    }),
               ],
             ),
           ),
