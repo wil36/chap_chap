@@ -6,7 +6,7 @@
 //
 
 #import "NotificationService.h"
-#import "FirebaseMessaging.h"
+// #import "FirebaseMessaging.h"
 
 @interface NotificationService ()
 
@@ -17,12 +17,12 @@
 
 @implementation NotificationService
 
-- (void)didReceiveNotificationRequest:(UNNotificationRequest *)request withContentHandler:(void (^)(UNNotificationContent * _Nonnull))contentHandler {
-    self.contentHandler = contentHandler;
-    self.bestAttemptContent = [request.content mutableCopy];
+// - (void)didReceiveNotificationRequest:(UNNotificationRequest *)request withContentHandler:(void (^)(UNNotificationContent * _Nonnull))contentHandler {
+//     self.contentHandler = contentHandler;
+//     self.bestAttemptContent = [request.content mutableCopy];
     
-    [[FIRMessaging extensionHelper] populateNotificationContent:self.bestAttemptContent withContentHandler:contentHandler];
-}
+//     [[FIRMessaging extensionHelper] populateNotificationContent:self.bestAttemptContent withContentHandler:contentHandler];
+// }
 
 - (void)serviceExtensionTimeWillExpire {
     // Called just before the extension will be terminated by the system.
