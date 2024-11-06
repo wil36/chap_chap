@@ -203,13 +203,22 @@ class _MyAppState extends State<MyApp> {
       print("Hello from init state");
       final FirebaseMessaging _messaging = FirebaseMessaging.instance;
       String userId = FirebaseAuth.instance.currentUser!.uid;
+      if (Platform.isIOS) {
+        _messaging.getAPNSToken().then((value) {
+          FirebaseFirestore.instance
+              .collection('users')
+              .doc(userId)
+              .update({'token': value!});
+        });
+      } else {
+        _messaging.getToken().then((value) {
+          FirebaseFirestore.instance
+              .collection('users')
+              .doc(userId)
+              .update({'token': value!});
+        });
+      }
 
-      _messaging.getToken().then((value) {
-        FirebaseFirestore.instance
-            .collection('users')
-            .doc(userId)
-            .update({'token': value!});
-      });
       setupInteractedMessage(context);
     }
   }

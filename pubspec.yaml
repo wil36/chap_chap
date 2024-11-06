@@ -46,7 +46,7 @@ dependencies:
   google_fonts: ^4.0.3
   html_unescape: ^2.0.0
   image_picker: ^1.1.1
-  package_info_plus: ^8.0.2
+  package_info_plus: ^8.1.0
   intl: ^0.19.0
   in_app_purchase: ^3.0.8
   json_path: ^0.7.1
