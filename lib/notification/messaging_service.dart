@@ -1,4 +1,6 @@
 // ignore_for_file: avoid_print, non_constant_identifier_names
+import 'dart:io';
+
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -8,9 +10,15 @@ FirebaseFunctions functions = FirebaseFunctions.instance;
 
 class MessagingService {
   static getToken() {
-    messaging.getToken().then((_token) {
-      print(_token);
-    });
+    if (Platform.isIOS) {
+      messaging.getAPNSToken().then((_token) {
+        print(_token);
+      });
+    } else {
+      messaging.getToken().then((_token) {
+        print(_token);
+      });
+    }
   }
 
   static checkPersmission() async {

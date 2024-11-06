@@ -87,7 +87,7 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.3'
         implementation 'com.google.firebase:firebase-appcheck-playintegrity'
 }
-configurations.all {
-    exclude group: 'com.google.android.gms', module: 'play-services-safetynet'
-}
+// configurations.all {
+//     exclude group: 'com.google.android.gms', module: 'play-services-safetynet'
+// }
 
