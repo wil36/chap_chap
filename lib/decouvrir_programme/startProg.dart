@@ -632,10 +632,10 @@ class _StartProgWidgetState extends State<StartProgWidget> {
                               InkWell(
                                 onTap: () async {
                                   await launchURL(
-                                      'https://madamelapresidente.fr/e-shop/?gclid=EAIaIQobChMIvIuU0aag9gIVkgwGAB38IwvdEAAYASAAEgJOXvD_BwE');
+                                      'https://lb.affilae.com/r/?p=5f59f0cdf7c1460c5202ba50&af=186&lp=https%3A%2F%2Finhaircare.co%2F');
                                 },
                                 child: Image.asset(
-                                  'assets/images/madamePresidenteLogo.png',
+                                  'assets/images/inHairCare.png',
                                   fit: BoxFit.cover,
                                   width: 50,
                                   height: 50,
@@ -644,7 +644,7 @@ class _StartProgWidgetState extends State<StartProgWidget> {
                               InkWell(
                                 onTap: () async {
                                   await launchURL(
-                                      'https://madamelapresidente.fr/e-shop/?gclid=EAIaIQobChMIvIuU0aag9gIVkgwGAB38IwvdEAAYASAAEgJOXvD_BwE');
+                                      'https://lb.affilae.com/r/?p=5f59f0cdf7c1460c5202ba50&af=186&lp=https%3A%2F%2Finhaircare.co%2F');
                                 },
                                 child: Image.asset(
                                   'assets/images/mama-first-gummies-post-partum-276513.webp',

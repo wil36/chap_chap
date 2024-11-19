@@ -42,7 +42,7 @@ class _ProfilWidgetState extends State<ProfilWidget> {
           child: Stack(
             children: [
               Padding(
-                padding: EdgeInsets.only(left: 20, top: 20),
+                padding: EdgeInsets.only(left: 20, top: 50),
                 child: MizzUpIconButton(
                   borderColor: Colors.transparent,
                   borderRadius: 30,
