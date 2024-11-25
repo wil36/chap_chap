@@ -1,3 +1,4 @@
+import 'package:chap_chap/auth/auth_util.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
@@ -69,7 +70,8 @@ class NotifController {
       'title': title,
       'message': message,
       'token': deviceToken,
-      'programRef': programRef
+      'programRef': programRef,
+      'userRef': currentUserDocument!.reference,
     };
     try {
       await docRef.add(data);

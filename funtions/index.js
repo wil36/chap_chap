@@ -24,19 +24,36 @@ exports.dailyNotificationsSender = functions
     const snapshot = await notifRef.where("date", "<=", Date.now()).get();
     snapshot.forEach(async (doc) => {
       console.log("Notification : ", doc.id, " en cours d'envoi");
-      try {
-        await messaging.send({
-          notification: {
-            title: doc.data().title,
-            body: doc.data().message,
-          },
-          token: doc.data().token,
-        });
-        console.log("Message envoyé");
-        await notifRef.doc(doc.id).delete();
-        console.log("Document supprimé");
-      } catch (ex) {
-        console.log("Message non envoyé : ", ex);
+      const userSnapshot = await doc.data().userRef.get();
+
+      if (userSnapshot.exists) {
+        const userData = userSnapshot.data();
+
+        if (
+          userData.token &&
+          userData.recevoirNotif &&
+          userData.recevoirNotif == true
+        ) {
+          try {
+            const payload = {
+              notification: {
+                title: doc.data().title,
+                body: doc.data().message,
+              },
+              token: userData.token,
+            };
+            const response = await admin.messaging().send(payload);
+            console.log("Notification sent successfully:", response);
+
+            await db.collection("Notification").doc(doc.id).delete();
+            console.log("Document supprimé");
+          } catch (ex) {
+            console.log("Message non envoyé : ", ex);
+          }
+        }
+      } else {
+        await db.collection("Notification").doc(doc.id).delete();
+        console.log("User document not found");
       }
     });
     console.log("Requête terminée");

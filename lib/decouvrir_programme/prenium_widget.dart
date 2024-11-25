@@ -112,6 +112,7 @@ class _PreniumWidgetState extends State<PreniumWidget> {
       final InAppPurchaseStoreKitPlatformAddition iosPlatformAddition =
           _inAppPurchase
               .getPlatformAddition<InAppPurchaseStoreKitPlatformAddition>();
+      iosPlatformAddition.presentCodeRedemptionSheet();
       await iosPlatformAddition.setDelegate(ExamplePaymentQueueDelegate());
     }
 
@@ -248,38 +249,37 @@ class _PreniumWidgetState extends State<PreniumWidget> {
           subtitle: Text(
             productDetails.description,
           ),
-          trailing:  TextButton(
-                  style: TextButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    backgroundColor: MizzUpTheme.primaryColor,
-                  ),
-                  onPressed: () {
-                    late PurchaseParam purchaseParam;
+          trailing: TextButton(
+            style: TextButton.styleFrom(
+              foregroundColor: Colors.white,
+              backgroundColor: MizzUpTheme.primaryColor,
+            ),
+            onPressed: () {
+              late PurchaseParam purchaseParam;
 
-                    if (Platform.isAndroid) {
-                      final GooglePlayPurchaseDetails? oldSubscription =
-                          _getOldSubscription(productDetails, purchases);
+              if (Platform.isAndroid) {
+                final GooglePlayPurchaseDetails? oldSubscription =
+                    _getOldSubscription(productDetails, purchases);
 
-                      purchaseParam = GooglePlayPurchaseParam(
-                          productDetails: productDetails,
-                          changeSubscriptionParam: (oldSubscription != null)
-                              ? ChangeSubscriptionParam(
-                                  oldPurchaseDetails: oldSubscription,
-                                  prorationMode:
-                                      ProrationMode.immediateWithTimeProration,
-                                )
-                              : null);
-                    } else {
-                      purchaseParam = PurchaseParam(
-                        productDetails: productDetails,
-                      );
-                    }
+                purchaseParam = GooglePlayPurchaseParam(
+                    productDetails: productDetails,
+                    changeSubscriptionParam: (oldSubscription != null)
+                        ? ChangeSubscriptionParam(
+                            oldPurchaseDetails: oldSubscription,
+                            prorationMode:
+                                ProrationMode.immediateWithTimeProration,
+                          )
+                        : null);
+              } else {
+                purchaseParam = PurchaseParam(
+                  productDetails: productDetails,
+                );
+              }
 
-                    _inAppPurchase.buyNonConsumable(
-                        purchaseParam: purchaseParam);
-                  },
-                  child: Text(productDetails.price),
-                ),
+              _inAppPurchase.buyNonConsumable(purchaseParam: purchaseParam);
+            },
+            child: Text(productDetails.price),
+          ),
         );
       },
     ));
@@ -376,7 +376,6 @@ class _PreniumWidgetState extends State<PreniumWidget> {
       }
     }
   }
- 
 
   GooglePlayPurchaseDetails? _getOldSubscription(
       ProductDetails productDetails, Map<String, PurchaseDetails> purchases) {

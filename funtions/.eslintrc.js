@@ -10,6 +10,8 @@ module.exports = {
   rules: {
     "no-restricted-globals": ["error", "name", "length"],
     "prefer-arrow-callback": "error",
+    indent: "off",
+
     quotes: ["error", "double", { allowTemplateLiterals: true }],
   },
   overrides: [
